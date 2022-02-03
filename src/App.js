@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import { store } from "./app/store";
+import HomePage from "./pages/Homepage";
+import PostPage from "./pages/PostPage";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className=" bg-gray-300">
+      <Router>
+        <Provider store={store}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route
+              path="/r/:subredditName/comments/:postId/:postTitle"
+              element={<PostPage />}
+            />
+          </Routes>{" "}
+        </Provider>
+      </Router>
     </div>
   );
-}
+};
 
 export default App;
