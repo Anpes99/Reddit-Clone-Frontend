@@ -1,3 +1,5 @@
-# Reddit Clone
+# Reddit Clone Frontend
 
-### TailwindCSS, React, Node.JS, Express, Sequelize
+## https://reddit1000.herokuapp.com/
+
+### TailwindCSS, React
