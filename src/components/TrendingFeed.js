@@ -15,19 +15,19 @@ const TrendingFeed = (props) => {
   }, []);
 
   return (
-    <div className="w-full">
+    <div className="w-full px-1">
       <p className="pl-4 font-medium text-gray-700">Trending today</p>
-      <div className="grid grid-cols-4 md:grid-cols-3 gap-3 py-4 lg:grid-cols-4">
-        <div className="  col-span-4 sm:col-span-2 md:col-auto">
+      <div className="grid grid-cols-4 sm:grid-cols-3 gap-3 py-4 md:grid-cols-4">
+        <div className="  col-span-2 sm:col-auto">
           <TrendingFeedItem data={newsArticles ? newsArticles[0] : null} />
         </div>
-        <div className=" hidden sm:block col-span-2 md:col-auto">
+        <div className=" col-span-2 sm:col-auto">
           <TrendingFeedItem data={newsArticles ? newsArticles[1] : null} />
         </div>
-        <div className="  hidden md:block">
+        <div className="  hidden sm:block">
           <TrendingFeedItem data={newsArticles ? newsArticles[2] : null} />
         </div>
-        <div className=" hidden lg:inline-block ">
+        <div className=" hidden md:inline-block ">
           <TrendingFeedItem data={newsArticles ? newsArticles[3] : null} />
         </div>
       </div>

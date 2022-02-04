@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  items: [],
+  user: {},
+  headerDropDownVisible: false,
 };
 
 export const appSlice = createSlice({
@@ -9,12 +10,15 @@ export const appSlice = createSlice({
   initialState,
   reducers: {
     addUser: (state, action) => {
-      state = action.payload;
+      state.user = action.payload;
+    },
+    setHeaderDropDownVisible: (state, action) => {
+      state.headerDropDownVisible = action.payload;
     },
   },
 });
 
-export const { addUser } = appSlice.actions;
+export const { addUser, setHeaderDropDownVisible } = appSlice.actions;
 
 // Selectors - This is how we pull information from the Global store slice
 //export const selectItems = (state) => state.basket.items;

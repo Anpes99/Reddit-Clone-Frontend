@@ -6,6 +6,9 @@
   .btn {
     @apply py-1 px-4 border rounded-2xl font-semibold transition-all;
   }
+  .btn2 {
+    @apply py-1 px-4 border rounded-2xl font-semibold transition-all bg-blue-600 text-white;
+  }
   .link {
     @apply hover:bg-blue-400 p-2 pl-4 pr-5 cursor-pointer;
   }

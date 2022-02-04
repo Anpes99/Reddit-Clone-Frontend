@@ -2,14 +2,28 @@ import { SearchIcon } from "@heroicons/react/outline";
 import { UserIcon } from "@heroicons/react/outline";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
+import { useDispatch } from "react-redux";
+import { setHeaderDropDownVisible } from "../slices/appSlice";
+
 const Header = () => {
-  const [dropDownVisible, setDropDownVisible] = useState(false);
+  const dropDownVisible = useSelector(
+    (state) => state.app.headerDropDownVisible
+  );
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   return (
-    <div className="pb-2 sm:pb-0 flex flex-col sm:flex-row h-12 bg-gray-50  items-center justify-between z-10">
+    <div
+      onClick={() => {
+        if (dropDownVisible) {
+          dispatch(setHeaderDropDownVisible(false));
+        }
+      }}
+      className="pb-2 sm:pb-0 flex flex-col sm:flex-row min-h-12 bg-gray-50  items-center justify-between z-[90] pl-0 sm:pl-2 sm:space-x-2"
+    >
       <div
         onClick={() => navigate("/")}
         className=" h-full flex items-center space-x-1 cursor-pointer"
@@ -46,9 +60,9 @@ const Header = () => {
         </div>
       </div>
       <div className="w-full sm:w-auto flex items-center  border  rounded-sm relative bg-gray-100 flex-grow sm:max-w-3xl ">
-        <SearchIcon className="pl-4 h-7 text-gray-400 absolute" />
+        <SearchIcon className="hidden sm:inline-block pl-4 h-7 text-gray-400 absolute" />
         <input
-          className="flex flex-grow bg-gray-100 p-2 text-gray-700 pl-20 hover:bg-white focus:bg-white "
+          className="flex flex-grow bg-gray-100 p-2 text-gray-700 sm:pl-20 hover:bg-white focus:bg-white "
           placeholder="Search Reddit"
           type="text"
         />
@@ -62,7 +76,8 @@ const Header = () => {
         </button>
         <div
           onClick={() => {
-            setDropDownVisible(!dropDownVisible);
+            console.log(dropDownVisible);
+            dispatch(setHeaderDropDownVisible(!dropDownVisible));
           }}
           className="px-2 rounded-sm md:px-4 flex items-center text-gray-400 border border-gray-50 hover:border-gray-300 transition-all cursor-pointer"
         >
@@ -71,11 +86,9 @@ const Header = () => {
         </div>
       </div>
       <div
-        className={`flex right-0   ${
-          dropDownVisible
-            ? "top-20 sm:top-9 opacity-1"
-            : "w-0 opacity-0 overflow-hidden top-14"
-        } absolute  flex-col bg-gray-50 text-sm font-medium select-none duration-200 z-50`}
+        className={`flex right-0  top-[9rem] sm:top-14 w-full sm:w-auto ${
+          dropDownVisible ? "" : "h-0 overflow-hidden"
+        } absolute  flex-col bg-gray-50 text-sm font-medium select-none duration-200 z-[100]`}
       >
         <h4 className="p-2 text-xs text-gray-400">VIEW OPTIONS</h4>
         <a className="link">Dark Mode</a>

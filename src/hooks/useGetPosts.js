@@ -1,15 +1,29 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const useGetPosts = () => {
+const useGetPosts = (queryParamSort) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPostCount, setTotalPostCount] = useState(true);
   const [error, setError] = useState(false);
+  let sortBy = "createdAt";
+  let order = "DESC";
+  let sort;
+
+  if (queryParamSort === "new") {
+    order = "DESC";
+    sortBy = "createdAt";
+  }
+  if (queryParamSort === "old") {
+    order = "ASC";
+    sortBy = "createdAt";
+  }
 
   useEffect(async () => {
     setLoading(true);
-    const result = await axios.get(`/api/posts?limit=5`);
+    const result = await axios.get(
+      `/api/posts?limit=5&sortBy=${sortBy}&order=${order}`
+    );
     console.log(result.data.totalCount);
     setTotalPostCount(result.data.totalCount);
     console.log(result);

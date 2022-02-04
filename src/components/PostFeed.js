@@ -7,10 +7,14 @@ import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import useGetPosts from "../hooks/useGetPosts";
+import { useParams } from "react-router";
+import { useSearchParams } from "react-router-dom";
 
 const PostFeed = () => {
   const [reachedEnd, setReachedEnd] = useState(false);
-  const [fetchMorePosts, loading, posts] = useGetPosts();
+  const [searchParams] = useSearchParams();
+  const sort = searchParams.get("sort");
+  const [fetchMorePosts, loading, posts] = useGetPosts(sort);
 
   const observer = useRef();
   const lastPostRef = useCallback((node) => {
@@ -24,6 +28,11 @@ const PostFeed = () => {
     if (node) observer.current.observe(node);
   });
 
+  /* const sortByDate = async () => {
+    const result = await axios.get(`/api/posts?sortBy=createdAt&order=ASC`);
+    setPost(result.data);
+  };
+^*/
   return (
     <div
       onScroll={() => {

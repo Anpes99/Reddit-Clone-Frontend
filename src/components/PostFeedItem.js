@@ -14,7 +14,11 @@ const PostFeedItem = ({ post }) => {
   return (
     <div
       onClick={() => {
-        navigate(`/r/${post.subreddit.name}/comments/${post.id}/${post.title}`);
+        navigate(
+          `/r/${post?.subreddit?.name || "noName"}/comments/${post.id}/${
+            post?.title.replaceAll(" ", "_") || "noTitle"
+          }`
+        );
       }}
       className="cursor-pointer flex flex-col sm:flex-row w-full  sm:h-96 bg-white border mb-4"
     >

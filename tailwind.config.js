@@ -15,3 +15,5 @@ module.exports = {
   },
   plugins: [require("@tailwindcss/line-clamp")],
 };
+
+//  if page is not compiling, try saving this file
