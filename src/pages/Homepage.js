@@ -11,18 +11,32 @@ const HomePage = () => {
   return (
     <>
       <Header />
-      <main
-        onClick={() => {
-          dispatch(setHeaderDropDownVisible(false));
-        }}
-        className="max-w-screen-lg mx-auto md:p-5
+      <div className="flex">
+        <div
+          onClick={() => {
+            dispatch(setHeaderDropDownVisible(false));
+          }}
+          className="flex-grow flex-shrink"
+        ></div>
+        <main
+          onClick={() => {
+            dispatch(setHeaderDropDownVisible(false));
+          }}
+          className="max-w-screen-lg mx-auto md:p-5
     pt-3"
-      >
-        <TrendingFeed />
-        <div>
-          <PostFeed />
-        </div>
-      </main>
+        >
+          <TrendingFeed />
+          <div>
+            <PostFeed />
+          </div>
+        </main>
+        <div
+          onClick={() => {
+            dispatch(setHeaderDropDownVisible(false));
+          }}
+          className="flex-grow flex-shrink"
+        ></div>
+      </div>
     </>
   );
 };

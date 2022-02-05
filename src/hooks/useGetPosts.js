@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import socket from "../websockets/posts";
 
 const useGetPosts = (queryParamSort) => {
   const [posts, setPosts] = useState([]);
@@ -19,22 +20,47 @@ const useGetPosts = (queryParamSort) => {
     sortBy = "createdAt";
   }
 
+  //////////////////   GET INITIAL POSTS  /////////////////////////////////////////////////////////////////////////////////////
   useEffect(async () => {
     setLoading(true);
-    const result = await axios.get(
+    /*const result = await axios.get(
       `/api/posts?limit=5&sortBy=${sortBy}&order=${order}`
-    );
-    console.log(result.data.totalCount);
+    );*/ //  order, sortby, offset, limit, cb
+
+    socket.emit("fetch_more_posts", order, sortBy, 0, 5, (data) => {
+      console.log("socket data ", data);
+      setPosts(data.posts);
+      setTotalPostCount(data.totalCount);
+      setLoading(false);
+    });
+
+    /*console.log(result.data.totalCount);
     setTotalPostCount(result.data.totalCount);
     console.log(result);
-    setLoading(false);
-    setPosts(result.data.posts);
+    
+    setPosts(result.data.posts);*/
   }, []);
 
+  //////////////////////////////////// GET MORE  POSTS ///////////////////////////////////////////////////
   const fetchMorePosts = async () => {
     console.log(totalPostCount, posts.length);
     if (totalPostCount > posts.length) {
       setLoading(true);
+      socket.emit(
+        "fetch_more_posts",
+        order,
+        sortBy,
+        posts.length,
+        5, //limit
+        (data) => {
+          console.log("socket data ", data);
+          setPosts([...posts, ...data.posts]);
+          setTotalPostCount(data.totalCount);
+          setLoading(false);
+        }
+      );
+
+      /*
       const result = await axios
         .get(`/api/posts?offset=${posts.length}&limit=5`)
         .catch((e) => {
@@ -42,7 +68,7 @@ const useGetPosts = (queryParamSort) => {
         });
       console.log(posts);
       setLoading(false);
-      setPosts([...posts, ...result.data.posts]);
+      setPosts([...posts, ...result.data.posts]);*/
     }
   };
 

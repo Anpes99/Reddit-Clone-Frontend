@@ -16,7 +16,7 @@ const TrendingFeed = (props) => {
 
   return (
     <div className="w-full px-1">
-      <p className="pl-4 font-medium text-gray-700">Trending today</p>
+      <p className=" font-medium text-gray-700">Trending today</p>
       <div className="grid grid-cols-4 sm:grid-cols-3 gap-3 py-4 md:grid-cols-4">
         <div className="  col-span-2 sm:col-auto">
           <TrendingFeedItem data={newsArticles ? newsArticles[0] : null} />

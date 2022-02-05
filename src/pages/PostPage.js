@@ -18,8 +18,37 @@ import { useSearchParams } from "react-router-dom";
 import { ChatIcon } from "@heroicons/react/outline";
 import TextareaAutosize from "react-textarea-autosize";
 
+import { useSelector } from "react-redux";
+import { setLoginVisible, setSignUpVisible } from "../slices/appSlice";
+
+import socket from "../websockets/posts";
+
 const handleLike = async (commentId) => {
   const result = await axios.post(`/api/comments/${commentId}/like`);
+  console.log(result);
+};
+
+const handleSubmitComment = async (
+  directReplyToPost,
+  comment,
+  subredditId,
+  postId,
+  commentId
+) => {
+  const data = {
+    text: comment,
+    directReplyToPost,
+    subredditId: subredditId,
+    userId: "2", // localstorage.getItem("...")
+    postId: postId,
+  };
+  if (commentId && !directReplyToPost) {
+    data.commentId = commentId;
+  }
+  const result = await axios.post("/api/comments", data).catch((e) => {
+    return { success: false };
+  });
+  return { success: true };
   console.log(result);
 };
 
@@ -41,24 +70,100 @@ const Avatar = ({ createdAt }) => {
   );
 };
 
-const CommentActionsBar = ({ post, comment }) => {
+const CommentCommentSection = ({
+  commentId,
+  setComment,
+  comment,
+  setVisible,
+  visible,
+  subredditId,
+  postId,
+}) => {
+  const [message, setMessage] = useState(null);
+  const [error, setError] = useState(false);
+
   return (
-    <div className="flex  sm:p-2 items-center space-x-1 text-gray-400 font-semibold text-xs">
-      <ArrowSmUpIcon
-        onClick={() => {
-          handleLike(comment.id);
-        }}
-        className="text-gray-400 w-4 hover:text-red-500"
-      />
-      <p className=" font-bold">{comment.upVotes - comment.downVotes}</p>
-      <ArrowSmDownIcon className="w-4 text-gray-400 hover:text-blue-500" />
-      <p className="flex items-center hover:bg-gray-200">
-        <ChatIcon className="hidden sm:inline-block h-6 mr-1" /> Reply
+    <>
+      <p
+        className={`${
+          error ? "text-red-600" : "text-green-600"
+        } font-medium text-medium`}
+      >
+        {message && message}
       </p>
-      <p className="hover:bg-gray-200">Share</p>
-      <p className="hover:bg-gray-200">Report</p>
-      <p className="hover:bg-gray-200">Save</p>
-      <p className="hover:bg-gray-200">Follow</p>
+
+      <div className={`mb-5 ${visible ? "block" : "hidden"}`}>
+        <TextareaAutosize
+          onChange={(event) => {
+            setComment(event.target.value);
+          }}
+          className="w-full px-5 pt-3 border m-0 min-h-[5rem] "
+        />
+        <div className="bg-gray-100 w-full h-10 -mt-1.5 rounded-b-md flex items-center justify-end">
+          <button
+            onClick={async () => {
+              const res = await handleSubmitComment(
+                false,
+                comment,
+                subredditId,
+                postId,
+                commentId
+              );
+              if (res.success) {
+                setVisible(false);
+                setMessage("new comment created");
+                setTimeout(() => {
+                  setMessage(null);
+                }, 3000);
+              }
+            }}
+            className="join-btn mr-5 "
+          >
+            Comment
+          </button>
+        </div>
+      </div>
+    </>
+  );
+};
+
+const CommentActionsBar = ({ post, comment }) => {
+  const [newComment, setNewComment] = useState("");
+  const [createCommentVisible, setCreateCommentVisible] = useState(false);
+
+  return (
+    <div className="flex flex-col">
+      <div className="flex  sm:p-2 items-center space-x-1 text-gray-400 font-semibold text-xs">
+        <ArrowSmUpIcon
+          onClick={() => {
+            handleLike(comment.id);
+          }}
+          className="text-gray-400 w-4 hover:text-red-500 cursor-pointer"
+        />
+        <p className=" font-bold">{comment.upVotes - comment.downVotes}</p>
+        <ArrowSmDownIcon className="w-4 text-gray-400 hover:text-blue-500 cursor-pointer" />
+        <p
+          onClick={() => {
+            setCreateCommentVisible(!createCommentVisible);
+          }}
+          className="flex items-center hover:bg-gray-200 cursor-pointer"
+        >
+          <ChatIcon className="hidden sm:inline-block h-6 mr-1" /> Reply
+        </p>
+        <p className="hover:bg-gray-200 cursor-pointer">Share</p>
+        <p className="hover:bg-gray-200 cursor-pointer">Report</p>
+        <p className="hover:bg-gray-200 cursor-pointer">Save</p>
+        <p className="hover:bg-gray-200 cursor-pointer">Follow</p>
+      </div>
+      <CommentCommentSection
+        commentId={comment.id}
+        comment={newComment}
+        setComment={setNewComment}
+        visible={createCommentVisible}
+        setVisible={setCreateCommentVisible}
+        subredditId={post.subredditId}
+        postId={post.id}
+      />
     </div>
   );
 };
@@ -67,7 +172,6 @@ const PostPage = () => {
   const navigate = useNavigate();
   const [sortVisible, setSortVisible] = useState(false);
 
-  const dispatch = useDispatch();
   const [post, setPost] = useState({});
   const [commentPost, setCommentPost] = useState("");
   const [searchParams] = useSearchParams();
@@ -76,40 +180,35 @@ const PostPage = () => {
 
   const postId = useParams().postId;
   let comments;
+
+  const user = useSelector((state) => state.app.user);
+
   useEffect(async () => {
+    let queryString = "";
+    queryString = sortBy ? queryString + "&sortBy=" + sortBy : queryString;
+    queryString = order ? queryString + "&order=" + order : queryString;
     const result = await axios.get(
-      `/api/posts/${postId}?commentCommentAmount=10${
-        sortBy && "&sortBy=" + sortBy
-      }${order && "&order=" + order}`
+      `/api/posts/${postId}?commentCommentAmount=10${queryString}`
     );
     setPost(result.data);
   }, []);
 
-  const handleSubmitComment = async (directReplyToPost, comment, commentId) => {
-    const data = {
-      text: comment,
-      directReplyToPost,
-      subredditId: post.subredditId,
-      userId: "2", // localstorage.getItem("...")
-      postId: post.id,
-    };
-    if (commentId && !directReplyToPost) {
-      data.commentId = commentId;
-    }
-    const result = await axios.post("/api/comments", data);
-    console.log(result);
+  const handleLike = async () => {
+    socket.emit("likePost", post.id);
+  };
+  const handleDislike = async () => {
+    socket.emit("dislikePost", post.id);
   };
 
-  const sortCommentsByDate = async () => {
-    const result = await axios.get(
-      `/api/posts/${postId}?commentCommentAmount=10&sortBy=createdAt&order=DESC`
-    );
-    console.log(result);
-    setPost(result.data);
-  };
+  const dispatch = useDispatch();
 
   return (
-    <div className="flex flex-col">
+    <div
+      onClick={() => {
+        if (sortVisible) setSortVisible(false);
+      }}
+      className="flex flex-col"
+    >
       <Header />
       <div
         onClick={() => {
@@ -121,19 +220,42 @@ const PostPage = () => {
           <div className="h-10 bg-black flex items-center justify-between sticky top-0 z-40">
             <div className="flex items-center">
               <div className="flex text-gray-400 items-center border-l border-r border-gray-600 mr-3 ml-1 sm:ml-10">
-                <ArrowSmUpIcon className=" h-6 hover:text-red-500" />
+                <ArrowSmUpIcon
+                  onClick={() => {
+                    if (user) {
+                      handleLike();
+                    } else {
+                      dispatch(setLoginVisible(true));
+                    }
+                  }}
+                  className=" h-6 hover:text-red-500 cursor-pointer"
+                />
                 <p className=" px-1 font-bold text-sm text-white">
                   {post.upVotes - post.downVotes}
                 </p>
-                <ArrowSmDownIcon className="h-6  hover:text-blue-500" />
+                <ArrowSmDownIcon
+                  onClick={() => {
+                    if (user) {
+                      handleDislike();
+                    } else {
+                      dispatch(setLoginVisible(true));
+                    }
+                  }}
+                  className="h-6  hover:text-blue-500 cursor-pointer"
+                />
               </div>
               <PhotographIcon className="hidden sm:inline-block h-6 w-6 text-gray-200 mr-1" />
               <p className="line-clamp-1 text-gray-200 flex-shrink flex-grow">
                 {post.title}
               </p>
             </div>
-            <div className=" text-gray-300 flex pr-5 items-center">
-              <XIcon className="h-5 w-5" />
+            <div
+              onClick={() => {
+                navigate("/");
+              }}
+              className=" text-gray-300 flex pr-5 items-center cursor-pointer"
+            >
+              <XIcon className="h-5 w-5 " />
               <p className="hidden sm:inline-block">Close</p>
             </div>
           </div>
@@ -143,6 +265,7 @@ const PostPage = () => {
               {/* POST COMMENT SECTION    //////////////////////////////////////////////////////////////////////////////////////// */}
               <div className="mb-5">
                 <TextareaAutosize
+                  disabled={user ? false : true}
                   onChange={(event) => {
                     setCommentPost(event.target.value);
                   }}
@@ -151,20 +274,32 @@ const PostPage = () => {
                 <div className="bg-gray-100 w-full h-10 -mt-1.5 rounded-b-md flex items-center justify-end">
                   <button
                     onClick={() => {
-                      handleSubmitComment(true, commentPost, post.subredditId);
+                      if (user) {
+                        handleSubmitComment(
+                          true,
+                          commentPost,
+                          post.subredditId
+                        );
+                      } else {
+                        dispatch(setLoginVisible(true));
+                      }
                     }}
-                    className="join-btn mr-5 "
+                    className={`${
+                      user
+                        ? ""
+                        : "bg-gray-300 text-gray-400 hover:bg-gray-300 cursor-default"
+                    } join-btn mr-5 `}
                   >
-                    Comment
+                    {user ? "Comment" : "Log in to Comment"}
                   </button>
                 </div>
               </div>
 
               {/* SORTING SECTION    //////////////////////////////////////////////////////////////////////////////////////// */}
 
-              <div className="relative my-5">
+              <div className="relative my-5 w-[3rem]">
                 <button
-                  className="h-10 bg-blue-600 text-white font-bold rounded-md px-5"
+                  className="h-10 bg-blue-600 text-white font-bold rounded-md w-full"
                   onClick={() => setSortVisible(!sortVisible)}
                 >
                   Sort
@@ -172,7 +307,7 @@ const PostPage = () => {
                 <div
                   className={` ${
                     sortVisible ? "inline-block" : "hidden"
-                  }  text-gray-500 bg-white font-medium  shadow-md absolute top-full rounded-md flex flex-col`}
+                  }  text-gray-500 bg-white font-medium  shadow-md absolute top-full w-full rounded-md flex flex-col`}
                 >
                   <a
                     href={`/r/${post?.subreddit?.name || "noName"}/comments/${
@@ -221,7 +356,7 @@ const PostPage = () => {
                     {comment?.comments?.map((a) => (
                       <div className="border-l border-gray-300 translate-x-3 sm:translate-x-10 ">
                         <div className="flex flex-col space-x-1 p-2 ">
-                          <Avatar createdAt={comment.createdAt} />
+                          <Avatar createdAt={a.createdAt} />
 
                           <p className="p-1 pl-7">{a.text}</p>
                           <CommentActionsBar comment={a} post={post} />
@@ -230,7 +365,7 @@ const PostPage = () => {
                           return (
                             <div className="border-l border-gray-300 translate-x-3 sm:translate-x-10 ">
                               <div className="flex flex-col space-x-1 p-2 ">
-                                <Avatar createdAt={comment.createdAt} />
+                                <Avatar createdAt={b.createdAt} />
 
                                 <p className="p-1 pl-7">{b.text}</p>
                                 <CommentActionsBar comment={b} post={post} />
@@ -239,7 +374,7 @@ const PostPage = () => {
                               {b?.comments?.map((c) => (
                                 <div className="border-l border-gray-300 translate-x-3 sm:translate-x-10 ">
                                   <div className="flex flex-col space-x-1 p-2 ">
-                                    <Avatar createdAt={comment.createdAt} />
+                                    <Avatar createdAt={c.createdAt} />
 
                                     <p className="p-1 pl-7">{c.text}</p>
                                     <CommentActionsBar
@@ -251,9 +386,7 @@ const PostPage = () => {
                                     return (
                                       <div className="border-l border-gray-300 translate-x-3 sm:translate-x-10 ">
                                         <div className="flex flex-col space-x-1 p-2 ">
-                                          <Avatar
-                                            createdAt={comment.createdAt}
-                                          />
+                                          <Avatar createdAt={d.createdAt} />
 
                                           <p className="p-1 pl-7">{d.text}</p>
                                           <CommentActionsBar
@@ -277,8 +410,8 @@ const PostPage = () => {
             </section>
 
             {/* SIDEBAR SECTION     RIGHT SIDE            //////////////////////////////////////////////////////////////////////////////////////////      */}
-            <section className="hidden lg:flex flex-col items-center">
-              <div className="flex flex-col border rounded-sm pt-5 text-gray-800 ">
+            <section className="hidden lg:flex flex-col items-center ">
+              <div className="flex flex-col border rounded-sm pt-5 text-gray-800 border border-gray-300">
                 <div className="p-2 flex flex-col space-y-3">
                   <div className=" font-bold flex space-x-5 items-center self-start">
                     <div className="rounded-full overflow-hidden h-[3rem] w-[3rem]">
@@ -306,7 +439,18 @@ const PostPage = () => {
                   <div className="text-base font-normal">
                     created aug 27 2008
                   </div>
-                  <button className="btn2">Join</button>
+                  <button
+                    onClick={() => {
+                      if (user) {
+                        /////////   join subreddit
+                      } else {
+                        dispatch(setLoginVisible(true));
+                      }
+                    }}
+                    className="btn2"
+                  >
+                    Join
+                  </button>
                 </div>
               </div>
             </section>

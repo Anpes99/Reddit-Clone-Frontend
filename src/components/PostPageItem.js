@@ -10,19 +10,53 @@ import {
 } from "@heroicons/react/outline";
 import skyrim from "../fake data/skyrim.png";
 import moment from "moment";
+import socket from "../websockets/posts";
+
+import { useDispatch, useSelector } from "react-redux";
+import { setLoginVisible } from "../slices/appSlice";
 
 const PostPageItem = ({ post }) => {
   console.log(post.createdAt);
   const date = new Date(post.createdAt);
   console.log(post);
+
+  const handleLike = async () => {
+    socket.emit("likePost", post.id);
+  };
+  const handleDislike = async () => {
+    socket.emit("dislikePost", post.id);
+  };
+
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.app.user);
+
   return (
     <div className="flex flex-col sm:flex-row max-w-[40rem]  bg-white  mb-4">
       <div className=" hidden sm:flex flex-col items-center  w-25">
-        <ArrowSmUpIcon className="h-7 text-gray-400 hover:text-red-500" />
+        <ArrowSmUpIcon
+          onClick={() => {
+            if (user) {
+              handleLike();
+            } else {
+              dispatch(setLoginVisible(true));
+            }
+          }}
+          className="h-7 text-gray-400 hover:text-red-500 cursor-pointer"
+        />
         <p className=" px-1 font-bold text-sm">
           {post.upVotes - post.downVotes}
         </p>
-        <ArrowSmDownIcon className="h-7 text-gray-400 hover:text-blue-500" />
+        <ArrowSmDownIcon
+          onClick={() => {
+            if (user) {
+              handleDislike();
+            } else {
+              dispatch(setLoginVisible(true));
+            }
+          }}
+          className="h-7 text-gray-400 hover:text-blue-500 cursor-pointer"
+        />
       </div>
 
       <div className="flex flex-col">

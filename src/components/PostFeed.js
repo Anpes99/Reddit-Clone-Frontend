@@ -9,6 +9,7 @@ import axios from "axios";
 import useGetPosts from "../hooks/useGetPosts";
 import { useParams } from "react-router";
 import { useSearchParams } from "react-router-dom";
+import socket from "../websockets/posts";
 
 const PostFeed = () => {
   const [reachedEnd, setReachedEnd] = useState(false);
@@ -38,43 +39,45 @@ const PostFeed = () => {
       onScroll={() => {
         console.log("scroll");
       }}
-      className="flex space-x-10 w-full"
+      className="flex flex-col  w-full"
     >
-      <div>
-        <div className="flex space-x-4 bg-white p-5 text-xs sm:text-sm">
-          <button className="flex items-center font-semibold text-gray-400 sm:space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl">
-            <FireIcon className="h-4 sm:h-7" />
-            <p className="hidden sm:inline">Hot</p>
-          </button>
-          <button className="flex items-center font-semibold text-gray-400 space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl">
-            <SunIcon className="h-4 sm:h-7" />
-            <p className="hidden sm:inline">New</p>
-          </button>
-          <button className="flex items-center font-semibold text-gray-400 space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl">
-            <TrendingUpIcon className="h-4 sm:h-7" />
-            <p className="hidden sm:inline">Top</p>
-          </button>
-          <button className="flex items-center font-semibold text-gray-400 space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl">
-            <p className="hidden sm:inline">Today</p>
-            <ChevronDownIcon className="h-4 sm:h-7" />
-          </button>
-          <button className="flex items-center font-semibold text-gray-400 space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl">
-            <p>...</p>
-          </button>
+      <p className="py-4 font-medium text-gray-700">Popular posts</p>
+      <div className="flex justify-center lg:justify-between ">
+        <div className="pr-0 lg:pr-7">
+          <div className="flex space-x-4 bg-white p-5 text-xs sm:text-sm mb-2 border border-gray-300">
+            <button className="flex items-center font-semibold text-gray-400 sm:space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl">
+              <FireIcon className="h-4 sm:h-7" />
+              <p className="hidden sm:inline">Hot</p>
+            </button>
+            <button className="flex items-center font-semibold text-gray-400 space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl">
+              <SunIcon className="h-4 sm:h-7" />
+              <p className="hidden sm:inline">New</p>
+            </button>
+            <button className="flex items-center font-semibold text-gray-400 space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl">
+              <TrendingUpIcon className="h-4 sm:h-7" />
+              <p className="hidden sm:inline">Top</p>
+            </button>
+            <button className="flex items-center font-semibold text-gray-400 space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl">
+              <p className="hidden sm:inline">Today</p>
+              <ChevronDownIcon className="h-4 sm:h-7" />
+            </button>
+            <button className="flex items-center font-semibold text-gray-400 space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl">
+              <p>...</p>
+            </button>
+          </div>
+          {posts.map((post, i) => {
+            if (i + 1 === posts.length) {
+              return (
+                <div ref={lastPostRef}>
+                  <PostFeedItem post={post} key={i} />
+                </div>
+              );
+            } else return <PostFeedItem post={post} key={i} />;
+          })}
         </div>
-        {posts.map((post, i) => {
-          if (i + 1 === posts.length) {
-            return (
-              <div ref={lastPostRef}>
-                <PostFeedItem post={post} key={i} />
-              </div>
-            );
-          } else return <PostFeedItem post={post} key={i} />;
-        })}
-      </div>
-
-      <div className="hidden lg:block">
-        <TopCommunities />
+        <div className="hidden lg:block">
+          <TopCommunities />
+        </div>
       </div>
     </div>
   );
