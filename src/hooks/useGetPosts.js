@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import socket from "../websockets/posts";
 
-const useGetPosts = (queryParamSort) => {
+const useGetPosts = (queryParamSort, subredditId) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPostCount, setTotalPostCount] = useState(true);
@@ -27,12 +27,20 @@ const useGetPosts = (queryParamSort) => {
       `/api/posts?limit=5&sortBy=${sortBy}&order=${order}`
     );*/ //  order, sortby, offset, limit, cb
 
-    socket.emit("fetch_more_posts", order, sortBy, 0, 5, (data) => {
-      console.log("socket data ", data);
-      setPosts(data.posts);
-      setTotalPostCount(data.totalCount);
-      setLoading(false);
-    });
+    socket.emit(
+      "fetch_more_posts",
+      order,
+      sortBy,
+      0,
+      5,
+      subredditId,
+      (data) => {
+        console.log("socket data ", data);
+        setPosts(data.posts);
+        setTotalPostCount(data.totalCount);
+        setLoading(false);
+      }
+    );
 
     /*console.log(result.data.totalCount);
     setTotalPostCount(result.data.totalCount);
@@ -52,6 +60,7 @@ const useGetPosts = (queryParamSort) => {
         sortBy,
         posts.length,
         5, //limit
+        subredditId,
         (data) => {
           console.log("socket data ", data);
           setPosts([...posts, ...data.posts]);

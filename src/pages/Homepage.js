@@ -3,10 +3,15 @@ import PostFeed from "../components/PostFeed";
 import TrendingFeed from "../components/TrendingFeed";
 
 import { useDispatch } from "react-redux";
-import { setHeaderDropDownVisible } from "../slices/appSlice";
+import {
+  setHeaderDropDownVisible,
+  setCurrentSubreddit,
+} from "../slices/appSlice";
 
 const HomePage = () => {
   const dispatch = useDispatch();
+
+  dispatch(setCurrentSubreddit(null));
 
   return (
     <>

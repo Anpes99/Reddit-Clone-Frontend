@@ -1,4 +1,4 @@
-import { SearchIcon } from "@heroicons/react/outline";
+import { PlusIcon, SearchIcon } from "@heroicons/react/outline";
 import { UserIcon } from "@heroicons/react/outline";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useState } from "react";
@@ -19,6 +19,7 @@ const Header = () => {
   const dropDownVisible = useSelector(
     (state) => state.app.headerDropDownVisible
   );
+  const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -81,7 +82,15 @@ const Header = () => {
             type="text"
           />
         </div>
-        <div className="flex space-x-3 p-4">
+        <div className="flex items-center space-x-3 p-4">
+          {user && currentSubreddit && (
+            <button
+              onClick={() => navigate(`/r/${currentSubreddit.name}/submit`)}
+              className="h-7 w-7 text-gray-400 hover:bg-gray-300"
+            >
+              <PlusIcon />
+            </button>
+          )}
           {
             <button
               onClick={() => {
@@ -124,7 +133,7 @@ const Header = () => {
               console.log(dropDownVisible);
               dispatch(setHeaderDropDownVisible(!dropDownVisible));
             }}
-            className="px-2 rounded-sm md:px-4 flex items-center text-gray-400 border border-gray-50 hover:border-gray-300 transition-all cursor-pointer"
+            className="px-2 rounded-sm md:px-4 flex items-center text-gray-400 border self-stretch border-gray-50 hover:border-gray-300 transition-all cursor-pointer"
           >
             <UserIcon className="h-5" />
             <ChevronDownIcon className="h-4 -ml-1" />

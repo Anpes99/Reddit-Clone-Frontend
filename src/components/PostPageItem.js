@@ -14,8 +14,31 @@ import socket from "../websockets/posts";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setLoginVisible } from "../slices/appSlice";
+import { useEffect, useRef, useState } from "react";
 
-const PostPageItem = ({ post }) => {
+const PostLikes = ({ post, className }) => {
+  const [likes, setLikes] = useState(0);
+
+  useEffect(() => {
+    setLikes(post.upVotes - post.downVotes);
+  }, [post]);
+
+  socket.on("post_received_likes", (postId) => {
+    if (postId === post.id) {
+      setLikes(likes + 1);
+    }
+  });
+  socket.on("post_received_dislikes", (postId) => {
+    if (postId === post.id) {
+      setLikes(likes - 1);
+    }
+  });
+
+  return <p className={className}>{likes}</p>;
+};
+
+const PostPageItem = ({ post, totalComments }) => {
+  console.log(post);
   console.log(post.createdAt);
   const date = new Date(post.createdAt);
   console.log(post);
@@ -44,9 +67,7 @@ const PostPageItem = ({ post }) => {
           }}
           className="h-7 text-gray-400 hover:text-red-500 cursor-pointer"
         />
-        <p className=" px-1 font-bold text-sm">
-          {post.upVotes - post.downVotes}
-        </p>
+        <PostLikes className=" px-1 font-bold text-sm" post={post} />
         <ArrowSmDownIcon
           onClick={() => {
             if (user) {
@@ -78,11 +99,12 @@ const PostPageItem = ({ post }) => {
           </div>
         </div>
         <div className="flex items-center w-full overflow-hidden self-stretch">
-          <img className="h-full object-contain" src={img} />
+          <img className="h-full object-contain" src={post.imageUrl || null} />
         </div>
         <div className="flex text-gray-400 items-center text-xs space-x-1 p-1">
           <p className="hover:bg-gray-200 p-2 py-3">
-            <ChatIcon className="w-6 h-6 inline mr-0.5 " /> 0 Comments
+            <ChatIcon className="w-6 h-6 inline mr-0.5 " /> {totalComments}{" "}
+            Comments
           </p>
           <p className="hover:bg-gray-200 p-2 py-3">
             <ShareIcon className="w-6 h-6 inline mr-0.5 " /> Share

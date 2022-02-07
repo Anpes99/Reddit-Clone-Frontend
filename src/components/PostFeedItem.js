@@ -39,7 +39,7 @@ const PostFeedItem = ({ post }) => {
   });
 
   return (
-    <div className=" flex flex-col sm:flex-row w-full max-w-[40rem]   sm:h-96 bg-white border mb-3  border-gray-300">
+    <div className=" flex flex-col sm:flex-row w-full    sm:h-min-content bg-white border mb-3  border-gray-300 p-0.5">
       <div className=" hidden sm:flex flex-col items-center bg-gray-50 w-20 p-1.5">
         <ArrowSmUpIcon
           onClick={() => {
@@ -49,7 +49,7 @@ const PostFeedItem = ({ post }) => {
               dispatch(setLoginVisible(true));
             }
           }}
-          className="h-7 text-gray-400 hover:text-red-500 cursor-pointer"
+          className="h-7 text-gray-400 hover:text-red-500 cursor-pointer "
         />
         <p className=" px-1 font-bold text-xs">{likes}</p>
         <ArrowSmDownIcon
@@ -72,7 +72,7 @@ const PostFeedItem = ({ post }) => {
             }`
           );
         }}
-        className="flex flex-col cursor-pointer"
+        className="flex flex-col cursor-pointer w-full"
       >
         <div className="flex flex-col p-2">
           <div className="flex items-center space-x-2 ">
@@ -87,13 +87,15 @@ const PostFeedItem = ({ post }) => {
               {moment(date.getTime()).fromNow()}
             </p>
           </div>
-          <div className="mt-2 font-semibold text-lg line-clamp-2">
+          <div className="mt-2 font-semibold text-lg line-clamp-5">
             {post.title}
           </div>
         </div>
-        <div className="flex items-center w-full overflow-hidden self-stretch">
-          <img src={img} />
-        </div>
+
+        <img
+          className="block max-w-[40rem]  overflow-hidden  object-contain w-full m-auto"
+          src={post?.imageUrl || null}
+        />
       </div>
       <div className="flex sm:hidden p-2 items-center">
         <ArrowSmUpIcon

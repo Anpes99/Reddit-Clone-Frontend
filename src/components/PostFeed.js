@@ -11,11 +11,11 @@ import { useParams } from "react-router";
 import { useSearchParams } from "react-router-dom";
 import socket from "../websockets/posts";
 
-const PostFeed = () => {
+const PostFeed = ({ subredditId }) => {
   const [reachedEnd, setReachedEnd] = useState(false);
   const [searchParams] = useSearchParams();
   const sort = searchParams.get("sort");
-  const [fetchMorePosts, loading, posts] = useGetPosts(sort);
+  const [fetchMorePosts, loading, posts] = useGetPosts(sort, subredditId);
 
   const observer = useRef();
   const lastPostRef = useCallback((node) => {
@@ -42,9 +42,9 @@ const PostFeed = () => {
       className="flex flex-col  w-full"
     >
       <p className="py-4 font-medium text-gray-700">Popular posts</p>
-      <div className="flex justify-center lg:justify-between ">
-        <div className="pr-0 lg:pr-7">
-          <div className="flex space-x-4 bg-white p-5 text-xs sm:text-sm mb-2 border border-gray-300">
+      <div className="flex justify-center lg:justify-between w-full">
+        <div className="pr-0 lg:pr-7 w-full">
+          <div className="flex space-x-4 bg-white p-5 text-xs sm:text-sm mb-2 border border-gray-300 w-full">
             <button className="flex items-center font-semibold text-gray-400 sm:space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl">
               <FireIcon className="h-4 sm:h-7" />
               <p className="hidden sm:inline">Hot</p>
@@ -68,7 +68,7 @@ const PostFeed = () => {
           {posts.map((post, i) => {
             if (i + 1 === posts.length) {
               return (
-                <div ref={lastPostRef}>
+                <div id={post.id} ref={lastPostRef}>
                   <PostFeedItem post={post} key={i} />
                 </div>
               );

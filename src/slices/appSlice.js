@@ -5,6 +5,7 @@ const initialState = {
   headerDropDownVisible: false,
   loginVisible: false,
   signUpVisible: false,
+  currentSubreddit: null,
 };
 
 export const appSlice = createSlice({
@@ -23,6 +24,9 @@ export const appSlice = createSlice({
     setSignUpVisible: (state, action) => {
       state.signUpVisible = action.payload;
     },
+    setCurrentSubreddit: (state, action) => {
+      state.currentSubreddit = action.payload;
+    },
   },
 });
 
@@ -31,6 +35,7 @@ export const {
   setHeaderDropDownVisible,
   setLoginVisible,
   setSignUpVisible,
+  setCurrentSubreddit,
 } = appSlice.actions;
 
 // Selectors - This is how we pull information from the Global store slice

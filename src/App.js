@@ -5,10 +5,12 @@ import HomePage from "./pages/Homepage";
 import PostPage from "./pages/PostPage";
 import { useEffect } from "react";
 import { setUser } from "./slices/appSlice";
+import SubmitNewPostPage from "./pages/SubmitNewPostPage";
+import SubredditPage from "./pages/SubredditPage";
 
 const App = () => {
   useEffect(() => {
-    const user = localStorage.getItem("loggedInRedditAppUser");
+    const user = JSON.parse(localStorage.getItem("loggedInRedditAppUser"));
     console.log(user);
     if (user) store.dispatch(setUser(user));
   }, []);
@@ -18,11 +20,16 @@ const App = () => {
       <Router>
         <Provider store={store}>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route
+              path="/r/:subredditName/submit"
+              element={<SubmitNewPostPage />}
+            />
             <Route
               path="/r/:subredditName/comments/:postId/:postTitle"
               element={<PostPage />}
             />
+            <Route path="/r/:subredditName" element={<SubredditPage />} />
+            <Route path="/" element={<HomePage />} />
           </Routes>{" "}
         </Provider>
       </Router>
