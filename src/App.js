@@ -29,6 +29,7 @@ const App = () => {
               element={<PostPage />}
             />
             <Route path="/r/:subredditName" element={<SubredditPage />} />
+            <Route path="/top" element={<HomePage orderType={"top"} />} />
             <Route path="/" element={<HomePage />} />
           </Routes>{" "}
         </Provider>

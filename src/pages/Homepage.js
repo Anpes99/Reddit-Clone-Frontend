@@ -8,7 +8,7 @@ import {
   setCurrentSubreddit,
 } from "../slices/appSlice";
 
-const HomePage = () => {
+const HomePage = ({ orderType }) => {
   const dispatch = useDispatch();
 
   dispatch(setCurrentSubreddit(null));
@@ -32,7 +32,7 @@ const HomePage = () => {
         >
           <TrendingFeed />
           <div>
-            <PostFeed />
+            <PostFeed orderType={orderType} />
           </div>
         </main>
         <div

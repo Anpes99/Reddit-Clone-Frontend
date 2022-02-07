@@ -553,7 +553,7 @@ const PostPage = () => {
                     className="border-l border-gray-300 "
                     key={comment.id}
                   >
-                    <div className="flex flex-col space-x-1 p-2">
+                    <div className="flex flex-col items-start  text-left space-x-1 p-2">
                       <Avatar createdAt={comment.createdAt} />
 
                       <p className="p-1 pl-7">{comment.text}</p>
@@ -569,7 +569,7 @@ const PostPage = () => {
                         key={a.id}
                         className="border-l border-gray-300 translate-x-3 sm:translate-x-10 "
                       >
-                        <div className="flex flex-col space-x-1 p-2 ">
+                        <div className="flex flex-col items-start text-left space-x-1 p-2 ">
                           <Avatar createdAt={a.createdAt} />
 
                           <p className="p-1 pl-7">{a.text}</p>
@@ -586,7 +586,7 @@ const PostPage = () => {
                               key={b.id}
                               className="border-l border-gray-300 translate-x-3 sm:translate-x-10 "
                             >
-                              <div className="flex flex-col space-x-1 p-2 ">
+                              <div className="flex flex-col items-start text-left space-x-1 p-2 ">
                                 <Avatar createdAt={b.createdAt} />
 
                                 <p className="p-1 pl-7">{b.text}</p>
@@ -603,7 +603,7 @@ const PostPage = () => {
                                   key={c.id}
                                   className="border-l border-gray-300 translate-x-3 sm:translate-x-10 "
                                 >
-                                  <div className="flex flex-col space-x-1 p-2 ">
+                                  <div className="flex flex-col items-start text-left space-x-1 p-2 ">
                                     <Avatar createdAt={c.createdAt} />
 
                                     <p className="p-1 pl-7">{c.text}</p>
@@ -620,7 +620,7 @@ const PostPage = () => {
                                         key={d.id}
                                         className="border-l border-gray-300 translate-x-3 sm:translate-x-10 "
                                       >
-                                        <div className="flex flex-col space-x-1 p-2 ">
+                                        <div className="flex flex-col items-start text-left space-x-1 p-2 ">
                                           <Avatar createdAt={d.createdAt} />
 
                                           <p className="p-1 pl-7">{d.text}</p>

@@ -68,7 +68,13 @@ const UserSubredditsDropDown = ({}) => {
               sx={{ position: "absolute", bgcolor: "background.paper" }}
             >
               {user?.subreddits.map((subreddit) => (
-                <ListItemButton key={subreddit.name} sx={{ pl: 4 }}>
+                <ListItemButton
+                  onClick={() => {
+                    window.location.href = `/r/${subreddit.name}`;
+                  }}
+                  key={subreddit.name}
+                  sx={{ pl: 4 }}
+                >
                   <ListItemIcon>
                     <div className="rounded-full w-6 h-6 overflow-hidden">
                       <img src={f1} alt="" />
