@@ -209,10 +209,11 @@ const handleSubmitComment = async (
   return result;
 };
 
-const handleJoinSubreddit = async (user, subredditId, dispatch) => {
+const handleJoinSubreddit = async (user, post, dispatch) => {
+  console.log("post: ", post);
   try {
     const res = await axios.post(
-      `/api/subreddits/${subredditId}/user`,
+      `/api/subreddits/${post.subredditId}/user`,
       {},
       {
         headers: {
@@ -224,12 +225,16 @@ const handleJoinSubreddit = async (user, subredditId, dispatch) => {
     if (res.status === 200) {
       const updatedUser = {
         id: user.id,
-        subreddits: [...user.subreddits, subredditId],
+        subreddits: [...user.subreddits, post.subreddit],
         token: user.token,
         username: user.username,
       };
 
       dispatch(setUser(updatedUser));
+      localStorage.setItem(
+        "loggedInRedditAppUser",
+        JSON.stringify(updatedUser)
+      );
     }
 
     console.log("joined subreddit");
@@ -249,11 +254,16 @@ const handleLeaveSubreddit = async (user, subredditId, dispatch) => {
     if (res.status === 204) {
       const updatedUser = {
         id: user.id,
-        subreddits: user.subreddits.filter((id) => id !== subredditId),
+        subreddits: user.subreddits.filter(
+          (subreddit) => subreddit.id !== subredditId
+        ),
         token: user.token,
         username: user.username,
       };
-
+      localStorage.setItem(
+        "loggedInRedditAppUser",
+        JSON.stringify(updatedUser)
+      );
       dispatch(setUser(updatedUser));
     }
     console.log(res, "left subreddit");
@@ -673,11 +683,13 @@ const PostPage = () => {
                   <div className="text-base font-normal">
                     created aug 27 2008
                   </div>
-                  {!user?.subreddits?.includes(post.subredditId) && (
+                  {!user?.subreddits
+                    ?.map((s) => s.id)
+                    .includes(post.subredditId) && (
                     <button
                       onClick={() => {
                         if (user) {
-                          handleJoinSubreddit(user, post.subredditId, dispatch);
+                          handleJoinSubreddit(user, post, dispatch);
                         } else {
                           dispatch(setLoginVisible(true));
                         }
@@ -687,7 +699,9 @@ const PostPage = () => {
                       Join
                     </button>
                   )}
-                  {user?.subreddits?.includes(post.subredditId) && (
+                  {user?.subreddits
+                    ?.map((s) => s.id)
+                    .includes(post.subredditId) && (
                     <button
                       onClick={() => {
                         if (user) {

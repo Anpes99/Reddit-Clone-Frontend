@@ -34,6 +34,7 @@ const PostFeed = ({ subredditId }) => {
     setPost(result.data);
   };
 ^*/
+
   return (
     <div
       onScroll={() => {
@@ -46,20 +47,20 @@ const PostFeed = ({ subredditId }) => {
         <div className="pr-0 lg:pr-7 w-full">
           <div className="flex space-x-4 bg-white p-5 text-xs sm:text-sm mb-2 border border-gray-300 w-full">
             <button className="flex items-center font-semibold text-gray-400 sm:space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl">
-              <FireIcon className="h-6 sm:h-7" />
+              <FireIcon className="h-5 sm:h-7" />
               <p className="hidden sm:inline">Hot</p>
             </button>
             <button className="flex items-center font-semibold text-gray-400 space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl">
-              <SunIcon className="h-6 sm:h-7" />
+              <SunIcon className="h-5 sm:h-7" />
               <p className="hidden sm:inline">New</p>
             </button>
             <button className="flex items-center font-semibold text-gray-400 space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl">
-              <TrendingUpIcon className="h-6 sm:h-7" />
+              <TrendingUpIcon className="h-5 sm:h-7" />
               <p className="hidden sm:inline">Top</p>
             </button>
             <button className="flex items-center font-semibold text-gray-400 space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl">
               <p className="hidden sm:inline">Today</p>
-              <ChevronDownIcon className="h-6 sm:h-7" />
+              <ChevronDownIcon className="h-5 sm:h-7" />
             </button>
             <button className="flex items-center font-semibold text-gray-400 space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl">
               <p>...</p>

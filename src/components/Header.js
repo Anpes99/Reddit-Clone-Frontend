@@ -1,6 +1,6 @@
 import { PlusIcon, SearchIcon } from "@heroicons/react/outline";
 import { UserIcon } from "@heroicons/react/outline";
-import { ChevronDownIcon } from "@heroicons/react/solid";
+import { HomeIcon, ChevronDownIcon } from "@heroicons/react/solid";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -16,6 +16,75 @@ import Login from "./Login";
 import SignUp from "./SignUp";
 import { Tooltip } from "@mui/material";
 
+import * as React from "react";
+import ListSubheader from "@mui/material/ListSubheader";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Collapse from "@mui/material/Collapse";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import DraftsIcon from "@mui/icons-material/Drafts";
+import SendIcon from "@mui/icons-material/Send";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import StarBorder from "@mui/icons-material/StarBorder";
+import f1 from "../fake data/f1.png";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+
+const UserSubredditsDropDown = ({}) => {
+  const [open, setOpen] = useState(false);
+  const user = useSelector((state) => state.app.user);
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
+  return (
+    <ClickAwayListener onClickAway={() => setOpen(false)}>
+      <div className="relative">
+        <List
+          sx={{ width: "100%", bgcolor: "background.paper" }}
+          component="nav"
+          aria-labelledby="nested-list-subheader"
+        >
+          <ListItemButton onClick={handleClick}>
+            <ListItemIcon>
+              <div className="flex space-x-1 items-center text-black">
+                <HomeIcon className="text-black h-8" />
+                {open ? <ExpandLess /> : <ExpandMore />}
+              </div>
+            </ListItemIcon>
+          </ListItemButton>
+
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <List
+              subheader={
+                <ListSubheader component="div" id="nested-list-subheader">
+                  MY COMMUNITIES
+                </ListSubheader>
+              }
+              component="div"
+              disablePadding
+              sx={{ position: "absolute", bgcolor: "background.paper" }}
+            >
+              {user?.subreddits.map((subreddit) => (
+                <ListItemButton key={subreddit.name} sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                    <div className="rounded-full w-6 h-6 overflow-hidden">
+                      <img src={f1} alt="" />
+                    </div>
+                  </ListItemIcon>
+                  <ListItemText primary={"r/" + subreddit.name} />
+                </ListItemButton>
+              ))}
+            </List>
+          </Collapse>
+        </List>
+      </div>
+    </ClickAwayListener>
+  );
+};
+
 const Header = () => {
   const dropDownVisible = useSelector(
     (state) => state.app.headerDropDownVisible
@@ -23,6 +92,9 @@ const Header = () => {
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const headerDropDownVisible = useSelector(
+    (state) => state.app.headerDropDownVisible
+  );
 
   const loginVisible = useSelector((state) => state.app.loginVisible);
   const signUpVisible = useSelector((state) => state.app.signUpVisible);
@@ -38,7 +110,7 @@ const Header = () => {
             dispatch(setHeaderDropDownVisible(false));
           }
         }}
-        className="relative pb-2 sm:pb-0 flex flex-col sm:flex-row min-h-12 bg-gray-50  items-center justify-between z-[90] pl-0 sm:pl-2 sm:space-x-2"
+        className="relative pb-2 sm:pb-0 flex flex-col sm:flex-row min-h-12 bg-white  items-center justify-between z-[90] pl-0 sm:pl-2 sm:space-x-2"
       >
         <div
           onClick={() => (window.location.href = "/")}
@@ -75,7 +147,14 @@ const Header = () => {
             </svg>
           </div>
         </div>
-        <div className="w-full sm:w-auto flex items-center  border  rounded-sm relative bg-gray-100 flex-grow sm:max-w-3xl ">
+        <div className="hidden sm:block">
+          {user && <UserSubredditsDropDown />}
+        </div>
+        <div
+          className={`w-full sm:w-auto flex items-center  border  rounded-sm relative bg-gray-100 flex-grow ${
+            user ? "" : "sm:max-w-3xl"
+          }`}
+        >
           <SearchIcon className="hidden sm:inline-block pl-4 h-7 text-gray-400 absolute" />
           <input
             className="flex flex-grow bg-gray-100 p-2 text-gray-700 sm:pl-20 hover:bg-white focus:bg-white "
@@ -119,7 +198,7 @@ const Header = () => {
               }}
               className={`hidden  ${
                 user ? "sm:inline-block" : ""
-              } btn hover:bg-blue-50 text-blue-500 border-blue-500`}
+              } btn hover:bg-blue-50 text-blue-500 border-blue-500 flex-shrink-0`}
             >
               Log Out
             </button>
@@ -146,6 +225,7 @@ const Header = () => {
             <ChevronDownIcon className="h-4 -ml-1" />
           </div>
         </div>
+
         <div
           className={`flex right-0  top-[9rem] sm:top-14 w-full sm:w-auto ${
             dropDownVisible ? "" : "h-0 overflow-hidden"
@@ -184,20 +264,24 @@ const Header = () => {
           )}
         </div>
       </div>
-      <div
-        className={`${
-          loginVisible ? "block" : "hidden"
-        } fixed top-0 left-0 w-full h-full m-0 p-0 z-[1000]`}
-      >
-        <Login />
-      </div>
-      <div
-        className={`${
-          signUpVisible ? "block" : "hidden"
-        }  fixed top-0 left-0 w-full h-full m-0 p-0 z-[1000]`}
-      >
-        <SignUp />
-      </div>
+      {loginVisible && (
+        <div
+          className={`${
+            loginVisible ? "block" : "hidden"
+          } fixed top-0 left-0 w-full h-full m-0 p-0 z-[1000]`}
+        >
+          <Login />
+        </div>
+      )}
+      {signUpVisible && (
+        <div
+          className={`${
+            signUpVisible ? "block" : "hidden"
+          }  fixed top-0 left-0 w-full h-full m-0 p-0 z-[1000]`}
+        >
+          <SignUp />
+        </div>
+      )}
     </>
   );
 };
