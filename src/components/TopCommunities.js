@@ -44,14 +44,17 @@ const TopCommunities = () => {
     <div className="w-80 bg-white rounded-t-sm relative border border-gray-300">
       <div className=" h-20 bg-blue-600 rounded-t-sm flex items-end p-1 pl-4">
         <h3 className="text-white z-20 font-semibold text-lg">
-          Top News Communities
+          Top Communities
         </h3>
         <div className="absolute top-0 left-0 z-10 h-20 w-full bg-gradient-to-t from-black to-white opacity-50 rounded-t-sm"></div>
       </div>
       <div>
-        {subreddits?.map((subreddit) => {
+        {subreddits?.map((subreddit, i) => {
           return (
-            <div className=" border-b flex justify-between space-x-3 pr-3 items-center py-3   font-semibold text-lg text-black">
+            <div
+              key={subreddit.name}
+              className=" border-b flex justify-between space-x-3 pr-3 items-center py-3   font-semibold text-lg text-black"
+            >
               <div className="flex items-center space-x-3 ml-5 ">
                 <p className="w-3">1</p>
                 <ChevronUpIcon className="h-6 text-green-400" />

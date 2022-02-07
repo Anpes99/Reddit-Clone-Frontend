@@ -9,9 +9,9 @@ function Login() {
   const dispatch = useDispatch();
 
   return (
-    <div className="h-full bg-black/60 w-full py-16 px-4 ">
-      <div className="flex flex-col items-center justify-center ">
-        <div className="bg-white shadow rounded lg:w-1/3 flex flex-col items-center  md:w-1/2 w-full p-10 mt-16 relative ">
+    <div className="h-full bg-black/60 w-full flex flex-col justify-center items-center">
+      <div className="flex flex-col items-center justify-center w-full h-full">
+        <div className="bg-white shadow rounded lg:w-1/3 flex flex-col items-center  md:w-1/2 w-full p-10 pt-[4rem] relative ">
           <XIcon
             className="h-10 w-10 absolute top-5 right-5 cursor-pointer"
             onClick={() => {

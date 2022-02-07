@@ -14,6 +14,7 @@ import {
 } from "../slices/appSlice";
 import Login from "./Login";
 import SignUp from "./SignUp";
+import { Tooltip } from "@mui/material";
 
 const Header = () => {
   const dropDownVisible = useSelector(
@@ -40,7 +41,7 @@ const Header = () => {
         className="relative pb-2 sm:pb-0 flex flex-col sm:flex-row min-h-12 bg-gray-50  items-center justify-between z-[90] pl-0 sm:pl-2 sm:space-x-2"
       >
         <div
-          onClick={() => navigate("/")}
+          onClick={() => (window.location.href = "/")}
           className=" h-full flex items-center space-x-1 cursor-pointer"
         >
           <svg
@@ -83,13 +84,19 @@ const Header = () => {
           />
         </div>
         <div className="flex items-center space-x-3 p-4">
-          {user && currentSubreddit && (
-            <button
-              onClick={() => navigate(`/r/${currentSubreddit.name}/submit`)}
-              className="h-7 w-7 text-gray-400 hover:bg-gray-300"
-            >
-              <PlusIcon />
-            </button>
+          {currentSubreddit && (
+            <Tooltip title="Submit a new post">
+              <button
+                onClick={
+                  user
+                    ? () => navigate(`/r/${currentSubreddit.name}/submit`)
+                    : () => dispatch(setLoginVisible(true))
+                }
+                className="h-7 w-7 text-gray-400 hover:bg-gray-300"
+              >
+                <PlusIcon />
+              </button>
+            </Tooltip>
           )}
           {
             <button

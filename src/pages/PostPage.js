@@ -525,7 +525,7 @@ const PostPage = () => {
               </div>
               {/* SORTING SECTION    //////////////////////////////////////////////////////////////////////////////////////// */}
 
-              <div className="relative my-5 w-full border-b p-1">
+              <div className={`relative my-5 w-full border-b p-1`}>
                 <SortingSection post={post} />
               </div>
 

@@ -83,10 +83,20 @@ const PostPageItem = ({ post, totalComments }) => {
       <div className="flex flex-col">
         <div className="flex flex-col p-2">
           <div className="flex items-center space-x-2 ">
-            <div className="inline-block rounded-full overflow-hidden h-7 w-7">
+            <div
+              onClick={() =>
+                (window.location.href = `/r/${post.subreddit.name}`)
+              }
+              className="inline-block rounded-full overflow-hidden h-7 w-7 cursor-pointer flex-shrink-0"
+            >
               <img src={skyrim} />
             </div>
-            <p className="inline mr-2 font-bold text-sm">
+            <p
+              onClick={() =>
+                (window.location.href = `/r/${post.subreddit.name}`)
+              }
+              className="inline mr-2 font-bold text-sm cursor-pointer"
+            >
               r/{post?.subreddit?.name || "noName"}
             </p>
             <p className="inline text-xs text-gray-400">
@@ -94,12 +104,13 @@ const PostPageItem = ({ post, totalComments }) => {
               {moment(date.getTime()).fromNow()}
             </p>
           </div>
-          <div className="mt-2 font-semibold text-lg line-clamp-2">
-            {post.title}
-          </div>
+          <div className="mt-2 font-semibold text-lg">{post.title}</div>
         </div>
         <div className="flex items-center w-full overflow-hidden self-stretch">
-          <img className="h-full object-contain" src={post.imageUrl || null} />
+          <img
+            className="block max-w-40rem w-full object-contain"
+            src={post.imageUrl || null}
+          />
         </div>
         <div className="flex text-gray-400 items-center text-xs space-x-1 p-1">
           <p className="hover:bg-gray-200 p-2 py-3">
