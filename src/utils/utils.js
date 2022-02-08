@@ -27,7 +27,7 @@ export const createOrUpdateObjInListById = (arr, obj) => {
 export const handleLikePost = async (post, user, dispatch) => {
   console.log("USERID:", user?.id);
 
-  const index = user.ratedPosts.findIndex((p) => p.id === post.id);
+  const index = user?.ratedPosts?.findIndex((p) => p.id === post.id);
 
   const currentRating = user?.ratedPosts[index]?.rating;
   let pointsToAdd = null;
@@ -85,7 +85,7 @@ export const handleLikePost = async (post, user, dispatch) => {
 export const handleDislikePost = async (post, user, dispatch) => {
   console.log("USERID:", user.id);
 
-  const index = user.ratedPosts.findIndex((p) => p.id === post.id);
+  const index = user?.ratedPosts?.findIndex((p) => p.id === post.id);
 
   const currentRating = user?.ratedPosts[index]?.rating;
   let pointsToAdd = null;

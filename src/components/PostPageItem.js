@@ -44,11 +44,11 @@ export const Voting = ({ post, numberColor, arrowsColor }) => {
   const [userRating, setUserRating] = useState(null);
 
   useEffect(() => {
-    const index = user.ratedPosts.findIndex((p) => p.id === post?.id);
+    const index = user?.ratedPosts?.findIndex((p) => p.id === post?.id);
     if (index === -1) {
       setUserRating(null);
     } else {
-      setUserRating(user.ratedPosts[index].rating);
+      setUserRating(user?.ratedPosts[index]?.rating);
     }
   }, [user]);
 
@@ -106,7 +106,7 @@ export const Voting = ({ post, numberColor, arrowsColor }) => {
 const PostPageItem = ({ post, totalComments }) => {
   console.log(post);
   console.log(post.createdAt);
-  const date = new Date(post.createdAt);
+  const date = new Date(post?.createdAt);
   console.log(post);
 
   return (
