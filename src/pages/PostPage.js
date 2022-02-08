@@ -8,8 +8,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import Header from "../components/Header";
-import PostPageItem from "../components/PostPageItem";
-import TopCommunities from "../components/TopCommunities";
+import PostPageItem, { Voting } from "../components/PostPageItem";
 import f1 from "../fake data/f1.png";
 import moment from "moment";
 import { useDispatch } from "react-redux";
@@ -34,11 +33,11 @@ const commentSchema = yup.object().shape({
   postId: yup.number().required(),
 });
 
-const handleLike = async (commentId) => {
-  socket.emit("likeComment", commentId);
+const handleLikeComment = async (commentId, userId) => {
+  socket.emit("likeComment", commentId, userId);
 };
-const handleDislike = async (commentId) => {
-  socket.emit("dislikeComment", commentId);
+const handleDislikeComment = async (commentId, userId) => {
+  socket.emit("dislikeComment", commentId, userId);
 };
 
 const CommentPostSection = ({ user, post }) => {
@@ -278,7 +277,7 @@ const Avatar = ({ createdAt }) => {
   return (
     <div className="flex space-x-2 items-center">
       <div className="rounded-full overflow-hidden h-5 w-5 sm:h-8 sm:w-8">
-        <img src={f1} />
+        <img src={f1} alt="user img" />
       </div>
       <div className="inline-block flex items-center text-xs font-medium  text-gray-900">
         Anpes99{" "}
@@ -372,7 +371,7 @@ const CommentActionsBar = ({ post, comment, user, dispatch }) => {
         <ArrowSmUpIcon
           onClick={() => {
             if (user) {
-              handleLike(comment.id);
+              handleLikeComment(comment.id, user.id);
             } else {
               dispatch(setLoginVisible(true));
             }
@@ -383,7 +382,7 @@ const CommentActionsBar = ({ post, comment, user, dispatch }) => {
         <ArrowSmDownIcon
           onClick={() => {
             if (user) {
-              handleDislike(comment.id);
+              handleDislikeComment(comment.id, user.id);
             } else {
               dispatch(setLoginVisible(true));
             }
@@ -424,14 +423,14 @@ const PostLikes = ({ post, className }) => {
     setLikes(post.upVotes - post.downVotes);
   }, [post]);
 
-  socket.on("post_received_likes", (postId) => {
+  socket.on("post_received_likes", (postId, pointsToAdd) => {
     if (postId === post.id) {
-      setLikes(likes + 1);
+      setLikes(likes + pointsToAdd);
     }
   });
-  socket.on("post_received_dislikes", (postId) => {
+  socket.on("post_received_dislikes", (postId, pointsToAdd) => {
     if (postId === post.id) {
-      setLikes(likes - 1);
+      setLikes(likes + pointsToAdd);
     }
   });
 
@@ -466,13 +465,6 @@ const PostPage = () => {
     setTotalComments(result.data.totalComments);
   }, []);
 
-  const handleLike = async () => {
-    socket.emit("likePost", post.id);
-  };
-  const handleDislike = async () => {
-    socket.emit("dislikePost", post.id);
-  };
-
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -486,30 +478,7 @@ const PostPage = () => {
           <div className="h-10 bg-black flex items-center justify-between sticky top-0 z-40">
             <div className="flex items-center">
               <div className="flex text-gray-400 items-center border-l border-r border-gray-600 mr-3 ml-1 sm:ml-10">
-                <ArrowSmUpIcon
-                  onClick={() => {
-                    if (user) {
-                      handleLike();
-                    } else {
-                      dispatch(setLoginVisible(true));
-                    }
-                  }}
-                  className=" h-6 hover:text-red-500 cursor-pointer"
-                />
-                <PostLikes
-                  className=" px-1 font-bold text-sm text-white"
-                  post={post}
-                />
-                <ArrowSmDownIcon
-                  onClick={() => {
-                    if (user) {
-                      handleDislike();
-                    } else {
-                      dispatch(setLoginVisible(true));
-                    }
-                  }}
-                  className="h-6  hover:text-blue-500 cursor-pointer"
-                />
+                <Voting post={post} numberColor="text-white" />
               </div>
               <PhotographIcon className="hidden sm:inline-block h-6 w-6 text-gray-200 mr-1" />
               <p className="line-clamp-1 text-gray-200 flex-shrink flex-grow">

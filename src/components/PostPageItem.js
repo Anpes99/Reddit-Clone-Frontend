@@ -1,4 +1,3 @@
-import img from "../fake data/markus-spiske-2siq7rVFeZs-unsplash.jpg";
 import { ArrowSmUpIcon } from "@heroicons/react/outline";
 import {
   ArrowSmDownIcon,
@@ -14,7 +13,8 @@ import socket from "../websockets/posts";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setLoginVisible } from "../slices/appSlice";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { handleDislikePost, handleLikePost } from "../utils/utils";
 
 const PostLikes = ({ post, className }) => {
   const [likes, setLikes] = useState(0);
@@ -23,18 +23,84 @@ const PostLikes = ({ post, className }) => {
     setLikes(post.upVotes - post.downVotes);
   }, [post]);
 
-  socket.on("post_received_likes", (postId) => {
+  socket.on("post_received_likes", (postId, pointsToAdd) => {
     if (postId === post.id) {
-      setLikes(likes + 1);
+      setLikes(likes + pointsToAdd);
     }
   });
-  socket.on("post_received_dislikes", (postId) => {
+  socket.on("post_received_dislikes", (postId, pointsToAdd) => {
     if (postId === post.id) {
-      setLikes(likes - 1);
+      setLikes(likes + pointsToAdd);
     }
   });
 
   return <p className={className}>{likes}</p>;
+};
+
+export const Voting = ({ post, numberColor, arrowsColor }) => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.app.user);
+  const [loading, setLoading] = useState(false);
+  const [userRating, setUserRating] = useState(null);
+
+  useEffect(() => {
+    const index = user.ratedPosts.findIndex((p) => p.id === post?.id);
+    if (index === -1) {
+      setUserRating(null);
+    } else {
+      setUserRating(user.ratedPosts[index].rating);
+    }
+  }, [user]);
+
+  return (
+    <>
+      <ArrowSmUpIcon
+        onClick={async () => {
+          console.log(loading);
+
+          if (user) {
+            if (loading) {
+              return;
+            }
+            setLoading(true);
+            await handleLikePost(post, user, dispatch);
+            setLoading(false);
+          } else {
+            dispatch(setLoginVisible(true));
+          }
+        }}
+        className={`h-7 ${arrowsColor ? arrowsColor : "text-gray-400"} ${
+          userRating === 1 && "text-red-500"
+        } hover:text-red-500 cursor-pointer`}
+      />
+      <PostLikes
+        className={`px-1 font-bold text-sm ${
+          numberColor ? numberColor : "text-black"
+        }`}
+        post={post}
+      />
+      <ArrowSmDownIcon
+        onClick={async () => {
+          console.log(loading);
+          if (user) {
+            if (loading) {
+              return;
+            }
+            setLoading(true);
+            await handleDislikePost(post, user, dispatch);
+            setLoading(false);
+          } else {
+            dispatch(setLoginVisible(true));
+          }
+        }}
+        className={`h-7 ${
+          arrowsColor ? arrowsColor : "text-gray-400"
+        } hover:text-blue-500 cursor-pointer ${
+          userRating === -1 && "text-blue-500"
+        }   `}
+      />
+    </>
+  );
 };
 
 const PostPageItem = ({ post, totalComments }) => {
@@ -43,41 +109,10 @@ const PostPageItem = ({ post, totalComments }) => {
   const date = new Date(post.createdAt);
   console.log(post);
 
-  const handleLike = async () => {
-    socket.emit("likePost", post.id);
-  };
-  const handleDislike = async () => {
-    socket.emit("dislikePost", post.id);
-  };
-
-  const dispatch = useDispatch();
-
-  const user = useSelector((state) => state.app.user);
-
   return (
     <div className="flex flex-col sm:flex-row max-w-[40rem]  bg-white  mb-4">
       <div className=" hidden sm:flex flex-col items-center  w-25">
-        <ArrowSmUpIcon
-          onClick={() => {
-            if (user) {
-              handleLike();
-            } else {
-              dispatch(setLoginVisible(true));
-            }
-          }}
-          className="h-7 text-gray-400 hover:text-red-500 cursor-pointer"
-        />
-        <PostLikes className=" px-1 font-bold text-sm" post={post} />
-        <ArrowSmDownIcon
-          onClick={() => {
-            if (user) {
-              handleDislike();
-            } else {
-              dispatch(setLoginVisible(true));
-            }
-          }}
-          className="h-7 text-gray-400 hover:text-blue-500 cursor-pointer"
-        />
+        <Voting post={post} />
       </div>
 
       <div className="flex flex-col">
@@ -89,7 +124,7 @@ const PostPageItem = ({ post, totalComments }) => {
               }
               className="inline-block rounded-full overflow-hidden h-7 w-7 cursor-pointer flex-shrink-0"
             >
-              <img src={skyrim} />
+              <img src={skyrim} alt="user img" />
             </div>
             <p
               onClick={() =>
@@ -108,6 +143,7 @@ const PostPageItem = ({ post, totalComments }) => {
         </div>
         <div className="flex items-center w-full overflow-hidden self-stretch">
           <img
+            alt="post img"
             className="block max-w-40rem w-full object-contain"
             src={post.imageUrl || null}
           />
