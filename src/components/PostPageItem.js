@@ -48,7 +48,9 @@ export const Voting = ({ post, numberColor, arrowsColor }) => {
     if (index === -1) {
       setUserRating(null);
     } else {
-      setUserRating(user?.ratedPosts[index]?.rating);
+      if (user) {
+        setUserRating(user?.ratedPosts?.[index]?.rating);
+      }
     }
   }, [user]);
 

@@ -29,7 +29,7 @@ export const handleLikePost = async (post, user, dispatch) => {
 
   const index = user?.ratedPosts?.findIndex((p) => p.id === post.id);
 
-  const currentRating = user?.ratedPosts[index]?.rating;
+  const currentRating = user?.ratedPosts?.[index]?.rating;
   let pointsToAdd = null;
   switch (currentRating) {
     case 1:
@@ -87,7 +87,7 @@ export const handleDislikePost = async (post, user, dispatch) => {
 
   const index = user?.ratedPosts?.findIndex((p) => p.id === post.id);
 
-  const currentRating = user?.ratedPosts[index]?.rating;
+  const currentRating = user?.ratedPosts?.[index]?.rating;
   let pointsToAdd = null;
   switch (currentRating) {
     case 1:
