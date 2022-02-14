@@ -15,6 +15,7 @@ import {
 import f1 from "../fake data/f1.png";
 import { useDispatch } from "react-redux";
 import { setCurrentSubreddit } from "../slices/appSlice";
+import SubredditInfo from "../components/SubredditInfo";
 
 const NewPostForm = ({}) => {
   const [text, setText] = useState("");
@@ -237,34 +238,7 @@ const SubmitNewPostPage = () => {
 
             <section className="hidden md:flex flex-col items-center bg-white  rounded-lg mt-10">
               <div className="flex flex-col border rounded-sm pt-5 text-gray-800 border border-gray-300">
-                <div className="p-2 flex flex-col space-y-3">
-                  <div className=" font-bold flex space-x-5 items-center self-start">
-                    <div className="rounded-full overflow-hidden h-[3rem] w-[3rem]">
-                      <img src={f1} />
-                    </div>
-                    <p className="text-lg font-semibold">r/{subredditName}</p>{" "}
-                  </div>
-                  <p className="max-w-xs text-base">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  </p>
-                  <div className="flex space-x-20 border-b pb-5">
-                    <div className="">
-                      <p className="font-bold">100k</p>
-                      <p className="font-medium text-xs text-gray-800">
-                        Members
-                      </p>
-                    </div>
-                    <div className="">
-                      <p className="font-bold">2k</p>
-                      <p className="font-medium text-xs text-gray-800">
-                        Online
-                      </p>
-                    </div>
-                  </div>
-                  <div className="text-base font-normal">
-                    created aug 27 2008
-                  </div>
-                </div>
+                <SubredditInfo />
               </div>
             </section>
           </section>

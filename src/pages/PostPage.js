@@ -17,7 +17,7 @@ import { useSearchParams } from "react-router-dom";
 import { ChatIcon } from "@heroicons/react/outline";
 import TextareaAutosize from "react-textarea-autosize";
 import * as yup from "yup";
-
+import SubredditInfo from "../components/SubredditInfo";
 import { useSelector } from "react-redux";
 import {
   setLoginVisible,
@@ -208,69 +208,6 @@ const handleSubmitComment = async (
   return result;
 };
 
-const handleJoinSubreddit = async (user, post, dispatch) => {
-  console.log("post: ", post);
-  try {
-    const res = await axios.post(
-      `/api/subreddits/${post.subredditId}/user`,
-      {},
-      {
-        headers: {
-          Authorization: `bearer ${user.token}`,
-        },
-      }
-    );
-
-    if (res.status === 200) {
-      const updatedUser = {
-        id: user.id,
-        subreddits: [...user.subreddits, post.subreddit],
-        token: user.token,
-        username: user.username,
-      };
-
-      dispatch(setUser(updatedUser));
-      localStorage.setItem(
-        "loggedInRedditAppUser",
-        JSON.stringify(updatedUser)
-      );
-    }
-
-    console.log("joined subreddit");
-  } catch (e) {
-    console.log(e.response);
-  }
-};
-
-const handleLeaveSubreddit = async (user, subredditId, dispatch) => {
-  console.log(user);
-  try {
-    const res = await axios.delete(`/api/subreddits/${subredditId}/user`, {
-      headers: {
-        Authorization: `bearer ${user.token}`,
-      },
-    });
-    if (res.status === 204) {
-      const updatedUser = {
-        id: user.id,
-        subreddits: user.subreddits.filter(
-          (subreddit) => subreddit.id !== subredditId
-        ),
-        token: user.token,
-        username: user.username,
-      };
-      localStorage.setItem(
-        "loggedInRedditAppUser",
-        JSON.stringify(updatedUser)
-      );
-      dispatch(setUser(updatedUser));
-    }
-    console.log(res, "left subreddit");
-  } catch (e) {
-    console.log(e);
-  }
-};
-
 const Avatar = ({ createdAt }) => {
   const date = new Date(createdAt);
 
@@ -416,25 +353,23 @@ const CommentActionsBar = ({ post, comment, user, dispatch }) => {
   );
 };
 
-const PostLikes = ({ post, className }) => {
-  const [likes, setLikes] = useState(0);
+const CommentUserInfo = ({ post, comment }) => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.app.user);
 
-  useEffect(() => {
-    setLikes(post.upVotes - post.downVotes);
-  }, [post]);
+  return (
+    <div className="flex flex-col items-start text-left space-x-1 p-2 ">
+      <Avatar createdAt={comment.createdAt} />
 
-  socket.on("post_received_likes", (postId, pointsToAdd) => {
-    if (postId === post.id) {
-      setLikes(likes + pointsToAdd);
-    }
-  });
-  socket.on("post_received_dislikes", (postId, pointsToAdd) => {
-    if (postId === post.id) {
-      setLikes(likes + pointsToAdd);
-    }
-  });
-
-  return <p className={className}>{likes}</p>;
+      <p className="p-1 pl-7">{comment.text}</p>
+      <CommentActionsBar
+        comment={comment}
+        post={post}
+        user={user}
+        dispatch={dispatch}
+      />
+    </div>
+  );
 };
 
 const PostPage = () => {
@@ -522,84 +457,50 @@ const PostPage = () => {
                     className="border-l border-gray-300 "
                     key={comment.id}
                   >
-                    <div className="flex flex-col items-start  text-left space-x-1 p-2">
-                      <Avatar createdAt={comment.createdAt} />
-
-                      <p className="p-1 pl-7">{comment.text}</p>
-                      <CommentActionsBar
-                        comment={comment}
-                        post={post}
-                        user={user}
-                        dispatch={dispatch}
-                      />
-                    </div>
+                    <CommentUserInfo
+                      post={post}
+                      user={user}
+                      comment={comment}
+                    />
                     {comment?.comments?.map((a) => (
                       <div
                         key={a.id}
                         className="border-l border-gray-300 translate-x-3 sm:translate-x-10 "
                       >
-                        <div className="flex flex-col items-start text-left space-x-1 p-2 ">
-                          <Avatar createdAt={a.createdAt} />
-
-                          <p className="p-1 pl-7">{a.text}</p>
-                          <CommentActionsBar
-                            comment={a}
-                            post={post}
-                            user={user}
-                            dispatch={dispatch}
-                          />
-                        </div>
+                        <CommentUserInfo post={post} user={user} comment={a} />
                         {a?.comments?.map((b) => {
                           return (
                             <div
                               key={b.id}
                               className="border-l border-gray-300 translate-x-3 sm:translate-x-10 "
                             >
-                              <div className="flex flex-col items-start text-left space-x-1 p-2 ">
-                                <Avatar createdAt={b.createdAt} />
-
-                                <p className="p-1 pl-7">{b.text}</p>
-                                <CommentActionsBar
-                                  comment={b}
-                                  post={post}
-                                  user={user}
-                                  dispatch={dispatch}
-                                />
-                              </div>
+                              <CommentUserInfo
+                                post={post}
+                                user={user}
+                                comment={b}
+                              />
 
                               {b?.comments?.map((c) => (
                                 <div
                                   key={c.id}
                                   className="border-l border-gray-300 translate-x-3 sm:translate-x-10 "
                                 >
-                                  <div className="flex flex-col items-start text-left space-x-1 p-2 ">
-                                    <Avatar createdAt={c.createdAt} />
-
-                                    <p className="p-1 pl-7">{c.text}</p>
-                                    <CommentActionsBar
-                                      comment={c}
-                                      post={post}
-                                      user={user}
-                                      dispatch={dispatch}
-                                    />
-                                  </div>
+                                  <CommentUserInfo
+                                    post={post}
+                                    user={user}
+                                    comment={c}
+                                  />
                                   {c?.comments?.map((d) => {
                                     return (
                                       <div
                                         key={d.id}
                                         className="border-l border-gray-300 translate-x-3 sm:translate-x-10 "
                                       >
-                                        <div className="flex flex-col items-start text-left space-x-1 p-2 ">
-                                          <Avatar createdAt={d.createdAt} />
-
-                                          <p className="p-1 pl-7">{d.text}</p>
-                                          <CommentActionsBar
-                                            comment={d}
-                                            post={post}
-                                            user={user}
-                                            dispatch={dispatch}
-                                          />
-                                        </div>
+                                        <CommentUserInfo
+                                          post={post}
+                                          user={user}
+                                          comment={d}
+                                        />
                                       </div>
                                     );
                                   })}
@@ -618,75 +519,7 @@ const PostPage = () => {
             {/* SIDEBAR SECTION     RIGHT SIDE            //////////////////////////////////////////////////////////////////////////////////////////      */}
             <section className="hidden lg:flex flex-col items-center ">
               <div className="flex flex-col border rounded-sm pt-5 text-gray-800 border border-gray-300">
-                <div className="p-2 flex flex-col space-y-3">
-                  <div
-                    onClick={() =>
-                      (window.location.href = `/r/${post.subreddit.name}`)
-                    }
-                    className=" font-bold flex space-x-5 items-center self-start cursor-pointer"
-                  >
-                    <div className="rounded-full overflow-hidden h-[3rem] w-[3rem]">
-                      <img src={f1} />
-                    </div>
-                    <p className="text-lg font-semibold">
-                      r/{post?.subreddit?.name}
-                    </p>{" "}
-                  </div>
-                  <p className="max-w-xs text-base">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  </p>
-                  <div className="flex space-x-20 border-b pb-5">
-                    <div className="">
-                      <p className="font-bold">100k</p>
-                      <p className="font-medium text-xs text-gray-800">
-                        Members
-                      </p>
-                    </div>
-                    <div className="">
-                      <p className="font-bold">2k</p>
-                      <p className="font-medium text-xs text-gray-800">
-                        Online
-                      </p>
-                    </div>
-                  </div>
-                  <div className="text-base font-normal">
-                    created aug 27 2008
-                  </div>
-                  {!user?.subreddits
-                    ?.map((s) => s.id)
-                    .includes(post.subredditId) && (
-                    <button
-                      onClick={() => {
-                        if (user) {
-                          handleJoinSubreddit(user, post, dispatch);
-                        } else {
-                          dispatch(setLoginVisible(true));
-                        }
-                      }}
-                      className="btn2"
-                    >
-                      Join
-                    </button>
-                  )}
-                  {user?.subreddits
-                    ?.map((s) => s.id)
-                    .includes(post.subredditId) && (
-                    <button
-                      onClick={() => {
-                        if (user) {
-                          handleLeaveSubreddit(
-                            user,
-                            post.subredditId,
-                            dispatch
-                          );
-                        } else {
-                          dispatch(setLoginVisible(true));
-                        }
-                      }}
-                      className={`btn2 after:content-['Joined'] hover:after:content-['Leave'] bg-blue-500 hover:bg-blue-400`}
-                    ></button>
-                  )}
-                </div>
+                <SubredditInfo post={post} />
               </div>
             </section>
           </section>
