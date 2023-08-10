@@ -120,15 +120,7 @@ const Header = () => {
       return;
     }
 
-    const response = await axios.post(
-      "/api/search",
-      { searchWord: word },
-      {
-        headers: {
-          Authorization: `bearer ${user.token}`,
-        },
-      }
-    );
+    const response = await axios.post("/api/search", { searchWord: word }, {});
     setSearchResults(response.data.result);
   }, 200);
 
