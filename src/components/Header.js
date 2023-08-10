@@ -103,32 +103,34 @@ const Header = () => {
   const headerDropDownVisible = useSelector(
     (state) => state.app.headerDropDownVisible
   );
-  const [searchResults, setSearchResults] = useState([])
+  const [searchResults, setSearchResults] = useState([]);
 
   const loginVisible = useSelector((state) => state.app.loginVisible);
   const signUpVisible = useSelector((state) => state.app.signUpVisible);
 
   const user = useSelector((state) => state.app.user);
 
-  const handleSearchWordChange = (e)=>{
-    debouncedSearch(e.target.value)
-  }
+  const handleSearchWordChange = (e) => {
+    debouncedSearch(e.target.value);
+  };
 
- const debouncedSearch =_.debounce(async(word)=>{
-  if (!word){
-    setSearchResults([])
-    return
-  }
-  
-  const response = await axios.post("/api/search", {searchWord:word},
-  {
-    headers: {
-      Authorization: `bearer ${user.token}`,
-    },
-  });
-  setSearchResults(response.data.result)
-  }, 200)
+  const debouncedSearch = _.debounce(async (word) => {
+    if (!word) {
+      setSearchResults([]);
+      return;
+    }
 
+    const response = await axios.post(
+      "/api/search",
+      { searchWord: word },
+      {
+        headers: {
+          Authorization: `bearer ${user.token}`,
+        },
+      }
+    );
+    setSearchResults(response.data.result);
+  }, 200);
 
   return (
     <>
@@ -179,25 +181,37 @@ const Header = () => {
           {user && <UserSubredditsDropDown />}
         </div>
         <div className="w-full sm:w-auto flex flex-col border rounded-sm relative bg-gray-100 flex-grow">
-            <SearchIcon className="hidden sm:inline-block pl-4 h-7 top-1/2 translate-y-[-50%] text-gray-400 absolute" />
-              <input
-              onChange={handleSearchWordChange}
-              className="flex flex-grow bg-gray-100 p-2 text-gray-700 sm:pl-20 hover:bg-white focus:bg-white"
-              placeholder="Search Reddit"
-              type="text"
-              />
-            {
-              searchResults.length ? 
-              <>
+          <SearchIcon className="hidden sm:inline-block pl-4 h-7 top-1/2 translate-y-[-50%] text-gray-400 absolute" />
+          <input
+            onChange={handleSearchWordChange}
+            className="flex flex-grow bg-gray-100 p-2 text-gray-700 sm:pl-20 hover:bg-white focus:bg-white"
+            placeholder="Search Reddit"
+            type="text"
+          />
+          {searchResults.length ? (
+            <>
               <div className="p-2 bg-white border-t border-gray-200 absolute w-full top-full">
                 <div className="text-sm text-gray-500">Search suggestions:</div>
                 <ul className="mt-1 space-y-1">
-                  {searchResults.map(searchResult => <>
-                    <li onClick={() => {window.location.href =`/r/${searchResult.name}` }} className="cursor-pointer hover:underline">{searchResult.name}</li>
-                  </>)}
+                  {searchResults.map((searchResult) => (
+                    <>
+                      <li
+                        onClick={() => {
+                          window.location.href = `/r/${searchResult.name}`;
+                        }}
+                        className="cursor-pointer hover:underline"
+                      >
+                        {searchResult.name}
+                      </li>
+                    </>
+                  ))}
                 </ul>
-              </div></> : <></>}
-          </div>
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
+        </div>
 
         <div className="flex items-center space-x-3 p-4">
           {currentSubreddit && (
