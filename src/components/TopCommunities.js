@@ -9,29 +9,17 @@ import { setLoginVisible } from "../slices/appSlice";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import {
+  handleJoinSubreddit,
+  handleLeaveSubreddit,
+} from "../utils/subredditActions";
+import JoinSubredditButton from "./JoinSubredditButton";
 
 const TopCommunities = () => {
   const user = useSelector((state) => state.app.user);
   const dispatch = useDispatch();
   const [subreddits, setSubreddits] = useState(null);
   const navigate = useNavigate();
-
-  const JoinButton = () => {
-    return (
-      <button
-        onClick={() => {
-          if (user) {
-            /////////   join subreddit
-          } else {
-            dispatch(setLoginVisible(true));
-          }
-        }}
-        className="join-btn"
-      >
-        Join
-      </button>
-    );
-  };
 
   useEffect(async () => {
     const res = await axios.get("/api/subreddits");
@@ -41,7 +29,7 @@ const TopCommunities = () => {
   }, []);
 
   return (
-    <div className="w-80 bg-white rounded-t-sm relative border border-gray-300">
+    <div className=" bg-white rounded-t-sm relative border border-gray-300">
       <div className=" h-20 bg-blue-600 rounded-t-sm flex items-end p-1 pl-4">
         <h3 className="text-white z-20 font-semibold text-lg">
           Top Communities
@@ -69,11 +57,11 @@ const TopCommunities = () => {
               </div>
               <p
                 onClick={() => (window.location.href = `/r/${subreddit.name}`)}
-                className="text-xs w-1/2 truncate cursor-pointer"
+                className="text-xs w-1/2 truncate cursor-pointer max-w-[100px] overflow-hidden"
               >
                 r/{subreddit.name}
               </p>
-              <JoinButton />
+              <JoinSubredditButton subreddit={subreddit} />
             </div>
           );
         })}

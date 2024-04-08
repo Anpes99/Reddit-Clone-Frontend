@@ -25,6 +25,7 @@ import {
   setUser,
 } from "../slices/appSlice";
 import socket from "../websockets/posts";
+import TopCommunities from "../components/TopCommunities";
 
 const commentSchema = yup.object().shape({
   text: yup.string().min(1).required(),
@@ -517,10 +518,10 @@ const PostPage = () => {
             </section>
 
             {/* SIDEBAR SECTION     RIGHT SIDE            //////////////////////////////////////////////////////////////////////////////////////////      */}
-            <section className="hidden lg:flex flex-col items-center ">
-              <div className="flex flex-col border rounded-sm pt-5 text-gray-800 border border-gray-300">
-                <SubredditInfo post={post} />
-              </div>
+            <section className="hidden lg:block ">
+              <SubredditInfo post={post} style={{ marginBottom: "20px" }} />
+
+              <TopCommunities />
             </section>
           </section>
         </main>
