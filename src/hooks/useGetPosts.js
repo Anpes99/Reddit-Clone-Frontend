@@ -63,7 +63,7 @@ const useGetPosts = (queryParamSort, subredditId, orderType) => {
     console.log(result);
     
     setPosts(result.data.posts);*/
-  }, []);
+  }, [subredditId]);
 
   //////////////////////////////////// GET MORE  POSTS ///////////////////////////////////////////////////
   const fetchMorePosts = async (orderType) => {

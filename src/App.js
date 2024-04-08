@@ -11,7 +11,6 @@ import SubredditPage from "./pages/SubredditPage";
 const App = () => {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("loggedInRedditAppUser"));
-    console.log(user);
     if (user) store.dispatch(setUser(user));
   }, []);
 
