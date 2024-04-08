@@ -19,12 +19,11 @@ const SubredditInfo = ({ style = {} }) => {
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
 
   const subredditName = useParams().subredditName;
-
   useEffect(async () => {
     const res = await axios.get("/api/subreddits?name=" + subredditName);
     dispatch(setCurrentSubreddit(res.data[0]));
   }, [subredditName]);
-
+  if (!currentSubreddit) return <></>;
   return (
     <div
       className="flex flex-col border rounded-sm pt-5 text-gray-800 border border-gray-300 bg-white"
@@ -42,16 +41,14 @@ const SubredditInfo = ({ style = {} }) => {
           </div>
           <p className="text-lg font-semibold">r/{currentSubreddit?.name}</p>{" "}
         </div>
-        <p className="max-w-xs text-base">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        </p>
+        <p className="max-w-xs text-base">{currentSubreddit.text}</p>
         <div className="flex space-x-20 border-b pb-5">
           <div className="">
-            <p className="font-bold">100k</p>
+            <p className="font-bold">{currentSubreddit.memberCount || 0}</p>
             <p className="font-medium text-xs text-gray-800">Members</p>
           </div>
           <div className="">
-            <p className="font-bold">2k</p>
+            <p className="font-bold">0</p>
             <p className="font-medium text-xs text-gray-800">Online</p>
           </div>
         </div>
