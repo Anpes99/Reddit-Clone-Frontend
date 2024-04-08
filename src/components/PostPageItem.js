@@ -144,11 +144,13 @@ const PostPageItem = ({ post, totalComments }) => {
           <div className="mt-2 font-semibold text-lg">{post.title}</div>
         </div>
         <div className="flex items-center w-full overflow-hidden self-stretch">
-          <img
-            alt="post img"
-            className="block max-w-40rem w-full object-contain"
-            src={post.imageUrl || null}
-          />
+          {post.imageUrl && (
+            <img
+              alt="post img"
+              className="block max-w-40rem w-full object-contain"
+              src={post.imageUrl}
+            />
+          )}
         </div>
         <div className="flex text-gray-400 items-center text-xs space-x-1 p-1">
           <p className="hover:bg-gray-200 p-2 py-3">

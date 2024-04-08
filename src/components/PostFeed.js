@@ -10,11 +10,15 @@ import useGetPosts from "../hooks/useGetPosts";
 import { useParams } from "react-router";
 import { useSearchParams } from "react-router-dom";
 import socket from "../websockets/posts";
+import { useSelector } from "react-redux";
+import SubredditInfo from "./SubredditInfo";
 
 const PostFeed = ({ subredditId, orderType }) => {
   const [reachedEnd, setReachedEnd] = useState(false);
   const [searchParams] = useSearchParams();
   const sort = searchParams.get("sort");
+
+  const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
 
   orderType = orderType ? orderType : "new";
   const [fetchMorePosts, loading, posts] = useGetPosts(
@@ -98,6 +102,9 @@ const PostFeed = ({ subredditId, orderType }) => {
           })}
         </div>
         <div className="hidden lg:block">
+          {currentSubreddit?.id && (
+            <SubredditInfo style={{ marginBottom: "20px" }} />
+          )}
           <TopCommunities />
         </div>
       </div>

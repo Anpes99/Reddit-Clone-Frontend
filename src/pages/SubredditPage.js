@@ -4,13 +4,20 @@ import { useParams } from "react-router";
 import Header from "../components/Header";
 import PostFeed from "../components/PostFeed";
 import skyrim from "../fake data/skyrim.png";
-import { setCurrentSubreddit } from "../slices/appSlice";
-import { useDispatch } from "react-redux";
+import { setCurrentSubreddit, setLoginVisible } from "../slices/appSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  handleJoinSubreddit,
+  handleLeaveSubreddit,
+} from "../utils/subredditActions";
+import JoinSubredditButton from "../components/JoinSubredditButton";
 
 const SubredditPage = () => {
   console.log("gfiuadsfhbg");
   const dispatch = useDispatch();
   const subredditName = useParams().subredditName;
+  const user = useSelector((state) => state.app.user);
+  const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
 
   const [subredditId, setSubredditId] = useState(null);
   useEffect(async () => {
@@ -36,7 +43,10 @@ const SubredditPage = () => {
                 r/{subredditName}
               </p>
             </div>
-            <button className="join-btn self-center">Join</button>
+
+            <JoinSubredditButton
+              subreddit={{ name: subredditName, id: subredditId }}
+            />
           </div>
         </div>
       </div>
