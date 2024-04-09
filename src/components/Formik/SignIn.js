@@ -4,7 +4,6 @@ import FormikTextInput from "./FormikTextInput";
 import * as yup from "yup";
 import useSignIn from "../../hooks/useSignIn";
 
-import { setLoginVisible, setSignUpVisible } from "../../slices/appSlice";
 import { useDispatch } from "react-redux";
 
 const initialValues = {

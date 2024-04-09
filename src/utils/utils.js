@@ -18,6 +18,13 @@ export const createOrUpdateObjInListById = (arr, obj) => {
   return newArr;
 };
 
+export const handleLikeComment = async (commentId, userId) => {
+  socket.emit("likeComment", commentId, userId);
+};
+export const handleDislikeComment = async (commentId, userId) => {
+  socket.emit("dislikeComment", commentId, userId);
+};
+
 export const handleLikePost = async (post, user, dispatch) => {
   const index = user?.ratedPosts?.findIndex((p) => p.id === post.id);
 
@@ -91,7 +98,7 @@ export const handleDislikePost = async (post, user, dispatch) => {
 
   const rating = currentRating === -1 ? 0 : -1;
   let a;
-  const result = await socket.emit(
+  await socket.emit(
     "dislikePost",
     post.id,
     user.id,

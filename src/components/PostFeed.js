@@ -1,22 +1,13 @@
 import PostFeedItem from "./PostFeedItem";
 import TopCommunities from "./TopCommunities";
-import { FireIcon } from "@heroicons/react/solid";
 import { SunIcon } from "@heroicons/react/outline";
 import { TrendingUpIcon } from "@heroicons/react/outline";
-import { ChevronDownIcon } from "@heroicons/react/solid";
-import { useCallback, useEffect, useRef, useState } from "react";
-import axios from "axios";
+import { useCallback, useRef } from "react";
 import useGetPosts from "../hooks/useGetPosts";
-import { useParams } from "react-router";
-import { useSearchParams } from "react-router-dom";
-import socket from "../websockets/posts";
 import { useSelector } from "react-redux";
 import SubredditInfo from "./SubredditInfo";
 
 const PostFeed = ({ subredditId, orderType }) => {
-  const [reachedEnd, setReachedEnd] = useState(false);
-  const [searchParams] = useSearchParams();
-
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
 
   const [fetchMorePosts, loading, posts] = useGetPosts(orderType, subredditId);

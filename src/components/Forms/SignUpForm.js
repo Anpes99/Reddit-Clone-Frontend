@@ -1,11 +1,11 @@
 import React from "react";
 import { XIcon } from "@heroicons/react/solid";
-import SignUp from "./Formik/SignUp";
-import { setLoginVisible, setSignUpVisible } from "../slices/appSlice";
+import SignUp from "../Formik/SignUp";
+import { setLoginVisible, setSignUpVisible } from "../../slices/appSlice";
 import { useDispatch } from "react-redux";
-import ContinueWithGoogleButton from "./Buttons/ContinueWithGoogleButton";
+import ContinueWithGoogleButton from "../Buttons/ContinueWithGoogleButton";
 
-function Login() {
+function SignUpForm() {
   const dispatch = useDispatch();
 
   return (
@@ -63,4 +63,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default SignUpForm;

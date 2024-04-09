@@ -1,6 +1,6 @@
 import { PlusIcon, SearchIcon } from "@heroicons/react/outline";
 import { UserIcon } from "@heroicons/react/outline";
-import { HomeIcon, ChevronDownIcon } from "@heroicons/react/solid";
+import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -12,84 +12,17 @@ import {
   setLoginVisible,
   setSignUpVisible,
 } from "../slices/appSlice";
-import Login from "./Login";
-import SignUp from "./SignUp";
+import LoginForm from "./Forms/LoginForm";
+import SignUpForm from "./Forms/SignUpForm";
 import { Tooltip } from "@mui/material";
 
 import * as React from "react";
-import ListSubheader from "@mui/material/ListSubheader";
-import List from "@mui/material/List";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Collapse from "@mui/material/Collapse";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import f1 from "../fake data/f1.png";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
 import _ from "lodash";
 import axios from "axios";
 import RedditTextIcon from "../icons/RedditTextIcon";
 import RedditIcon from "../icons/RedditIcon";
-
-const UserSubredditsDropDown = ({}) => {
-  const [open, setOpen] = useState(false);
-  const user = useSelector((state) => state.app.user);
-  const handleClick = () => {
-    setOpen(!open);
-  };
-
-  return (
-    <ClickAwayListener onClickAway={() => setOpen(false)}>
-      <div className="relative">
-        <List
-          sx={{ width: "100%", bgcolor: "background.paper" }}
-          component="nav"
-          aria-labelledby="nested-list-subheader"
-        >
-          <ListItemButton onClick={handleClick}>
-            <ListItemIcon>
-              <div className="flex space-x-1 items-center text-black">
-                <HomeIcon className="text-black h-8" />
-                {open ? <ExpandLess /> : <ExpandMore />}
-              </div>
-            </ListItemIcon>
-          </ListItemButton>
-
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <List
-              subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
-                  MY COMMUNITIES
-                </ListSubheader>
-              }
-              component="div"
-              disablePadding
-              sx={{ position: "absolute", bgcolor: "background.paper" }}
-            >
-              {user?.subreddits.map((subreddit) => (
-                <ListItemButton
-                  onClick={() => {
-                    window.location.href = `/r/${subreddit.name}`;
-                  }}
-                  key={subreddit.name}
-                  sx={{ pl: 4 }}
-                >
-                  <ListItemIcon>
-                    <div className="rounded-full w-6 h-6 overflow-hidden">
-                      <img src={f1} alt="" />
-                    </div>
-                  </ListItemIcon>
-                  <ListItemText primary={"r/" + subreddit.name} />
-                </ListItemButton>
-              ))}
-            </List>
-          </Collapse>
-        </List>
-      </div>
-    </ClickAwayListener>
-  );
-};
+import HeaderOptionsDropDownList from "./HeaderOptionsDropDownList";
+import UserSubredditsDropDownList from "./UserSubredditsDropDown";
 
 const Header = () => {
   const dropDownVisible = useSelector(
@@ -98,9 +31,7 @@ const Header = () => {
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const headerDropDownVisible = useSelector(
-    (state) => state.app.headerDropDownVisible
-  );
+
   const [searchResults, setSearchResults] = useState([]);
 
   const loginVisible = useSelector((state) => state.app.loginVisible);
@@ -142,7 +73,7 @@ const Header = () => {
           </div>
         </div>
         <div className="hidden sm:block">
-          {user && <UserSubredditsDropDown />}
+          {user && <UserSubredditsDropDownList />}
         </div>
         <div className="w-full sm:w-auto flex flex-col border rounded-sm relative bg-gray-100 flex-grow">
           <SearchIcon className="hidden sm:inline-block pl-4 h-7 top-1/2 translate-y-[-50%] text-gray-400 absolute" />
@@ -240,43 +171,7 @@ const Header = () => {
           </div>
         </div>
 
-        <div
-          className={`flex right-0  top-[9rem] sm:top-14 w-full sm:w-auto ${
-            dropDownVisible ? "" : "h-0 overflow-hidden"
-          } absolute  flex-col bg-gray-50 text-sm font-medium select-none duration-200 z-[100]`}
-        >
-          <h4 className="p-2 text-xs text-gray-400">VIEW OPTIONS</h4>
-          <a className="link">Dark Mode</a>
-          <h4 className="p-2 text-xs text-gray-400">MORE STUFF</h4>
-          <a className="link">Coins</a>
-          <a className="link">Premium</a>
-          <a className="link">Powerups</a>
-          <a className="link">Talk</a>
-          <a className="link">Predictions</a>
-          <a className="link">Help Center</a>
-          {!user && (
-            <a
-              onClick={() => {
-                dispatch(setLoginVisible(true));
-              }}
-              className="link border-t"
-            >
-              Log In / Sign Up
-            </a>
-          )}
-
-          {user && (
-            <a
-              onClick={() => {
-                dispatch(setUser(null));
-                localStorage.removeItem("loggedInRedditAppUser");
-              }}
-              className="link border-t"
-            >
-              Log Out
-            </a>
-          )}
-        </div>
+        <HeaderOptionsDropDownList isVisible={dropDownVisible} />
       </div>
       {loginVisible && (
         <div
@@ -284,7 +179,7 @@ const Header = () => {
             loginVisible ? "block" : "hidden"
           } fixed top-0 left-0 w-full h-full m-0 p-0 z-[1000]`}
         >
-          <Login />
+          <LoginForm />
         </div>
       )}
       {signUpVisible && (
@@ -293,7 +188,7 @@ const Header = () => {
             signUpVisible ? "block" : "hidden"
           }  fixed top-0 left-0 w-full h-full m-0 p-0 z-[1000]`}
         >
-          <SignUp />
+          <SignUpForm />
         </div>
       )}
     </>

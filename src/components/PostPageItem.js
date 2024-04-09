@@ -102,7 +102,7 @@ export const Voting = ({ post, numberColor, arrowsColor }) => {
   );
 };
 
-const PostPageItem = ({ post, totalComments }) => {
+const PostPageMainInfoSection = ({ post, totalComments }) => {
   const date = new Date(post?.createdAt);
 
   return (
@@ -169,4 +169,4 @@ const PostPageItem = ({ post, totalComments }) => {
   );
 };
 
-export default PostPageItem;
+export default PostPageMainInfoSection;

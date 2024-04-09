@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { XIcon } from "@heroicons/react/solid";
-import TextField from "@mui/material/TextField";
-import SignIn from "./Formik/SignIn";
-import { setLoginVisible, setSignUpVisible } from "../slices/appSlice";
+import SignIn from "../Formik/SignIn";
+import { setLoginVisible, setSignUpVisible } from "../../slices/appSlice";
 import { useDispatch } from "react-redux";
-import ContinueWithGoogleButton from "./Buttons/ContinueWithGoogleButton";
+import ContinueWithGoogleButton from "../Buttons/ContinueWithGoogleButton";
 
-function Login() {
+function LoginForm() {
   const dispatch = useDispatch();
 
   return (
@@ -62,4 +61,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginForm;
