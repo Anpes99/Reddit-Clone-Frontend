@@ -15,10 +15,7 @@ const useSignIn = () => {
         password,
       });
 
-      console.log(response);
       if (response.status === 200 && response.data.token) {
-        console.log("here1");
-        console.log(response);
         setSuccess(true);
         localStorage.setItem(
           "loggedInRedditAppUser",
@@ -26,7 +23,6 @@ const useSignIn = () => {
         );
         dispatch(setUser(response.data));
         dispatch(setLoginVisible(false));
-        console.log("here1");
       }
       return response;
     } catch (error) {

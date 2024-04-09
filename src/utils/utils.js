@@ -4,15 +4,12 @@ import socket from "../websockets/posts";
 export const createOrUpdateObjInListById = (arr, obj) => {
   const newArr = [...arr];
   const index = arr.findIndex((o) => o.id === obj.id);
-  console.log(index);
 
   if (index !== -1) {
     console.log("sdfg");
     if (obj.rating === 0) {
       return arr.filter((obj1) => obj1.id !== obj.id);
     } else {
-      console.log(index);
-
       newArr[index] = obj;
     }
   } else {
@@ -25,8 +22,6 @@ export const createOrUpdateObjInListById = (arr, obj) => {
 };
 
 export const handleLikePost = async (post, user, dispatch) => {
-  console.log("USERID:", user?.id);
-
   const index = user?.ratedPosts?.findIndex((p) => p.id === post.id);
 
   const currentRating = user?.ratedPosts?.[index]?.rating;
@@ -61,12 +56,10 @@ export const handleLikePost = async (post, user, dispatch) => {
           username: user.username,
           ratedPosts: [...user.ratedPosts],
         };
-        console.log("fgsdfg", typeof updatedUser.ratedPosts);
         updatedUser.ratedPosts = await createOrUpdateObjInListById(
           updatedUser.ratedPosts,
           { id: post.id, rating }
         );
-        console.log(updatedUser);
         dispatch(setUser(updatedUser));
         localStorage.setItem(
           "loggedInRedditAppUser",
@@ -83,8 +76,6 @@ export const handleLikePost = async (post, user, dispatch) => {
   });
 };
 export const handleDislikePost = async (post, user, dispatch) => {
-  console.log("USERID:", user.id);
-
   const index = user?.ratedPosts?.findIndex((p) => p.id === post.id);
 
   const currentRating = user?.ratedPosts?.[index]?.rating;
@@ -110,7 +101,6 @@ export const handleDislikePost = async (post, user, dispatch) => {
     rating,
     pointsToAdd,
     async (data) => {
-      console.log(data);
       a = data;
       if (data.success) {
         const updatedUser = {
@@ -120,7 +110,6 @@ export const handleDislikePost = async (post, user, dispatch) => {
           username: user.username,
           ratedPosts: [...user.ratedPosts],
         };
-        console.log("fgsdfg", updatedUser.ratedPosts);
         updatedUser.ratedPosts = await createOrUpdateObjInListById(
           updatedUser.ratedPosts,
           { id: post.id, rating }
@@ -133,8 +122,6 @@ export const handleDislikePost = async (post, user, dispatch) => {
       }
     }
   );
-
-  console.log(result, " dislike post result ", a);
 
   return new Promise((resolve, reject) => {
     setTimeout(() => {

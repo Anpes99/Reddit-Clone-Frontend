@@ -19,11 +19,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import * as yup from "yup";
 import SubredditInfo from "../components/SubredditInfo";
 import { useSelector } from "react-redux";
-import {
-  setLoginVisible,
-  setCurrentSubreddit,
-  setUser,
-} from "../slices/appSlice";
+import { setLoginVisible } from "../slices/appSlice";
 import socket from "../websockets/posts";
 import TopCommunities from "../components/TopCommunities";
 

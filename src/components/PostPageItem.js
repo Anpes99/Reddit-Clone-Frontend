@@ -7,7 +7,7 @@ import {
   EyeOffIcon,
   FlagIcon,
 } from "@heroicons/react/outline";
-import skyrim from "../fake data/skyrim.png";
+import f1 from "../fake data/f1.png";
 import moment from "moment";
 import socket from "../websockets/posts";
 
@@ -106,10 +106,7 @@ export const Voting = ({ post, numberColor, arrowsColor }) => {
 };
 
 const PostPageItem = ({ post, totalComments }) => {
-  console.log(post);
-  console.log(post.createdAt);
   const date = new Date(post?.createdAt);
-  console.log(post);
 
   return (
     <div className="flex flex-col sm:flex-row max-w-[40rem]  bg-white  mb-4">
@@ -126,7 +123,7 @@ const PostPageItem = ({ post, totalComments }) => {
               }
               className="inline-block rounded-full overflow-hidden h-7 w-7 cursor-pointer flex-shrink-0"
             >
-              <img src={skyrim} alt="user img" />
+              <img src={f1} alt="user img" />
             </div>
             <p
               onClick={() =>

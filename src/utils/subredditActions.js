@@ -27,8 +27,6 @@ export const handleJoinSubreddit = async (user, subreddit, dispatch) => {
         JSON.stringify(updatedUser)
       );
     }
-
-    console.log("joined subreddit");
   } catch (e) {
     console.log(e.response);
   }
@@ -56,7 +54,6 @@ export const handleLeaveSubreddit = async (user, subreddit, dispatch) => {
       );
       dispatch(setUser(updatedUser));
     }
-    console.log(res, "left subreddit");
   } catch (e) {
     console.log(e);
   }

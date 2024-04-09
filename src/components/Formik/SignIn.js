@@ -18,8 +18,6 @@ const validationSchema = yup.object().shape({
 });
 
 export const SignInContainer = ({ onSubmit, setSignUpVisible, newError }) => {
-  console.log("here2");
-
   return (
     <Formik
       validationSchema={validationSchema}
@@ -56,11 +54,9 @@ const SignIn = ({ setSignUpVisible, setLoginVisible }) => {
 
   const onSubmit = async (values) => {
     const { username, password } = values;
-    console.log("here3");
     try {
-      const response = await signIn({ username, password });
+      await signIn({ username, password });
 
-      console.log("success");
       dispatch(setLoginVisible(false));
       window.location.href = "/";
     } catch (e) {

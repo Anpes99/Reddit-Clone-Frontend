@@ -3,20 +3,15 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import Header from "../components/Header";
 import PostFeed from "../components/PostFeed";
-import skyrim from "../fake data/skyrim.png";
-import { setCurrentSubreddit, setLoginVisible } from "../slices/appSlice";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  handleJoinSubreddit,
-  handleLeaveSubreddit,
-} from "../utils/subredditActions";
-import JoinSubredditButton from "../components/JoinSubredditButton";
+import f1 from "../fake data/f1.png";
+import { setCurrentSubreddit } from "../slices/appSlice";
+import { useDispatch } from "react-redux";
+
+import JoinSubredditButton from "../components/Buttons/JoinSubredditButton";
 
 const SubredditPage = ({ orderType = "new" }) => {
   const dispatch = useDispatch();
   const subredditName = useParams().subredditName;
-  const user = useSelector((state) => state.app.user);
-  const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
 
   const [subredditId, setSubredditId] = useState(null);
   useEffect(async () => {
@@ -34,7 +29,7 @@ const SubredditPage = ({ orderType = "new" }) => {
         <div className="bg-white h-[6rem]">
           <div className="max-w-screen-lg m-auto flex space-x-4">
             <div className="rounded-full h-20 w-20 overflow-hidden border-4 border-white -translate-y-5">
-              <img src={skyrim} alt="" />
+              <img src={f1} alt="" />
             </div>
             <div className="flex flex-col items-start space-y-1 py-2">
               <h2 className="font-bold text-lg">{subredditName}</h2>

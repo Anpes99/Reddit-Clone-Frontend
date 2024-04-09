@@ -203,8 +203,6 @@ const NewPostForm = ({}) => {
 };
 
 const SubmitNewPostPage = () => {
-  const user = useSelector((state) => state.app.user);
-  const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
   const subredditName = useParams().subredditName;
   const dispatch = useDispatch();
 

@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setLoginVisible } from "../slices/appSlice";
+import { setLoginVisible } from "../../slices/appSlice";
 import {
   handleJoinSubreddit,
   handleLeaveSubreddit,
-} from "../utils/subredditActions";
+} from "../../utils/subredditActions";
 
 const JoinSubredditButton = ({ size, subreddit }) => {
   const dispatch = useDispatch();

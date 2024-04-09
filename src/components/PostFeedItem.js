@@ -1,4 +1,4 @@
-import skyrim from "../fake data/skyrim.png";
+import f1 from "../fake data/f1.png";
 import moment from "moment";
 import { useNavigate } from "react-router";
 import socket from "../websockets/posts";
@@ -43,7 +43,7 @@ const PostFeedItem = ({ post }) => {
         <div className="flex flex-col p-2">
           <div className="flex items-center space-x-2 ">
             <div className="inline-block rounded-full overflow-hidden h-7 w-7">
-              <img src={skyrim} alt="subreddit img" />
+              <img src={f1} alt="subreddit img" />
             </div>
             <p className="inline mr-2 font-bold text-sm">
               r/{post?.subreddit?.name || "noName"}

@@ -1,18 +1,11 @@
-import {
-  setLoginVisible,
-  setCurrentSubreddit,
-  setUser,
-} from "../slices/appSlice";
+import { setCurrentSubreddit } from "../slices/appSlice";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  handleJoinSubreddit,
-  handleLeaveSubreddit,
-} from "../utils/subredditActions";
+
 import f1 from "../fake data/f1.png";
 import { useParams } from "react-router";
 import { useEffect } from "react";
 import axios from "axios";
-import JoinSubredditButton from "./JoinSubredditButton";
+import JoinSubredditButton from "./Buttons/JoinSubredditButton";
 
 const SubredditInfo = ({ style = {} }) => {
   const dispatch = useDispatch();
