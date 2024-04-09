@@ -17,7 +17,6 @@ const SubredditPage = ({ orderType = "new" }) => {
   useEffect(async () => {
     const res = await axios.get("/api/subreddits?name=" + subredditName);
     setSubredditId(res.data[0].id);
-    console.log(res);
     dispatch(setCurrentSubreddit(res.data[0]));
   }, [subredditName]);
 

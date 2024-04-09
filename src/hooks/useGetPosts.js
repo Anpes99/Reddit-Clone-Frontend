@@ -37,7 +37,6 @@ const useGetPosts = (queryParamSort, subredditId) => {
         5,
         subredditId,
         (data) => {
-          console.log("socket data ", data);
           setPosts(data.posts);
           setTotalPostCount(data.totalCount);
           setLoading(false);
@@ -51,7 +50,6 @@ const useGetPosts = (queryParamSort, subredditId) => {
         0, // offset
         subredditId,
         (data) => {
-          console.log("socket data ", data);
           setPosts(data.posts);
           setTotalPostCount(data.totalCount);
           setLoading(false);
@@ -62,7 +60,6 @@ const useGetPosts = (queryParamSort, subredditId) => {
 
   //////////////////////////////////// GET MORE  POSTS ///////////////////////////////////////////////////
   const fetchMorePosts = async (orderType) => {
-    console.log(totalPostCount, posts.length);
     if (totalPostCount > posts.length) {
       if (
         orderType === null ||
@@ -94,7 +91,6 @@ const useGetPosts = (queryParamSort, subredditId) => {
           posts.length, // offset
           subredditId,
           (data) => {
-            console.log("socket data ", data);
             setPosts([...posts, ...data.posts]);
             setTotalPostCount(data.totalCount);
             setLoading(false);

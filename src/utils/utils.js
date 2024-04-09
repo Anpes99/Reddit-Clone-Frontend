@@ -6,15 +6,12 @@ export const createOrUpdateObjInListById = (arr, obj) => {
   const index = arr.findIndex((o) => o.id === obj.id);
 
   if (index !== -1) {
-    console.log("sdfg");
     if (obj.rating === 0) {
       return arr.filter((obj1) => obj1.id !== obj.id);
     } else {
       newArr[index] = obj;
     }
   } else {
-    console.log(obj);
-
     newArr.push(obj);
   }
 

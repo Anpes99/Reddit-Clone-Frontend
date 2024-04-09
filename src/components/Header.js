@@ -231,7 +231,6 @@ const Header = () => {
           </button>
           <div
             onClick={() => {
-              console.log(dropDownVisible);
               dispatch(setHeaderDropDownVisible(!dropDownVisible));
             }}
             className="px-2 rounded-sm md:px-4 flex items-center text-gray-400 border self-stretch border-gray-50 hover:border-gray-300 transition-all cursor-pointer"

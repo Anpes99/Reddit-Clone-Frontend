@@ -21,8 +21,6 @@ const validationSchema = yup.object().shape({
 });
 
 export const SignUpContainer = ({ onSubmit, setSignUpVisible, newError }) => {
-  console.log("here2");
-
   return (
     <Formik
       validationSchema={validationSchema}
@@ -63,14 +61,11 @@ const SignUp = () => {
   const dispatch = useDispatch();
 
   const onSubmit = async (values) => {
-    console.log("here3");
     try {
       const response = await axios.post("api/users", values);
-      console.log("success user created", response);
       dispatch(setSignUpVisible(false));
       navigate("/");
     } catch (e) {
-      console.log("fsd", e.response);
       if (e.response.data.error === "username already taken")
         setNewError("This username is already taken.");
     }

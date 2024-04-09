@@ -34,12 +34,7 @@ const PostFeed = ({ subredditId, orderType }) => {
   });
 
   return (
-    <div
-      onScroll={() => {
-        console.log("scroll");
-      }}
-      className="flex flex-col  w-full"
-    >
+    <div className="flex flex-col  w-full">
       <p className="py-4 font-medium text-gray-700 px-1">Popular posts</p>
       <div className="flex justify-center lg:justify-between w-full">
         <div className="pr-0 lg:pr-7 w-full">
@@ -80,7 +75,6 @@ const PostFeed = ({ subredditId, orderType }) => {
             </button>
           </div>
           {posts.map((post, i) => {
-            console.log(post.id, "  ", i);
             if (i + 1 === posts.length) {
               return (
                 <div key={post.id} ref={lastPostRef}>

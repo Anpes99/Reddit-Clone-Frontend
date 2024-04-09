@@ -8,7 +8,6 @@ const TrendingFeed = (props) => {
     axios
       .get(`/api/news`)
       .then((res) => {
-        console.log(res);
         setNewsArticles(res.data.articles);
       })
       .catch((e) => console.log(e));

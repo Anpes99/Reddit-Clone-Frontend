@@ -31,7 +31,6 @@ const PostFeedItem = ({ post }) => {
 
       <div
         onClick={() => {
-          console.log(post);
           navigate(
             `/r/${post?.subreddit?.name || "noName"}/comments/${post.id}/${
               post?.title.replaceAll(" ", "_") || "noTitle"

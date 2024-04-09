@@ -58,8 +58,6 @@ export const Voting = ({ post, numberColor, arrowsColor }) => {
     <>
       <ArrowSmUpIcon
         onClick={async () => {
-          console.log(loading);
-
           if (user) {
             if (loading) {
               return;
@@ -83,7 +81,6 @@ export const Voting = ({ post, numberColor, arrowsColor }) => {
       />
       <ArrowSmDownIcon
         onClick={async () => {
-          console.log(loading);
           if (user) {
             if (loading) {
               return;

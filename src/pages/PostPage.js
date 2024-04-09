@@ -70,7 +70,6 @@ const CommentPostSection = ({ user, post }) => {
                   null,
                   user
                 );
-                console.log(res);
                 if (res.success) {
                   setCommentPost("");
                   setCommentPostMessage("New comment created");
@@ -183,7 +182,6 @@ const handleSubmitComment = async (
     subredditId: subredditId, // localstorage.getItem("...")
     postId: postId,
   };
-  console.log(data);
   const result = commentSchema.isValid(data).then(async () => {
     if (commentId && !directReplyToPost) {
       data.commentId = commentId;
@@ -195,10 +193,8 @@ const handleSubmitComment = async (
           Authorization: `bearer ${user.token}`,
         },
       });
-      console.log(result);
       return { success: true };
     } catch (e) {
-      console.log(e.response);
       return { success: false };
     }
   });
@@ -214,7 +210,7 @@ const Avatar = ({ createdAt }) => {
         <img src={f1} alt="user img" />
       </div>
       <div className="inline-block flex items-center text-xs font-medium  text-gray-900">
-        Anpes99{" "}
+        User1{" "}
         <p className="font-sm ml-2 text-gray-500">
           {moment(date.getTime()).fromNow()}
         </p>

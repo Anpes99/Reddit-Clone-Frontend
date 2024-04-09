@@ -10,7 +10,6 @@ const TopCommunities = () => {
   useEffect(async () => {
     const res = await axios.get("/api/subreddits");
 
-    console.log(res);
     setSubreddits(res.data);
   }, []);
 

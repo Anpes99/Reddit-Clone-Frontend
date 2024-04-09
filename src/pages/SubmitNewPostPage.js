@@ -36,7 +36,6 @@ const NewPostForm = ({}) => {
 
   // called every time a file's `status` changes
   const handleChangeStatus = ({ meta, file }, status) => {
-    console.log(status, meta, file);
     if (status === "done") {
       setImg(file);
       setLoading(false);
@@ -72,7 +71,6 @@ const NewPostForm = ({}) => {
             Authorization: `bearer ${user.token}`,
           },
         });
-        console.log(res);
 
         await axios.put(res.data.url, img); //  put request to save img in aws s3 storage
 
@@ -86,7 +84,6 @@ const NewPostForm = ({}) => {
         },
       });
       if (response.status === 201) {
-        console.log("new post created");
         setMessage("New Post Created");
         setText("");
         setTitle("");
@@ -211,7 +208,6 @@ const SubmitNewPostPage = () => {
       name: subredditName,
     });
 
-    console.log(res);
     dispatch(setCurrentSubreddit(res.data[0]));
   }, []);
 
