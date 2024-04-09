@@ -8,7 +8,7 @@ import {
   setCurrentSubreddit,
 } from "../slices/appSlice";
 
-const HomePage = ({ orderType }) => {
+const HomePage = ({ orderType = "new" }) => {
   const dispatch = useDispatch();
 
   dispatch(setCurrentSubreddit(null));

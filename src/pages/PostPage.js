@@ -397,7 +397,6 @@ const PostPage = () => {
       `/api/posts/${postId}?commentCommentAmount=10${queryString}`
     );
     setPost(result.data.post);
-    dispatch(setCurrentSubreddit(result.data.post.subreddit));
     setTotalComments(result.data.totalComments);
   }, []);
 
@@ -519,7 +518,7 @@ const PostPage = () => {
 
             {/* SIDEBAR SECTION     RIGHT SIDE            //////////////////////////////////////////////////////////////////////////////////////////      */}
             <section className="hidden lg:block ">
-              <SubredditInfo post={post} style={{ marginBottom: "20px" }} />
+              <SubredditInfo style={{ marginBottom: "20px" }} />
 
               <TopCommunities />
             </section>

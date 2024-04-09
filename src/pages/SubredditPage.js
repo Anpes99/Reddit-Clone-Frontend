@@ -12,8 +12,7 @@ import {
 } from "../utils/subredditActions";
 import JoinSubredditButton from "../components/JoinSubredditButton";
 
-const SubredditPage = () => {
-  console.log("gfiuadsfhbg");
+const SubredditPage = ({ orderType = "new" }) => {
   const dispatch = useDispatch();
   const subredditName = useParams().subredditName;
   const user = useSelector((state) => state.app.user);
@@ -53,7 +52,7 @@ const SubredditPage = () => {
       <main className="max-w-screen-lg m-auto">
         {subredditId && (
           <div>
-            <PostFeed subredditId={subredditId} />
+            <PostFeed orderType={orderType} subredditId={subredditId} />
           </div>
         )}
       </main>

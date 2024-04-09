@@ -16,16 +16,10 @@ import SubredditInfo from "./SubredditInfo";
 const PostFeed = ({ subredditId, orderType }) => {
   const [reachedEnd, setReachedEnd] = useState(false);
   const [searchParams] = useSearchParams();
-  const sort = searchParams.get("sort");
 
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
 
-  orderType = orderType ? orderType : "new";
-  const [fetchMorePosts, loading, posts] = useGetPosts(
-    sort,
-    subredditId,
-    orderType
-  );
+  const [fetchMorePosts, loading, posts] = useGetPosts(orderType, subredditId);
 
   const observer = useRef();
   const lastPostRef = useCallback((node) => {
@@ -39,12 +33,6 @@ const PostFeed = ({ subredditId, orderType }) => {
     if (node) observer.current.observe(node);
   });
 
-  /* const sortByDate = async () => {
-    const result = await axios.get(`/api/posts?sortBy=createdAt&order=ASC`);
-    setPost(result.data);
-  };
-^*/
-
   return (
     <div
       onScroll={() => {
@@ -56,20 +44,15 @@ const PostFeed = ({ subredditId, orderType }) => {
       <div className="flex justify-center lg:justify-between w-full">
         <div className="pr-0 lg:pr-7 w-full">
           <div className="flex space-x-4 bg-white p-5 text-xs sm:text-sm mb-2 border border-gray-300 w-full">
-            {/*  <button
-              onClick={() => {
-                if (orderType !== "hot") window.location.href = "/hot";
-              }}
-              className={`flex items-center font-semibold ${
-                orderType === "hot" ? "text-blue-500" : "text-gray-400"
-              } sm:space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl`}
-            >
-              <FireIcon className="h-5 sm:h-7" />
-              <p className="hidden sm:inline">Hot</p>
-            </button>*/}
             <button
               onClick={() => {
-                if (orderType !== "new") window.location.href = "/";
+                if (orderType === "new") return;
+
+                if (currentSubreddit?.name) {
+                  window.location.href = `/r/${currentSubreddit.name}`;
+                } else {
+                  window.location.href = `/`;
+                }
               }}
               className={`flex items-center font-semibold ${
                 orderType === "new" ? "text-blue-500" : "text-gray-400"
@@ -80,7 +63,13 @@ const PostFeed = ({ subredditId, orderType }) => {
             </button>
             <button
               onClick={() => {
-                if (orderType !== "top") window.location.href = "/top";
+                if (orderType === "top") return;
+
+                if (currentSubreddit?.name) {
+                  window.location.href = `/r/${currentSubreddit.name}/top`;
+                } else {
+                  window.location.href = `/top`;
+                }
               }}
               className={`flex items-center font-semibold ${
                 orderType === "top" ? "text-blue-500" : "text-gray-400"

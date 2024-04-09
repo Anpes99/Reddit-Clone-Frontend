@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import socket from "../websockets/posts";
 
-const useGetPosts = (queryParamSort, subredditId, orderType) => {
+const useGetPosts = (queryParamSort, subredditId) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPostCount, setTotalPostCount] = useState(true);
@@ -10,6 +10,7 @@ const useGetPosts = (queryParamSort, subredditId, orderType) => {
   let sortBy = "createdAt";
   let order = "DESC";
   let sort;
+  let orderType;
 
   if (queryParamSort === "new") {
     order = "DESC";
@@ -19,13 +20,13 @@ const useGetPosts = (queryParamSort, subredditId, orderType) => {
     order = "ASC";
     sortBy = "createdAt";
   }
+  if (queryParamSort === "top") {
+    orderType = "top";
+  }
 
   //////////////////   GET INITIAL POSTS  /////////////////////////////////////////////////////////////////////////////////////
   useEffect(async () => {
     setLoading(true);
-    /*const result = await axios.get(
-      `/api/posts?limit=5&sortBy=${sortBy}&order=${order}`
-    );*/ //  order, sortby, offset, limit, cb
 
     if (orderType === null || orderType === "new" || orderType === undefined) {
       socket.emit(
@@ -57,12 +58,6 @@ const useGetPosts = (queryParamSort, subredditId, orderType) => {
         }
       );
     }
-
-    /*console.log(result.data.totalCount);
-    setTotalPostCount(result.data.totalCount);
-    console.log(result);
-    
-    setPosts(result.data.posts);*/
   }, [subredditId]);
 
   //////////////////////////////////// GET MORE  POSTS ///////////////////////////////////////////////////
@@ -106,16 +101,6 @@ const useGetPosts = (queryParamSort, subredditId, orderType) => {
           }
         );
       }
-
-      /*
-      const result = await axios
-        .get(`/api/posts?offset=${posts.length}&limit=5`)
-        .catch((e) => {
-          setError(e);
-        });
-      console.log(posts);
-      setLoading(false);
-      setPosts([...posts, ...result.data.posts]);*/
     }
   };
 

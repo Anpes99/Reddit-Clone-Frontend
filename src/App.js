@@ -27,10 +27,14 @@ const App = () => {
               path="/r/:subredditName/comments/:postId/:postTitle"
               element={<PostPage />}
             />
+            <Route
+              path="/r/:subredditName/top"
+              element={<SubredditPage orderType={"top"} />}
+            />
             <Route path="/r/:subredditName" element={<SubredditPage />} />
             <Route path="/top" element={<HomePage orderType={"top"} />} />
             <Route path="/" element={<HomePage />} />
-          </Routes>{" "}
+          </Routes>
         </Provider>
       </Router>
     </div>
