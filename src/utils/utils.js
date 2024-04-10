@@ -42,13 +42,13 @@ export const handleLikePost = async (post, user, dispatch) => {
       break;
   }
 
-  const rating = currentRating === 1 ? 0 : 1;
+  const newRating = currentRating === 1 ? 0 : 1;
   let a;
   socket.emit(
     "likePost",
     post.id,
     user.id,
-    rating,
+    newRating,
     pointsToAdd,
     async (data) => {
       a = data;
@@ -62,7 +62,7 @@ export const handleLikePost = async (post, user, dispatch) => {
         };
         updatedUser.ratedPosts = await createOrUpdateObjInListById(
           updatedUser.ratedPosts,
-          { id: post.id, rating }
+          { id: post.id, rating: newRating }
         );
         dispatch(setUser(updatedUser));
         localStorage.setItem(

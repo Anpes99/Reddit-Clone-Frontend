@@ -37,7 +37,7 @@ const PostLikes = ({ post, className }) => {
   return <p className={className}>{likes}</p>;
 };
 
-export const Voting = ({ post, numberColor, arrowsColor }) => {
+export const Voting = ({ post, numberColor }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.app.user);
   const [loading, setLoading] = useState(false);
@@ -45,6 +45,7 @@ export const Voting = ({ post, numberColor, arrowsColor }) => {
 
   useEffect(() => {
     const index = user?.ratedPosts?.findIndex((p) => p.id === post?.id);
+
     if (index === -1) {
       setUserRating(null);
     } else {
@@ -52,8 +53,7 @@ export const Voting = ({ post, numberColor, arrowsColor }) => {
         setUserRating(user?.ratedPosts?.[index]?.rating);
       }
     }
-  }, [user]);
-
+  }, [user, post]);
   return (
     <>
       <ArrowSmUpIcon
@@ -69,8 +69,8 @@ export const Voting = ({ post, numberColor, arrowsColor }) => {
             dispatch(setLoginVisible(true));
           }
         }}
-        className={`h-7 ${arrowsColor ? arrowsColor : "text-gray-400"} ${
-          userRating === 1 && "text-red-500"
+        className={`h-7  ${
+          userRating === 1 ? "text-red-500" : "text-gray-400"
         } hover:text-red-500 cursor-pointer`}
       />
       <PostLikes
@@ -92,10 +92,8 @@ export const Voting = ({ post, numberColor, arrowsColor }) => {
             dispatch(setLoginVisible(true));
           }
         }}
-        className={`h-7 ${
-          arrowsColor ? arrowsColor : "text-gray-400"
-        } hover:text-blue-500 cursor-pointer ${
-          userRating === -1 && "text-blue-500"
+        className={`h-7  hover:text-blue-500 cursor-pointer ${
+          userRating === -1 ? "text-blue-500" : "text-gray-400"
         }   `}
       />
     </>
