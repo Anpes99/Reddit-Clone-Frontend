@@ -1,6 +1,4 @@
-import { ArrowSmUpIcon } from "@heroicons/react/outline";
 import {
-  ArrowSmDownIcon,
   ChatIcon,
   ShareIcon,
   BookmarkIcon,
@@ -9,96 +7,7 @@ import {
 } from "@heroicons/react/outline";
 import f1 from "../fake data/f1.png";
 import moment from "moment";
-import socket from "../websockets/posts";
-
-import { useDispatch, useSelector } from "react-redux";
-import { setLoginVisible } from "../slices/appSlice";
-import { useEffect, useState } from "react";
-import { handleDislikePost, handleLikePost } from "../utils/utils";
-
-const PostLikes = ({ post, className }) => {
-  const [likes, setLikes] = useState(0);
-
-  useEffect(() => {
-    setLikes(post.upVotes - post.downVotes);
-  }, [post]);
-
-  socket.on("post_received_likes", (postId, pointsToAdd) => {
-    if (postId === post.id) {
-      setLikes(likes + pointsToAdd);
-    }
-  });
-  socket.on("post_received_dislikes", (postId, pointsToAdd) => {
-    if (postId === post.id) {
-      setLikes(likes + pointsToAdd);
-    }
-  });
-
-  return <p className={className}>{likes}</p>;
-};
-
-export const Voting = ({ post, numberColor }) => {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.app.user);
-  const [loading, setLoading] = useState(false);
-  const [userRating, setUserRating] = useState(null);
-
-  useEffect(() => {
-    const index = user?.ratedPosts?.findIndex((p) => p.id === post?.id);
-
-    if (index === -1) {
-      setUserRating(null);
-    } else {
-      if (user) {
-        setUserRating(user?.ratedPosts?.[index]?.rating);
-      }
-    }
-  }, [user, post]);
-  return (
-    <>
-      <ArrowSmUpIcon
-        onClick={async () => {
-          if (user) {
-            if (loading) {
-              return;
-            }
-            setLoading(true);
-            await handleLikePost(post, user, dispatch);
-            setLoading(false);
-          } else {
-            dispatch(setLoginVisible(true));
-          }
-        }}
-        className={`h-7  ${
-          userRating === 1 ? "text-red-500" : "text-gray-400"
-        } hover:text-red-500 cursor-pointer`}
-      />
-      <PostLikes
-        className={`px-1 font-bold text-sm ${
-          numberColor ? numberColor : "text-black"
-        }`}
-        post={post}
-      />
-      <ArrowSmDownIcon
-        onClick={async () => {
-          if (user) {
-            if (loading) {
-              return;
-            }
-            setLoading(true);
-            await handleDislikePost(post, user, dispatch);
-            setLoading(false);
-          } else {
-            dispatch(setLoginVisible(true));
-          }
-        }}
-        className={`h-7  hover:text-blue-500 cursor-pointer ${
-          userRating === -1 ? "text-blue-500" : "text-gray-400"
-        }   `}
-      />
-    </>
-  );
-};
+import PostVotingArrows from "./PostVotingArrows";
 
 const PostPageMainInfoSection = ({ post, totalComments }) => {
   const date = new Date(post?.createdAt);
@@ -106,7 +15,7 @@ const PostPageMainInfoSection = ({ post, totalComments }) => {
   return (
     <div className="flex flex-col sm:flex-row max-w-[40rem]  bg-white  mb-4">
       <div className=" hidden sm:flex flex-col items-center  w-25">
-        <Voting post={post} />
+        <PostVotingArrows post={post} />
       </div>
 
       <div className="flex flex-col">

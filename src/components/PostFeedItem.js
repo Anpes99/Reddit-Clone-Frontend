@@ -3,7 +3,7 @@ import moment from "moment";
 import { useNavigate } from "react-router";
 import socket from "../websockets/posts";
 import { useState } from "react";
-import { Voting } from "./PostPageItem";
+import PostVotingArrows from "./PostVotingArrows";
 
 const PostFeedItem = ({ post }) => {
   const [likes, setLikes] = useState(post?.upVotes - post?.downVotes);
@@ -26,7 +26,7 @@ const PostFeedItem = ({ post }) => {
   return (
     <div className=" flex flex-col sm:flex-row w-full    sm:h-min-content bg-white border mb-3  border-gray-300 p-0.5">
       <div className=" hidden sm:flex flex-col items-center bg-gray-50 w-20 p-1.5">
-        <Voting post={post} />
+        <PostVotingArrows post={post} />
       </div>
 
       <div
@@ -63,7 +63,7 @@ const PostFeedItem = ({ post }) => {
         />
       </div>
       <div className="flex sm:hidden p-2 items-center">
-        <Voting post={post} />
+        <PostVotingArrows post={post} />
       </div>
     </div>
   );

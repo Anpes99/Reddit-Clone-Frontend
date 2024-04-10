@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import Header from "../components/Header";
-import PostPageMainInfoSection, { Voting } from "../components/PostPageItem";
+import PostPageMainInfoSection from "../components/PostPageItem";
 import { useDispatch } from "react-redux";
 import { setHeaderDropDownVisible } from "../slices/appSlice";
 import { useSearchParams } from "react-router-dom";
@@ -13,6 +13,7 @@ import TopCommunities from "../components/TopCommunities";
 import CreateNewDirectPostComment from "../components/Comments/CreateNewDirectPostComment";
 import PostPageCommentsSortingSection from "../components/Comments/PostPageCommentsSortingSection";
 import PostCommentsSection from "../components/Comments/PostCommentsSection";
+import PostVotingArrows from "../components/PostVotingArrows";
 
 const PostPage = () => {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ const PostPage = () => {
           <div className="h-10 bg-black flex items-center justify-between sticky top-0 z-40">
             <div className="flex items-center">
               <div className="flex text-gray-400 items-center border-l border-r border-gray-600 mr-3 ml-1 sm:ml-10">
-                <Voting post={post} numberColor="text-white" />
+                <PostVotingArrows post={post} numberColor="text-white" />
               </div>
               <PhotographIcon className="hidden sm:inline-block h-6 w-6 text-gray-200 mr-1" />
               <p className="line-clamp-1 text-gray-200 flex-shrink flex-grow">
