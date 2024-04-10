@@ -15,10 +15,8 @@ export const handleJoinSubreddit = async (user, subreddit, dispatch) => {
 
     if (res.status === 200) {
       const updatedUser = {
-        id: user.id,
+        ...user,
         subreddits: [...user.subreddits, subreddit],
-        token: user.token,
-        username: user.username,
       };
 
       dispatch(setUser(updatedUser));
@@ -41,12 +39,10 @@ export const handleLeaveSubreddit = async (user, subreddit, dispatch) => {
     });
     if (res.status === 204) {
       const updatedUser = {
-        id: user.id,
+        ...user,
         subreddits: user.subreddits.filter(
           (userJoinedSubreddit) => userJoinedSubreddit.id !== subreddit.id
         ),
-        token: user.token,
-        username: user.username,
       };
       localStorage.setItem(
         "loggedInRedditAppUser",

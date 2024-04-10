@@ -53,13 +53,7 @@ export const handleLikePost = async (post, user, dispatch) => {
     async (data) => {
       a = data;
       if (data.success) {
-        const updatedUser = {
-          id: user.id,
-          subreddits: [...user.subreddits],
-          token: user.token,
-          username: user.username,
-          ratedPosts: [...user.ratedPosts],
-        };
+        const updatedUser = { ...user };
         updatedUser.ratedPosts = await createOrUpdateObjInListById(
           updatedUser.ratedPosts,
           { id: post.id, rating: newRating }
@@ -107,13 +101,7 @@ export const handleDislikePost = async (post, user, dispatch) => {
     async (data) => {
       a = data;
       if (data.success) {
-        const updatedUser = {
-          id: user.id,
-          subreddits: [...user.subreddits],
-          token: user.token,
-          username: user.username,
-          ratedPosts: [...user.ratedPosts],
-        };
+        const updatedUser = { ...user };
         updatedUser.ratedPosts = await createOrUpdateObjInListById(
           updatedUser.ratedPosts,
           { id: post.id, rating }
