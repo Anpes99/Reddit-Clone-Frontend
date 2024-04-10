@@ -3,12 +3,19 @@ import f1 from "../fake data/f1.png";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import JoinSubredditButton from "./Buttons/JoinSubredditButton";
+import { SUBREDDIT_ORDER_BY_TYPES } from "../constants/subreddits";
 
 const TopCommunities = () => {
   const [subreddits, setSubreddits] = useState(null);
 
   useEffect(async () => {
-    const res = await axios.get("/api/subreddits");
+    const res = await axios.get("/api/subreddits", {
+      params: {
+        limit: 10,
+        sortBy: SUBREDDIT_ORDER_BY_TYPES.MEMBER_COUNT,
+        order: "desc",
+      },
+    });
 
     setSubreddits(res.data);
   }, []);
@@ -29,7 +36,7 @@ const TopCommunities = () => {
               className=" border-b flex justify-between space-x-3 pr-3 items-center py-3   font-semibold text-lg text-black"
             >
               <div className="flex items-center space-x-3 ml-5 ">
-                <p className="w-3">1</p>
+                <p className="w-3">{i + 1}</p>
                 <ChevronUpIcon className="h-6 text-green-400" />
                 <div
                   onClick={() =>

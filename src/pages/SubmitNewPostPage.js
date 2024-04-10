@@ -13,8 +13,8 @@ const SubmitNewPostPage = () => {
   const dispatch = useDispatch();
 
   useEffect(async () => {
-    const res = await axios.get("/api/subreddits?name=" + subredditName, {
-      name: subredditName,
+    const res = await axios.get("/api/subreddits", {
+      params: { name: subredditName },
     });
 
     dispatch(setCurrentSubreddit(res.data[0]));
