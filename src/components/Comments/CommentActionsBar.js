@@ -1,26 +1,27 @@
 import { ArrowSmDownIcon, ArrowSmUpIcon } from "@heroicons/react/outline";
 import { handleDislikeComment, handleLikeComment } from "../../utils/utils";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import socket from "../../websockets/posts";
 import { setLoginVisible } from "../../slices/appSlice";
 import { ChatIcon } from "@heroicons/react/outline";
 import CommentCommentSection from "./CommentCommentSection";
 
+const CommentLikes = ({ comment }) => {
+  const [likes, setLikes] = useState(comment.upVotes - comment.downVotes);
+  useEffect(() => {
+    socket.on("comment_likes_changed", ({ commentId, ratingToPlusOrMinus }) => {
+      if (commentId === comment.id) {
+        setLikes((currentValue) => currentValue + ratingToPlusOrMinus);
+      }
+    });
+  }, []);
+
+  return <p className=" font-bold">{likes}</p>;
+};
+
 const CommentActionsBar = ({ post, comment, user, dispatch }) => {
   const [newComment, setNewComment] = useState("");
   const [createCommentVisible, setCreateCommentVisible] = useState(false);
-  const [likes, setLikes] = useState(comment.upVotes - comment.downVotes);
-
-  socket.on("comment_received_likes", (commentId) => {
-    if (commentId === comment.id) {
-      setLikes(likes + 1);
-    }
-  });
-  socket.on("comment_received_dislikes", (commentId) => {
-    if (commentId === comment.id) {
-      setLikes(likes - 1);
-    }
-  });
 
   return (
     <div className="flex flex-col">
@@ -35,7 +36,7 @@ const CommentActionsBar = ({ post, comment, user, dispatch }) => {
           }}
           className="text-gray-400 w-4 hover:text-red-500 cursor-pointer"
         />
-        <p className=" font-bold">{likes}</p>
+        <CommentLikes comment={comment} />
         <ArrowSmDownIcon
           onClick={() => {
             if (user) {

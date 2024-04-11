@@ -19,10 +19,10 @@ export const createOrUpdateObjInListById = (arr, obj) => {
 };
 
 export const handleLikeComment = async (commentId, userId) => {
-  socket.emit("likeComment", commentId, userId);
+  socket.emit("likeComment", { commentId, userId });
 };
 export const handleDislikeComment = async (commentId, userId) => {
-  socket.emit("dislikeComment", commentId, userId);
+  socket.emit("dislikeComment", { commentId, userId });
 };
 
 export const handleLikePost = async (post, user, dispatch) => {
