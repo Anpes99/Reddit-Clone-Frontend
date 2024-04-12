@@ -26,38 +26,24 @@ export const handleDislikeComment = async (commentId, userId) => {
 };
 
 export const handleLikePost = async (post, user, dispatch) => {
-  const index = user?.ratedPosts?.findIndex((p) => p.id === post.id);
-
-  const currentRating = user?.ratedPosts?.[index]?.rating;
-  let pointsToAdd = null;
-  switch (currentRating) {
-    case 1:
-      pointsToAdd = -1;
-      break;
-    case -1:
-      pointsToAdd = 2;
-      break;
-    default:
-      pointsToAdd = 1;
-      break;
-  }
-
-  const newRating = currentRating === 1 ? 0 : 1;
   let a;
   socket.emit(
     "likePost",
-    post.id,
-    user.id,
-    newRating,
-    pointsToAdd,
+    {
+      postId: post.id,
+      userId: user.id,
+    },
     async (data) => {
       a = data;
       if (data.success) {
         const updatedUser = { ...user };
-        updatedUser.ratedPosts = await createOrUpdateObjInListById(
-          updatedUser.ratedPosts,
-          { id: post.id, rating: newRating }
-        );
+        updatedUser.ratedPosts =
+          data.newRating === 0
+            ? updatedUser.ratedPosts.filter((p) => p.id !== post.id)
+            : await createOrUpdateObjInListById(updatedUser.ratedPosts, {
+                id: post.id,
+                rating: data.newRating,
+              });
         dispatch(setUser(updatedUser));
         localStorage.setItem(
           "loggedInRedditAppUser",
@@ -74,37 +60,20 @@ export const handleLikePost = async (post, user, dispatch) => {
   });
 };
 export const handleDislikePost = async (post, user, dispatch) => {
-  const index = user?.ratedPosts?.findIndex((p) => p.id === post.id);
-
-  const currentRating = user?.ratedPosts?.[index]?.rating;
-  let pointsToAdd = null;
-  switch (currentRating) {
-    case 1:
-      pointsToAdd = -2;
-      break;
-    case -1:
-      pointsToAdd = 1;
-      break;
-    default:
-      pointsToAdd = -1;
-      break;
-  }
-
-  const rating = currentRating === -1 ? 0 : -1;
   let a;
   await socket.emit(
     "dislikePost",
-    post.id,
-    user.id,
-    rating,
-    pointsToAdd,
+    {
+      postId: post.id,
+      userId: user.id,
+    },
     async (data) => {
       a = data;
       if (data.success) {
         const updatedUser = { ...user };
         updatedUser.ratedPosts = await createOrUpdateObjInListById(
           updatedUser.ratedPosts,
-          { id: post.id, rating }
+          { id: post.id, rating: data.newRating }
         );
         dispatch(setUser(updatedUser));
         localStorage.setItem(

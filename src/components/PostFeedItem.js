@@ -1,27 +1,12 @@
 import f1 from "../fake data/f1.png";
 import moment from "moment";
 import { useNavigate } from "react-router";
-import socket from "../websockets/posts";
-import { useState } from "react";
 import PostVotingArrows from "./PostVotingArrows";
 
 const PostFeedItem = ({ post }) => {
-  const [likes, setLikes] = useState(post?.upVotes - post?.downVotes);
-
   const date = new Date(post.createdAt);
 
   const navigate = useNavigate();
-
-  socket.on("post_received_likes", (postId, pointsToAdd) => {
-    if (postId === post.id) {
-      setLikes(likes + pointsToAdd);
-    }
-  });
-  socket.on("post_received_dislikes", (postId, pointsToAdd) => {
-    if (postId === post.id) {
-      setLikes(likes + pointsToAdd);
-    }
-  });
 
   return (
     <div className=" flex flex-col sm:flex-row w-full    sm:h-min-content bg-white border mb-3  border-gray-300 p-0.5">
