@@ -1,5 +1,5 @@
 # Reddit Clone Frontend
 
-## [Live demo](https://website-clone-98473209487324-f259a816b134.herokuapp.com/)
+## [Live demo](https://reddit-clone-app-1234512345-fecf0e20e036.herokuapp.com/)
 
 ### TailwindCSS, React, Redux, Socket.io, AWS S3, MUI
