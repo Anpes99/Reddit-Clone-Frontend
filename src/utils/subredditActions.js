@@ -54,5 +54,3 @@ export const handleLeaveSubreddit = async (user, subreddit, dispatch) => {
     console.log(e);
   }
 };
-
-module.exports = { handleJoinSubreddit, handleLeaveSubreddit };
