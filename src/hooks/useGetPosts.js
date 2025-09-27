@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import socket from "../websockets/posts";
 
-const useGetPosts = (queryParamSort, subredditId) => {
+const useGetPosts = ({ queryParamSort, subredditId, username }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPostCount, setTotalPostCount] = useState(true);
@@ -31,11 +31,14 @@ const useGetPosts = (queryParamSort, subredditId) => {
     if (orderType === null || orderType === "new" || orderType === undefined) {
       socket.emit(
         "fetch_more_posts",
-        order,
-        sortBy,
-        0,
-        5,
-        subredditId,
+        {
+          order,
+          sortBy,
+          offset: 0,
+          limit: 5,
+          subredditId,
+          username,
+        },
         (data) => {
           setPosts(data.posts);
           setTotalPostCount(data.totalCount);
@@ -47,8 +50,11 @@ const useGetPosts = (queryParamSort, subredditId) => {
     if (orderType === "top") {
       socket.emit(
         "fetch_top_posts",
-        0, // offset
-        subredditId,
+        {
+          offset: 0,
+          subredditId,
+          username,
+        },
         (data) => {
           setPosts(data.posts);
           setTotalPostCount(data.totalCount);
@@ -69,11 +75,14 @@ const useGetPosts = (queryParamSort, subredditId) => {
         setLoading(true);
         socket.emit(
           "fetch_more_posts",
-          order,
-          sortBy,
-          posts.length,
-          5, //limit
-          subredditId,
+          {
+            order,
+            sortBy,
+            offset: posts.length,
+            limit: 5,
+            subredditId,
+            username,
+          },
           (data) => {
             console.log("socket data ", data);
             setPosts([...posts, ...data.posts]);
@@ -88,8 +97,11 @@ const useGetPosts = (queryParamSort, subredditId) => {
 
         socket.emit(
           "fetch_top_posts",
-          posts.length, // offset
-          subredditId,
+          {
+            offset: posts.length,
+            subredditId,
+            username,
+          },
           (data) => {
             setPosts([...posts, ...data.posts]);
             setTotalPostCount(data.totalCount);

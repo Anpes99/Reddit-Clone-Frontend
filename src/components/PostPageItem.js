@@ -38,7 +38,10 @@ const PostPageMainInfoSection = ({ post, totalComments }) => {
               r/{post?.subreddit?.name || "noName"}
             </p>
             <p className="inline text-xs text-gray-400">
-              posted by u/{post?.user?.username || "noName"}{" "}
+              posted by{" "}
+              <a href={`/user/${post?.user?.username}`}>
+                u/{post?.user?.username || "noName"}
+              </a>{" "}
               {moment(date.getTime()).fromNow()}
             </p>
           </div>

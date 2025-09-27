@@ -2,17 +2,22 @@ import PostFeedItem from "./PostFeedItem";
 import TopCommunities from "./TopCommunities";
 import { SunIcon } from "@heroicons/react/outline";
 import { TrendingUpIcon } from "@heroicons/react/outline";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import useGetPosts from "../hooks/useGetPosts";
 import { useSelector } from "react-redux";
 import SubredditInfo from "./SubredditInfo";
+import { useParams } from "react-router";
+import { useSearchParams } from "react-router-dom";
 
-const PostFeed = ({ subredditId, orderType }) => {
+const UserPagePostFeed = ({ subredditId }) => {
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
-
+  const username = useParams().username;
+  const [searchParams] = useSearchParams();
+  const orderType = searchParams.get("sort") || "new";
   const [fetchMorePosts, loading, posts] = useGetPosts({
     queryParamSort: orderType,
     subredditId,
+    username,
   });
 
   const observer = useRef();
@@ -29,7 +34,7 @@ const PostFeed = ({ subredditId, orderType }) => {
 
   return (
     <div className="flex flex-col  w-full">
-      <p className="py-4 font-medium text-gray-700 px-1">Popular posts</p>
+      <p className="py-8 font-medium text-gray-700 px-1"></p>
       <div className="flex justify-center lg:justify-between w-full">
         <div className="pr-0 lg:pr-7 w-full">
           <div className="flex space-x-4 bg-white p-5 text-xs sm:text-sm mb-2 border border-gray-300 w-full">
@@ -37,11 +42,7 @@ const PostFeed = ({ subredditId, orderType }) => {
               onClick={() => {
                 if (orderType === "new") return;
 
-                if (currentSubreddit?.name) {
-                  window.location.href = `/r/${currentSubreddit.name}`;
-                } else {
-                  window.location.href = `/`;
-                }
+                window.location.href = `/user/${username}/?sort=new`;
               }}
               className={`flex items-center font-semibold ${
                 orderType === "new" ? "text-blue-500" : "text-gray-400"
@@ -53,12 +54,7 @@ const PostFeed = ({ subredditId, orderType }) => {
             <button
               onClick={() => {
                 if (orderType === "top") return;
-
-                if (currentSubreddit?.name) {
-                  window.location.href = `/r/${currentSubreddit.name}/top`;
-                } else {
-                  window.location.href = `/top`;
-                }
+                window.location.href = `/user/${username}/?sort=top`;
               }}
               className={`flex items-center font-semibold ${
                 orderType === "top" ? "text-blue-500" : "text-gray-400"
@@ -89,4 +85,4 @@ const PostFeed = ({ subredditId, orderType }) => {
   );
 };
 
-export default PostFeed;
+export default UserPagePostFeed;

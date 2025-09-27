@@ -61,7 +61,7 @@ const Header = () => {
             dispatch(setHeaderDropDownVisible(false));
           }
         }}
-        className="relative pb-2 sm:pb-0 flex flex-col sm:flex-row min-h-12 bg-white  items-center justify-between z-[90] pl-0 sm:pl-2 sm:space-x-2"
+        className="relative pb-2 sm:pb-0 flex flex-col sm:flex-row min-h-12 bg-white  items-center justify-between z-[90] pl-0 sm:pl-2 sm:space-x-2 border-b"
       >
         <div
           onClick={() => (window.location.href = "/")}

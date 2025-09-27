@@ -16,17 +16,14 @@ const HomePage = ({ orderType = "new" }) => {
   return (
     <>
       <Header />
-      <div className="flex">
-        <div
-          onClick={() => {
-            dispatch(setHeaderDropDownVisible(false));
-          }}
-          className="flex-grow flex-shrink"
-        ></div>
+      <div
+        onClick={() => {
+          dispatch(setHeaderDropDownVisible(false));
+        }}
+        className="flex"
+      >
+        <div className="flex-grow flex-shrink"></div>
         <main
-          onClick={() => {
-            dispatch(setHeaderDropDownVisible(false));
-          }}
           className="max-w-screen-lg mx-auto md:p-5
     pt-3"
         >
@@ -35,12 +32,7 @@ const HomePage = ({ orderType = "new" }) => {
             <PostFeed orderType={orderType} />
           </div>
         </main>
-        <div
-          onClick={() => {
-            dispatch(setHeaderDropDownVisible(false));
-          }}
-          className="flex-grow flex-shrink"
-        ></div>
+        <div className="flex-grow flex-shrink"></div>
       </div>
     </>
   );

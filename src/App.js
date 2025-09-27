@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { setUser } from "./slices/appSlice";
 import SubmitNewPostPage from "./pages/SubmitNewPostPage";
 import SubredditPage from "./pages/SubredditPage";
+import UserPage from "./pages/UserPage";
 
 const App = () => {
   useEffect(() => {
@@ -33,6 +34,7 @@ const App = () => {
             />
             <Route path="/r/:subredditName" element={<SubredditPage />} />
             <Route path="/top" element={<HomePage orderType={"top"} />} />
+            <Route path="/user/:username" element={<UserPage />} />
             <Route path="/" element={<HomePage />} />
           </Routes>
         </Provider>
