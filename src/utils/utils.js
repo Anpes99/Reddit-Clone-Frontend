@@ -90,3 +90,56 @@ export const handleDislikePost = async (post, user, dispatch) => {
     }, 3000);
   });
 };
+
+export const makeStringSafeForURL = (input, { maxLen = 140 } = {}) => {
+  if (input == null) return "";
+  let s = String(input).trim();
+
+  // Normalize Unicode (avoid duplicates from accents/codepoints)
+  s = s.normalize("NFC");
+
+  // Replace punctuation with words
+  const map = {
+    "?": "question",
+    "!": "exclamation",
+    "&": "and",
+    "%": "percent",
+    "#": "hash",
+    "/": "slash",
+    "\\": "backslash",
+    ":": "colon",
+    ";": "semicolon",
+    ",": "comma",
+    ".": "dot",
+    "@": "at",
+    "+": "plus",
+    "=": "equals",
+    "<": "lt",
+    ">": "gt",
+    '"': "quote",
+    "'": "apos",
+    "`": "backtick",
+    "~": "tilde",
+    "*": "star",
+  };
+
+  s = s
+    .split("")
+    .map((ch) => map[ch] ?? ch)
+    .join("");
+
+  // Convert spaces/underscores to dashes
+  s = s.replace(/[_\s]+/g, "-");
+
+  // Remove disallowed chars (keep letters, numbers, dash)
+  s = s.replace(/[^-\p{L}\p{N}]/gu, "");
+
+  // Collapse multiple dashes
+  s = s.replace(/-+/g, "-");
+
+  // Trim dashes and lowercase
+  s = s.replace(/^-+|-+$/g, "").toLowerCase();
+
+  // Enforce max length
+  return s.slice(0, maxLen);
+};

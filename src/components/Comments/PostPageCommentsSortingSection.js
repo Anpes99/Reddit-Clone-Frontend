@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { makeStringSafeForURL } from "../../utils/utils";
 
 const PostPageCommentsSortingSection = ({ post }) => {
   const [sortVisible, setSortVisible] = useState(false);
@@ -20,7 +21,7 @@ const PostPageCommentsSortingSection = ({ post }) => {
           href={
             post.id
               ? `/r/${post?.subreddit?.name || "noName"}/comments/${post.id}/${
-                  post?.title?.replaceAll(" ", "_") || "noTitle"
+                  makeStringSafeForURL(post?.title) || "noTitle"
                 }?sortBy=upVotes&order=DESC`
               : null
           }
@@ -32,7 +33,7 @@ const PostPageCommentsSortingSection = ({ post }) => {
           href={
             post.id
               ? `/r/${post?.subreddit?.name || "noName"}/comments/${post.id}/${
-                  post?.title?.replaceAll(" ", "_") || "noTitle"
+                  makeStringSafeForURL(post?.title) || "noTitle"
                 }?sortBy=createdAt&order=DESC`
               : null
           }
@@ -44,7 +45,7 @@ const PostPageCommentsSortingSection = ({ post }) => {
           href={
             post.id
               ? `/r/${post?.subreddit?.name || "noName"}/comments/${post.id}/${
-                  post?.title?.replaceAll(" ", "_") || "noTitle"
+                  makeStringSafeForURL(post?.title) || "noTitle"
                 }?sortBy=createdAt&order=ASC`
               : null
           }

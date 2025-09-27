@@ -2,6 +2,7 @@ import f1 from "../fake data/f1.png";
 import moment from "moment";
 import { useNavigate } from "react-router";
 import PostVotingArrows from "./PostVotingArrows";
+import { makeStringSafeForURL } from "../utils/utils";
 
 const PostFeedItem = ({ post }) => {
   const date = new Date(post.createdAt);
@@ -18,7 +19,7 @@ const PostFeedItem = ({ post }) => {
         onClick={() => {
           navigate(
             `/r/${post?.subreddit?.name || "noName"}/comments/${post.id}/${
-              post?.title.replaceAll(" ", "_") || "noTitle"
+              makeStringSafeForURL(post?.title) || "noTitle"
             }`
           );
         }}
