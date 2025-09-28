@@ -34,8 +34,7 @@ const UserPagePostFeed = ({ subredditId }) => {
 
   return (
     <div className="flex flex-col  w-full">
-      <p className="py-8 font-medium text-gray-700 px-1"></p>
-      <div className="flex justify-center lg:justify-between w-full">
+      <div className="flex justify-center lg:justify-between w-full mt-4">
         <div className="pr-0 lg:pr-7 w-full">
           <div className="flex space-x-4 bg-white p-5 text-xs sm:text-sm mb-2 border border-gray-300 w-full">
             <button

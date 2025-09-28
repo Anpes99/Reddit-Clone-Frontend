@@ -26,7 +26,7 @@ const UserPage = ({ orderType = "new" }) => {
 
   const UserPageContentSelectionButtons = () => {
     return (
-      <div className="flex">
+      <div className="flex ">
         <a
           href="#"
           className=" pl-4 pr-4 py-2  rounded-3xl font-semibold mr-4 hover:underline"
@@ -56,13 +56,13 @@ const UserPage = ({ orderType = "new" }) => {
         onClick={() => {
           dispatch(setHeaderDropDownVisible(false));
         }}
-        className="flex flex-row min-h-screen justify-between"
+        className="flex flex-row min-h-screen justify-between bg-white"
       >
         {/* LEFT SIDE BAR SECTION */}
         <div className=""></div>
 
         {/* 1. USER INTRODUCTION SECTION 2. POST SORTING SECTION 3. USER POSTFEED SECTION/COMMENTS SECTION */}
-        <div className=" border-l border-r w-full bg-white px-8 pt-4  max-w-screen-lg">
+        <div className="w-full  md:px-5 pt-4  max-w-screen-lg">
           <UserIntroductionSection />
           <UserPageContentSelectionButtons />
           <UserPagePostFeed orderType={orderType} />
