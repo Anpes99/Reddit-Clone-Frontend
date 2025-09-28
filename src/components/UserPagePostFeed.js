@@ -33,53 +33,43 @@ const UserPagePostFeed = ({ subredditId }) => {
   });
 
   return (
-    <div className="flex flex-col  w-full">
-      <div className="flex justify-center lg:justify-between w-full mt-4">
-        <div className="pr-0 lg:pr-7 w-full">
-          <div className="flex space-x-4 bg-white p-5 text-xs sm:text-sm mb-2 border border-gray-300 w-full">
-            <button
-              onClick={() => {
-                if (orderType === "new") return;
+    <div className="pr-0 lg:pr-7 w-full">
+      <div className="flex space-x-4 bg-white p-5 text-xs sm:text-sm mb-2 border border-gray-300 w-full">
+        <button
+          onClick={() => {
+            if (orderType === "new") return;
 
-                window.location.href = `/user/${username}/?sort=new`;
-              }}
-              className={`flex items-center font-semibold ${
-                orderType === "new" ? "text-blue-500" : "text-gray-400"
-              } space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl`}
-            >
-              <SunIcon className="h-7" />
-              <p className="inline">New</p>
-            </button>
-            <button
-              onClick={() => {
-                if (orderType === "top") return;
-                window.location.href = `/user/${username}/?sort=top`;
-              }}
-              className={`flex items-center font-semibold ${
-                orderType === "top" ? "text-blue-500" : "text-gray-400"
-              } space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl`}
-            >
-              <TrendingUpIcon className="h-7" />
-              <p className="inline">Top</p>
-            </button>
-          </div>
-          {posts.map((post, i) => {
-            if (i + 1 === posts.length) {
-              return (
-                <div key={post.id} ref={lastPostRef}>
-                  <PostFeedItem post={post} />
-                </div>
-              );
-            } else return <PostFeedItem post={post} key={post.id} />;
-          })}
-        </div>
-        <div className="hidden lg:block">
-          {currentSubreddit?.id && (
-            <SubredditInfo style={{ marginBottom: "20px" }} />
-          )}
-          <TopCommunities />
-        </div>
+            window.location.href = `/user/${username}/?sort=new`;
+          }}
+          className={`flex items-center font-semibold ${
+            orderType === "new" ? "text-blue-500" : "text-gray-400"
+          } space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl`}
+        >
+          <SunIcon className="h-7" />
+          <p className="inline">New</p>
+        </button>
+        <button
+          onClick={() => {
+            if (orderType === "top") return;
+            window.location.href = `/user/${username}/?sort=top`;
+          }}
+          className={`flex items-center font-semibold ${
+            orderType === "top" ? "text-blue-500" : "text-gray-400"
+          } space-x-1 hover:bg-gray-100 px-2 py-1 rounded-3xl`}
+        >
+          <TrendingUpIcon className="h-7" />
+          <p className="inline">Top</p>
+        </button>
       </div>
+      {posts.map((post, i) => {
+        if (i + 1 === posts.length) {
+          return (
+            <div key={post.id} ref={lastPostRef}>
+              <PostFeedItem post={post} />
+            </div>
+          );
+        } else return <PostFeedItem post={post} key={post.id} />;
+      })}
     </div>
   );
 };
