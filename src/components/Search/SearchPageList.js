@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { MenuItem, Select } from "@mui/material";
 import f1 from "../../fake data/f1.png";
 import { makeStringSafeForURL } from "../../utils/utils";
+import moment from "moment";
 
 const ListItemSubreddit = ({ subreddit }) => {
   return (
@@ -30,6 +31,7 @@ const ListItemSubreddit = ({ subreddit }) => {
 };
 
 const ListItemPost = ({ post }) => {
+  const date = new Date(post.createdAt);
   const { title } = post;
   return (
     <a
@@ -43,9 +45,13 @@ const ListItemPost = ({ post }) => {
           <div className="inline-block rounded-full overflow-hidden h-7 w-7 cursor-pointer flex-shrink-0">
             <img src={f1} alt="user img" />
           </div>
-          <p className="font-semibold text-sm mr-1.5 ml-3">r/subredditname</p>
+          <p className="font-semibold text-sm mr-1.5 ml-3">
+            r/{post?.subreddit?.name}
+          </p>
           <p className="font-extralight text-sm">·</p>
-          <p className="font-extralight text-sm ml-1.5">4mo ago</p>
+          <p className="font-extralight text-sm ml-1.5">
+            {moment(date.getTime()).fromNow()}
+          </p>
         </div>
         <div className="mb-1.5">
           <p className="font-bold text-lg">{title}</p>
