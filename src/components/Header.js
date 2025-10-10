@@ -23,6 +23,7 @@ import RedditTextIcon from "../icons/RedditTextIcon";
 import RedditIcon from "../icons/RedditIcon";
 import HeaderOptionsDropDownList from "./HeaderOptionsDropDownList";
 import UserSubredditsDropDownList from "./UserSubredditsDropDown";
+import { useSearchParams } from "react-router-dom";
 
 const Header = () => {
   const dropDownVisible = useSelector(
@@ -39,7 +40,13 @@ const Header = () => {
 
   const user = useSelector((state) => state.app.user);
 
+  const [searchParams] = useSearchParams();
+
+  const searchQuery = searchParams.get("searchquery");
+  const [searchWord, setSearchWord] = useState(searchQuery);
+
   const handleSearchWordChange = (e) => {
+    setSearchWord(e.target.value);
     debouncedSearch(e.target.value);
   };
 
@@ -78,10 +85,16 @@ const Header = () => {
         <div className="w-full sm:w-auto flex flex-col border rounded-sm relative bg-gray-100 flex-grow">
           <SearchIcon className="hidden sm:inline-block pl-4 h-7 top-1/2 translate-y-[-50%] text-gray-400 absolute" />
           <input
+            value={searchWord}
             onChange={handleSearchWordChange}
             className="flex flex-grow bg-gray-100 p-2 text-gray-700 sm:pl-20 hover:bg-white focus:bg-white"
             placeholder="Search Reddit"
             type="text"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                window.location.href = `/search?type=communities&sort=top&searchquery=${searchWord}`;
+              }
+            }}
           />
           {searchResults.length ? (
             <>
