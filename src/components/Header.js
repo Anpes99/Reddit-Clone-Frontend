@@ -92,7 +92,7 @@ const Header = () => {
             type="text"
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                window.location.href = `/search?type=communities&sort=top&searchquery=${searchWord}`;
+                window.location.href = `/search?type=posts&sort=top&searchquery=${searchWord}`;
               }
             }}
           />
