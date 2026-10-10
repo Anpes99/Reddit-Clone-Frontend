@@ -42,7 +42,7 @@ const SingleCommentAndCommentCommentsThread = ({ post, comment }) => {
   return (
     <div className="border-l">
       <SingleCommentInfoAndActions comment={comment} post={post} />
-      {!showChildCommentsThread && comment.comments.length ? (
+      {!showChildCommentsThread && comment.descendantCount ? (
         <div
           onClick={() => {
             setShowChildCommentsThread(true);
@@ -52,7 +52,7 @@ const SingleCommentAndCommentCommentsThread = ({ post, comment }) => {
         >
           <PlusCircleIcon style={{ height: "20px", marginRight: "5px" }} />
           <p className="text-gray-500 moreRepliesText">
-            {comment.comments.length} more replies
+            {comment.descendantCount} more replies
           </p>
         </div>
       ) : (
