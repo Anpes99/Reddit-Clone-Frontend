@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
-import SingleCommentInfoAndActions from "./SingleCommentInfoAndActions";
+
+import SingleCommentAndCommentCommentsThread from "./SingleCommentAndChilrenCommentsThread";
 
 const PostCommentsSection = ({ post }) => {
   const user = useSelector((state) => state.app.user);
@@ -10,69 +11,12 @@ const PostCommentsSection = ({ post }) => {
         <p className="text-gray-500">This post doesn't have any comments.</p>
       )}
       {post.comments?.map((comment) => (
-        <div
-          key={comment.id}
-          className="border-l border-gray-300 "
-          key={comment.id}
-        >
-          <SingleCommentInfoAndActions
+        <div key={comment.id} className=" border-gray-300 ">
+          <SingleCommentAndCommentCommentsThread
             post={post}
             user={user}
             comment={comment}
           />
-          {comment?.comments?.map((a) => (
-            <div
-              key={a.id}
-              className="border-l border-gray-300 translate-x-3 sm:translate-x-10 "
-            >
-              <SingleCommentInfoAndActions
-                post={post}
-                user={user}
-                comment={a}
-              />
-              {a?.comments?.map((b) => {
-                return (
-                  <div
-                    key={b.id}
-                    className="border-l border-gray-300 translate-x-3 sm:translate-x-10 "
-                  >
-                    <SingleCommentInfoAndActions
-                      post={post}
-                      user={user}
-                      comment={b}
-                    />
-
-                    {b?.comments?.map((c) => (
-                      <div
-                        key={c.id}
-                        className="border-l border-gray-300 translate-x-3 sm:translate-x-10 "
-                      >
-                        <SingleCommentInfoAndActions
-                          post={post}
-                          user={user}
-                          comment={c}
-                        />
-                        {c?.comments?.map((d) => {
-                          return (
-                            <div
-                              key={d.id}
-                              className="border-l border-gray-300 translate-x-3 sm:translate-x-10 "
-                            >
-                              <SingleCommentInfoAndActions
-                                post={post}
-                                user={user}
-                                comment={d}
-                              />
-                            </div>
-                          );
-                        })}
-                      </div>
-                    ))}
-                  </div>
-                );
-              })}
-            </div>
-          ))}
         </div>
       ))}
     </div>

@@ -1,0 +1,28 @@
+.moreRepliesTextContainer{
+width: fit-content;
+margin-left:10px;
+
+       .moreRepliesText::after{
+
+    content:"";
+     width: 100%;
+     height: 1px;
+    display: block;
+    transform: translateY(-2px);
+     
+        }
+
+
+    &:hover{
+
+        .moreRepliesText::after{
+
+    background-color: black;
+
+        }
+
+
+    }
+
+
+}
