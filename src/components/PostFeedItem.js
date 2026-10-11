@@ -20,14 +20,16 @@ const PostFeedItem = ({ post }) => {
       <div className="flex space-x-4 text-gray-450 font-bold pl-2 w-fit">
         <div className="flex  hover:bg-gray-300">
           <ChatBubbleRounded className=" mr-1" style={{ width: "20px" }} />
-          <p>{post.commentCount} Comments</p>
+          <p>{post.commentCount}</p>
+          <p className="hidden sm:inline-block ml-1">Comments</p>
         </div>
         <div className="flex  hover:bg-gray-300">
-          <Reply className="scale-x-[-1]" /> <p>Share</p>
+          <Reply className="scale-x-[-1]" />
+          <p className="hidden sm:inline-block">Share</p>
         </div>
         <div className="flex hover:bg-gray-300">
           <BookmarkAdd className="mr-1" />
-          <p>Save</p>
+          <p className="hidden sm:inline-block">Save</p>
         </div>
         <div className="flex items-center hover:bg-gray-300">
           <MoreHoriz />

@@ -84,7 +84,7 @@ const PostVotingArrows = ({ post, numberColor }) => {
           }
         }}
         className={`h-7  hover:text-blue-500 cursor-pointer ${
-          userRating === -1 ? "text-blue-500" : "text-gray-400"
+          userRating === -1 ? "text-blue-500" : "text-gray-450"
         }   `}
       />
     </>
