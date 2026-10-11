@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import Header from "../components/Header";
@@ -11,6 +10,7 @@ import {
 import { useDispatch } from "react-redux";
 
 import JoinSubredditButton from "../components/Buttons/JoinSubredditButton";
+import Axios from "../utils/axios";
 
 const SubredditPage = ({ orderType = "new" }) => {
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ const SubredditPage = ({ orderType = "new" }) => {
 
   const [subredditId, setSubredditId] = useState(null);
   useEffect(async () => {
-    const res = await axios.get("/api/subreddits", {
+    const res = await Axios.get("/api/subreddits", {
       params: { name: subredditName },
     });
     setSubredditId(res.data[0].id);

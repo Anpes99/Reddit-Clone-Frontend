@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import axios from "axios";
+import Axios from "./axios";
 
 const handleSubmitComment = async (
   directReplyToPost,
@@ -7,7 +7,7 @@ const handleSubmitComment = async (
   subredditId,
   postId,
   commentId,
-  user
+  user,
 ) => {
   const commentSchema = yup.object().shape({
     text: yup.string().min(1).required(),
@@ -28,7 +28,7 @@ const handleSubmitComment = async (
     }
 
     try {
-      await axios.post("/api/comments", data, {
+      await Axios.post("/api/comments", data, {
         headers: {
           Authorization: `bearer ${user.token}`,
         },

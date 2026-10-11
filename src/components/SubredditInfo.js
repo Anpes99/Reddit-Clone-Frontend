@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import f1 from "../fake data/f1.png";
 import { useParams } from "react-router";
 import { useEffect } from "react";
-import axios from "axios";
 import JoinSubredditButton from "./Buttons/JoinSubredditButton";
+import Axios from "../utils/axios";
 
 const SubredditInfo = ({ style = {} }) => {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ const SubredditInfo = ({ style = {} }) => {
 
   const subredditName = useParams().subredditName;
   useEffect(async () => {
-    const res = await axios.get("/api/subreddits", {
+    const res = await Axios.get("/api/subreddits", {
       params: { name: subredditName },
     });
     dispatch(setCurrentSubreddit(res.data[0]));
@@ -34,7 +34,9 @@ const SubredditInfo = ({ style = {} }) => {
           <div className="rounded-full overflow-hidden h-[3rem] w-[3rem]">
             <img src={f1} />
           </div>
-          <p className="text-lg font-semibold">r/{currentSubreddit?.name}</p>{" "}
+          <p className="text-lg font-semibold">
+            r/{currentSubreddit?.name}
+          </p>{" "}
         </div>
         <p className="max-w-xs text-base">{currentSubreddit.text}</p>
         <div className="flex space-x-20 border-b pb-5">

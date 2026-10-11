@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 import { TextareaAutosize } from "@mui/material";
 import Dropzone from "react-dropzone-uploader";
+import Axios from "../../utils/axios";
 
 const NewPostForm = ({}) => {
   const [text, setText] = useState("");
@@ -53,7 +54,7 @@ const NewPostForm = ({}) => {
 
     try {
       if (img) {
-        const res = await axios.get("/api/utils/s3Url", {
+        const res = await Axios.get("/api/utils/s3Url", {
           // get aws s3 put url // expires in 1min
           headers: {
             Authorization: `bearer ${user.token}`,
@@ -66,7 +67,7 @@ const NewPostForm = ({}) => {
         newPost.imageUrl = imageUrl;
       }
 
-      const response = await axios.post("/api/posts", newPost, {
+      const response = await Axios.post("/api/posts", newPost, {
         headers: {
           Authorization: `bearer ${user.token}`,
         },

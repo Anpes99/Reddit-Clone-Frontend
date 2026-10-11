@@ -4,7 +4,7 @@ import Avatar from "./Avatar";
 import { useState } from "react";
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/outline";
 import "./SingleCommentAndChilrenCommentsThread.css";
-import axios from "axios";
+import Axios from "../../utils/axios";
 
 const SingleCommentInfoAndActions = ({ post, comment }) => {
   const dispatch = useDispatch();
@@ -45,7 +45,7 @@ const SingleCommentAndCommentCommentsThread = ({ post, comment }) => {
   const [fetchedComments, setFetchedComments] = useState([]);
 
   const getMoreComments = async () => {
-    const { data } = await axios.get(
+    const { data } = await Axios.get(
       "/api/comments/moreComments/" + comment.id,
     );
     return data;

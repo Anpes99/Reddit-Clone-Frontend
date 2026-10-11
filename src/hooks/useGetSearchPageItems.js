@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import Axios from "../utils/axios";
 
 const useGetSearchPageItems = ({
   queryParamSort,
@@ -36,7 +36,7 @@ const useGetSearchPageItems = ({
       ) {
         setLoading(true);
 
-        const result = await axios.post(`/api/search/posts`, {
+        const result = await Axios.post(`/api/search/posts`, {
           searchQuery,
           offset: 0,
           limit: 5,
@@ -50,7 +50,7 @@ const useGetSearchPageItems = ({
       } else if (orderType === "top") {
         setLoading(true);
 
-        const result = await axios.post(`/api/search/posts`, {
+        const result = await Axios.post(`/api/search/posts`, {
           searchQuery,
           offset: 0,
           limit: 5,
@@ -64,7 +64,7 @@ const useGetSearchPageItems = ({
     } else if (itemsType === "communities") {
       setLoading(true);
 
-      const result = await axios.post(`/api/search/subreddits`, {
+      const result = await Axios.post(`/api/search/subreddits`, {
         searchQuery,
         offset: 0,
         limit: 10,
@@ -85,7 +85,7 @@ const useGetSearchPageItems = ({
           orderType === undefined
         ) {
           setLoading(true);
-          const result = await axios.post(`/api/search/posts`, {
+          const result = await Axios.post(`/api/search/posts`, {
             searchQuery,
             offset: items.length,
             limit: 5,
@@ -99,7 +99,7 @@ const useGetSearchPageItems = ({
         } else if (orderType === "top") {
           setLoading(true);
 
-          const result = await axios.post(`/api/search/posts`, {
+          const result = await Axios.post(`/api/search/posts`, {
             searchQuery,
             offset: items.length,
             limit: 5,
@@ -114,7 +114,7 @@ const useGetSearchPageItems = ({
       } else if (itemsType === "communities") {
         setLoading(true);
 
-        const result = await axios.post(`/api/search/subreddits`, {
+        const result = await Axios.post(`/api/search/subreddits`, {
           searchQuery,
           offset: items.length,
           limit: 5,

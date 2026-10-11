@@ -1,15 +1,15 @@
 import { ChevronUpIcon } from "@heroicons/react/solid";
 import f1 from "../fake data/f1.png";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import JoinSubredditButton from "./Buttons/JoinSubredditButton";
 import { SUBREDDIT_ORDER_BY_TYPES } from "../constants/subreddits";
+import Axios from "../utils/axios";
 
 const TopCommunities = () => {
   const [subreddits, setSubreddits] = useState(null);
 
   useEffect(async () => {
-    const res = await axios.get("/api/subreddits", {
+    const res = await Axios.get("/api/subreddits", {
       params: {
         limit: 10,
         sortBy: SUBREDDIT_ORDER_BY_TYPES.MEMBER_COUNT,

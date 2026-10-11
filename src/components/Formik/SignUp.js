@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import axios, { AxiosResponse } from "axios";
 import { setLoginVisible, setSignUpVisible } from "../../slices/appSlice";
 import { useDispatch } from "react-redux";
+import Axios from "../../utils/axios";
 
 const initialValues = {
   username: "",
@@ -59,10 +60,12 @@ const SignUp = () => {
   const navigate = useNavigate();
   const [newError, setNewError] = useState(null);
   const dispatch = useDispatch();
+  const [signIn] = useSignIn();
 
   const onSubmit = async (values) => {
     try {
-      const response = await axios.post("api/users", values);
+      const response = await Axios.post("api/users", values);
+      await signIn({ username: values.username, password: values.password });
       dispatch(setSignUpVisible(false));
       navigate("/");
     } catch (e) {

@@ -1,7 +1,7 @@
-import axios, { AxiosResponse } from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser, setLoginVisible } from "../slices/appSlice";
+import Axios from "../utils/axios";
 
 const useSignIn = () => {
   const [success, setSuccess] = useState(false);
@@ -10,7 +10,7 @@ const useSignIn = () => {
 
   const signIn = async ({ username, password }) => {
     try {
-      const response = await axios.post("/api/login", {
+      const response = await Axios.post("/api/login", {
         username,
         password,
       });
@@ -19,7 +19,7 @@ const useSignIn = () => {
         setSuccess(true);
         localStorage.setItem(
           "loggedInRedditAppUser",
-          JSON.stringify(response.data)
+          JSON.stringify(response.data),
         );
         dispatch(setUser(response.data));
         dispatch(setLoginVisible(false));

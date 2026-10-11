@@ -16,14 +16,13 @@ import LoginForm from "./Forms/LoginForm";
 import SignUpForm from "./Forms/SignUpForm";
 import { Tooltip } from "@mui/material";
 
-import * as React from "react";
 import _ from "lodash";
-import axios from "axios";
 import RedditTextIcon from "../icons/RedditTextIcon";
 import RedditIcon from "../icons/RedditIcon";
 import HeaderOptionsDropDownList from "./HeaderOptionsDropDownList";
 import UserSubredditsDropDownList from "./UserSubredditsDropDown";
 import { useSearchParams } from "react-router-dom";
+import Axios from "../utils/axios";
 
 const Header = () => {
   const dropDownVisible = useSelector(
@@ -56,7 +55,7 @@ const Header = () => {
       return;
     }
 
-    const response = await axios.post("/api/search", { searchWord: word }, {});
+    const response = await Axios.post("/api/search", { searchWord: word }, {});
     setSearchResults(response.data.result);
   }, 200);
 

@@ -1,16 +1,16 @@
-import axios from "axios";
 import { setUser } from "../slices/appSlice";
+import Axios from "./axios";
 
 export const handleJoinSubreddit = async (user, subreddit, dispatch) => {
   try {
-    const res = await axios.post(
+    const res = await Axios.post(
       `/api/subreddits/${subreddit.id}/user`,
       {},
       {
         headers: {
           Authorization: `bearer ${user.token}`,
         },
-      }
+      },
     );
 
     if (res.status === 200) {
@@ -22,7 +22,7 @@ export const handleJoinSubreddit = async (user, subreddit, dispatch) => {
       dispatch(setUser(updatedUser));
       localStorage.setItem(
         "loggedInRedditAppUser",
-        JSON.stringify(updatedUser)
+        JSON.stringify(updatedUser),
       );
     }
   } catch (e) {
@@ -32,7 +32,7 @@ export const handleJoinSubreddit = async (user, subreddit, dispatch) => {
 
 export const handleLeaveSubreddit = async (user, subreddit, dispatch) => {
   try {
-    const res = await axios.delete(`/api/subreddits/${subreddit.id}/user`, {
+    const res = await Axios.delete(`/api/subreddits/${subreddit.id}/user`, {
       headers: {
         Authorization: `bearer ${user.token}`,
       },
@@ -41,12 +41,12 @@ export const handleLeaveSubreddit = async (user, subreddit, dispatch) => {
       const updatedUser = {
         ...user,
         subreddits: user.subreddits.filter(
-          (userJoinedSubreddit) => userJoinedSubreddit.id !== subreddit.id
+          (userJoinedSubreddit) => userJoinedSubreddit.id !== subreddit.id,
         ),
       };
       localStorage.setItem(
         "loggedInRedditAppUser",
-        JSON.stringify(updatedUser)
+        JSON.stringify(updatedUser),
       );
       dispatch(setUser(updatedUser));
     }

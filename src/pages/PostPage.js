@@ -1,5 +1,4 @@
 import { XIcon, PhotographIcon } from "@heroicons/react/outline";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import Header from "../components/Header";
@@ -14,6 +13,7 @@ import CreateNewDirectPostComment from "../components/Comments/CreateNewDirectPo
 import PostPageCommentsSortingSection from "../components/Comments/PostPageCommentsSortingSection";
 import PostCommentsSection from "../components/Comments/PostCommentsSection";
 import PostVotingArrows from "../components/PostVotingArrows";
+import Axios from "../utils/axios";
 
 const PostPage = () => {
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ const PostPage = () => {
     let queryString = "";
     queryString = sortBy ? queryString + "&sortBy=" + sortBy : queryString;
     queryString = order ? queryString + "&order=" + order : queryString;
-    const result = await axios.get(
+    const result = await Axios.get(
       `/api/posts/${postId}?commentCommentAmount=10${queryString}`,
     );
     setPost(result.data.post);
