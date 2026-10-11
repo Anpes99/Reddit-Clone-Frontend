@@ -27,7 +27,7 @@ import { useSearchParams } from "react-router-dom";
 
 const Header = () => {
   const dropDownVisible = useSelector(
-    (state) => state.app.headerDropDownVisible
+    (state) => state.app.headerDropDownVisible,
   );
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ const Header = () => {
   const [searchParams] = useSearchParams();
 
   const searchQuery = searchParams.get("searchquery");
-  const [searchWord, setSearchWord] = useState(searchQuery);
+  const [searchWord, setSearchWord] = useState(searchQuery || "");
 
   const handleSearchWordChange = (e) => {
     setSearchWord(e.target.value);

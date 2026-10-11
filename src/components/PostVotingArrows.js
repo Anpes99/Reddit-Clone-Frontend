@@ -21,7 +21,11 @@ const PostLikes = ({ post, className }) => {
     });
   }, []);
 
-  return <p className={className}>{likes}</p>;
+  return (
+    <p className={className}>
+      <>{likes}</>
+    </p>
+  );
 };
 
 const PostVotingArrows = ({ post, numberColor }) => {

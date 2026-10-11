@@ -4,6 +4,7 @@ import Avatar from "./Avatar";
 import { useState } from "react";
 import { PlusCircleIcon } from "@heroicons/react/outline";
 import "./SingleCommentAndChilrenCommentsThread.css";
+import axios from "axios";
 
 const SingleCommentInfoAndActions = ({ post, comment }) => {
   const dispatch = useDispatch();
@@ -24,13 +25,14 @@ const SingleCommentInfoAndActions = ({ post, comment }) => {
   );
 };
 
-const CommentCommentsSection = ({ post, comment }) => {
+const CommentCommentsSection = ({ post, fetchedComments }) => {
   return (
     <div className="translate-x-3 sm:translate-x-10">
-      {comment.comments.map((childComment) => (
+      {fetchedComments.map((comment) => (
         <SingleCommentAndCommentCommentsThread
+          key={"comment_" + comment.id}
           post={post}
-          comment={childComment}
+          comment={comment}
         />
       ))}
     </div>
@@ -38,13 +40,31 @@ const CommentCommentsSection = ({ post, comment }) => {
 };
 
 const SingleCommentAndCommentCommentsThread = ({ post, comment }) => {
+  const user = useSelector((state) => state.app.user);
   const [showChildCommentsThread, setShowChildCommentsThread] = useState(false);
+  const [fetchedComments, setFetchedComments] = useState([]);
+
+  const getMoreComments = async () => {
+    const { data } = await axios.get(
+      "/api/comments/moreComments/" + comment.id,
+      {},
+      {
+        headers: {
+          Authorization: `bearer ${user.token}`,
+        },
+      },
+    );
+    return data;
+  };
+
   return (
     <div className="border-l">
       <SingleCommentInfoAndActions comment={comment} post={post} />
       {!showChildCommentsThread && comment.descendantCount ? (
         <div
-          onClick={() => {
+          onClick={async () => {
+            const moreComments = await getMoreComments();
+            setFetchedComments(moreComments);
             setShowChildCommentsThread(true);
           }}
           style={{ cursor: "pointer", display: "flex" }}
@@ -59,7 +79,7 @@ const SingleCommentAndCommentCommentsThread = ({ post, comment }) => {
         <></>
       )}
       {showChildCommentsThread && (
-        <CommentCommentsSection comment={comment} post={post} />
+        <CommentCommentsSection fetchedComments={fetchedComments} post={post} />
       )}
     </div>
   );
