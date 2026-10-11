@@ -1,7 +1,8 @@
 import moment from "moment";
 import f1 from "../../fake data/f1.png";
 
-const Avatar = ({ createdAt }) => {
+const Avatar = ({ comment }) => {
+  const { createdAt } = comment;
   const date = new Date(createdAt);
 
   return (
@@ -10,7 +11,7 @@ const Avatar = ({ createdAt }) => {
         <img src={f1} alt="user img" />
       </div>
       <div className="inline-block flex items-center text-xs font-medium  text-gray-900">
-        User1{" "}
+        {comment.user.username}{" "}
         <p className="font-sm ml-2 text-gray-500">
           {moment(date.getTime()).fromNow()}
         </p>

@@ -12,7 +12,7 @@ const SingleCommentInfoAndActions = ({ post, comment }) => {
 
   return (
     <div className=" flex flex-col items-start text-left space-x-1 p-2 ">
-      <Avatar createdAt={comment.createdAt} />
+      <Avatar comment={comment} />
 
       <p className="p-1 pl-7">{comment.text}</p>
       <CommentActionsBar
