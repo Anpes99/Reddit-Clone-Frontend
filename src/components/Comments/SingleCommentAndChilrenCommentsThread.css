@@ -26,3 +26,11 @@ margin-left:10px;
 
 
 }
+
+
+.SingleCommentAndCommentCommentsThreadContainer:has(> .commentThreadLeftBorder:hover){
+
+    border-color: black;
+
+}
+

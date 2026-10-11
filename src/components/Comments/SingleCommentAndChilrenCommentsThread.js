@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CommentActionsBar from "./CommentActionsBar";
 import Avatar from "./Avatar";
 import { useState } from "react";
-import { PlusCircleIcon } from "@heroicons/react/outline";
+import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/outline";
 import "./SingleCommentAndChilrenCommentsThread.css";
 import axios from "axios";
 
@@ -58,7 +58,32 @@ const SingleCommentAndCommentCommentsThread = ({ post, comment }) => {
   };
 
   return (
-    <div className="border-l">
+    <div className="relative border-l SingleCommentAndCommentCommentsThreadContainer">
+      {showChildCommentsThread && (
+        <div
+          onClick={() => {
+            setShowChildCommentsThread(false);
+          }}
+          style={{
+            position: "absolute",
+            height: "100%",
+            cursor: "pointer",
+            left: "-10px",
+          }}
+          className="commentThreadLeftBorder"
+        >
+          <MinusCircleIcon
+            style={{
+              width: "20px",
+              position: "relative",
+              backgroundColor: "white",
+              cursor: "pointer",
+            }}
+            className="top-[74px] sm:top-[97px]"
+          />
+        </div>
+      )}
+
       <SingleCommentInfoAndActions comment={comment} post={post} />
       {!showChildCommentsThread && comment.descendantCount ? (
         <div
