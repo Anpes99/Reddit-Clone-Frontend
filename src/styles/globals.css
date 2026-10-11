@@ -16,3 +16,8 @@
     @apply py-0.5 px-4 rounded-2xl text-sm font-semibold transition-all bg-blue-500 text-white hover:bg-blue-400;
   }
 }
+
+.text-gray-450 {
+ --tw-text-opacity: 1;
+ color: rgb(133, 135, 142);
+}

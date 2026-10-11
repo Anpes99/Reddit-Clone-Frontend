@@ -20,7 +20,6 @@ const PostPage = () => {
   const [commentPostMessageError, setCommentPostMessageError] = useState(false);
   const postId = useParams().postId;
   const [post, setPost] = useState({ id: Number(postId) });
-  const [totalComments, setTotalComments] = useState(null);
   const [commentPostMessage, setCommentPostMessage] = useState(null);
   const [searchParams] = useSearchParams();
   const sortBy = searchParams.get("sortBy");
@@ -34,10 +33,9 @@ const PostPage = () => {
     queryString = sortBy ? queryString + "&sortBy=" + sortBy : queryString;
     queryString = order ? queryString + "&order=" + order : queryString;
     const result = await axios.get(
-      `/api/posts/${postId}?commentCommentAmount=10${queryString}`
+      `/api/posts/${postId}?commentCommentAmount=10${queryString}`,
     );
     setPost(result.data.post);
-    setTotalComments(result.data.totalComments);
   }, []);
 
   return (
@@ -72,10 +70,7 @@ const PostPage = () => {
           </div>
           <section className="flex space-x-5 p-5 justify-center text-sm">
             <section className="flex flex-col">
-              <PostPageMainInfoSection
-                post={post}
-                totalComments={totalComments}
-              />
+              <PostPageMainInfoSection post={post} />
               <div className="mb-5">
                 <CreateNewDirectPostComment user={user} post={post} />
               </div>

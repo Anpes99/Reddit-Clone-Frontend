@@ -15,7 +15,7 @@ const PostPageCommentsSortingSection = ({ post }) => {
       <div
         className={` ${
           sortVisible ? "inline-block" : "hidden"
-        }  text-gray-500 bg-white font-medium  shadow-md absolute top-full w-full rounded-md flex flex-col`}
+        }  text-gray-500 bg-white font-medium  shadow-md absolute top-full w-full rounded-md flex flex-col z-[1]`}
       >
         <a
           href={

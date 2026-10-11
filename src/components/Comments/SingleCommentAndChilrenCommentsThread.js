@@ -47,12 +47,6 @@ const SingleCommentAndCommentCommentsThread = ({ post, comment }) => {
   const getMoreComments = async () => {
     const { data } = await axios.get(
       "/api/comments/moreComments/" + comment.id,
-      {},
-      {
-        headers: {
-          Authorization: `bearer ${user.token}`,
-        },
-      },
     );
     return data;
   };

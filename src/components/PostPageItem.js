@@ -9,7 +9,7 @@ import f1 from "../fake data/f1.png";
 import moment from "moment";
 import PostVotingArrows from "./PostVotingArrows";
 
-const PostPageMainInfoSection = ({ post, totalComments }) => {
+const PostPageMainInfoSection = ({ post }) => {
   const date = new Date(post?.createdAt);
 
   return (
@@ -58,7 +58,7 @@ const PostPageMainInfoSection = ({ post, totalComments }) => {
         </div>
         <div className="flex text-gray-400 items-center text-xs space-x-1 p-1">
           <p className="hover:bg-gray-200 p-2 py-3">
-            <ChatIcon className="w-6 h-6 inline mr-0.5 " /> {totalComments}{" "}
+            <ChatIcon className="w-6 h-6 inline mr-0.5 " /> {post.commentCount}{" "}
             Comments
           </p>
           <p className="hover:bg-gray-200 p-2 py-3">

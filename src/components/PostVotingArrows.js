@@ -61,7 +61,7 @@ const PostVotingArrows = ({ post, numberColor }) => {
           }
         }}
         className={`h-7  ${
-          userRating === 1 ? "text-red-500" : "text-gray-400"
+          userRating === 1 ? "text-red-500" : "text-gray-450"
         } hover:text-red-500 cursor-pointer`}
       />
       <PostLikes
