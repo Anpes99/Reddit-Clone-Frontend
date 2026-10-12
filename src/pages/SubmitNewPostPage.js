@@ -22,7 +22,6 @@ const SubmitNewPostPage = () => {
 
   return (
     <div>
-      <Header />
       <main className="max-w-screen-lg mx-auto min-h-screen ">
         <div className="flex mt-10 md:space-x-5">
           <section className="flex-grow flex flex-col ">

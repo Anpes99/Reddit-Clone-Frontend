@@ -39,7 +39,6 @@ const SearchPage = ({}) => {
 
   return (
     <>
-      <Header />
       <div
         onClick={() => {
           dispatch(setHeaderDropDownVisible(false));

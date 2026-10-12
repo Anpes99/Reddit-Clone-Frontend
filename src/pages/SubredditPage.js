@@ -27,7 +27,6 @@ const SubredditPage = ({ orderType = "new" }) => {
 
   return (
     <>
-      <Header />
       <div
         onClick={() => {
           dispatch(setHeaderDropDownVisible(false));

@@ -15,7 +15,6 @@ const HomePage = ({ orderType = "new" }) => {
 
   return (
     <>
-      <Header />
       <div
         onClick={() => {
           dispatch(setHeaderDropDownVisible(false));

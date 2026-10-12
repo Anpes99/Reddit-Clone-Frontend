@@ -9,6 +9,7 @@ import SubmitNewPostPage from "./pages/SubmitNewPostPage";
 import SubredditPage from "./pages/SubredditPage";
 import UserPage from "./pages/UserPage";
 import SearchPage from "./pages/SearchPage";
+import Header from "./components/Header";
 
 const App = () => {
   useEffect(() => {
@@ -20,6 +21,7 @@ const App = () => {
     <div className=" bg-gray-200">
       <Router>
         <Provider store={store}>
+          <Header />
           <Routes>
             <Route
               path="/r/:subredditName/submit"
