@@ -5,6 +5,7 @@ import * as yup from "yup";
 import useSignIn from "../../hooks/useSignIn";
 
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 
 const initialValues = {
   username: "",
@@ -50,6 +51,7 @@ const SignIn = ({ setSignUpVisible, setLoginVisible }) => {
   const dispatch = useDispatch();
   const [signIn] = useSignIn();
   const [newError, setNewError] = useState(null);
+  const navigate = useNavigate();
 
   const onSubmit = async (values) => {
     const { username, password } = values;
@@ -57,7 +59,7 @@ const SignIn = ({ setSignUpVisible, setLoginVisible }) => {
       await signIn({ username, password });
 
       dispatch(setLoginVisible(false));
-      window.location.href = "/";
+      navigate("/");
     } catch (e) {
       if (e.response.status === 401) {
         setNewError("Incorrect username or password");

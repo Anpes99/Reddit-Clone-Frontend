@@ -67,10 +67,10 @@ const Header = () => {
             dispatch(setHeaderDropDownVisible(false));
           }
         }}
-        className="relative pb-2 sm:pb-0 flex flex-col sm:flex-row min-h-12 bg-white  items-center justify-between z-[90] pl-0 sm:pl-2 sm:space-x-2 border-b"
+        className="fixed top-0 left-0 w-full pb-2 sm:pb-0 flex flex-col sm:flex-row min-h-12 bg-white  items-center justify-between z-[90] pl-0 sm:pl-2 sm:space-x-2 border-b-[3px] h-[var(--header-height)]"
       >
         <div
-          onClick={() => (window.location.href = "/")}
+          onClick={() => navigate("/")}
           className=" h-full flex items-center space-x-1 cursor-pointer"
         >
           <RedditIcon />
@@ -86,12 +86,14 @@ const Header = () => {
           <input
             value={searchWord}
             onChange={handleSearchWordChange}
-            className="flex flex-grow bg-gray-100 p-2 text-gray-700 sm:pl-20 hover:bg-white focus:bg-white"
+            className="flex flex-grow bg-gray-200 p-2 text-gray-700 placeholder:text-gray-500 sm:pl-20 hover:bg-white focus:bg-white"
             placeholder="Search Reddit"
             type="text"
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                window.location.href = `/search?type=posts&sort=top&searchquery=${searchWord}`;
+                navigate(
+                  `/search?type=posts&sort=top&searchquery=${searchWord}`,
+                );
               }
             }}
           />
@@ -104,7 +106,7 @@ const Header = () => {
                     <>
                       <li
                         onClick={() => {
-                          window.location.href = `/r/${searchResult.name}`;
+                          navigate(`/r/${searchResult.name}`);
                         }}
                         className="cursor-pointer hover:underline"
                       >

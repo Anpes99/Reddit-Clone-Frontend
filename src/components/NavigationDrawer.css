@@ -1,0 +1,15 @@
+.NavigationDrawerContainer{
+    @apply bg-white border-r-[3px] hidden xl:block;
+    position:sticky;
+    top:68px;
+    left:0;
+    width:270px;
+    height: calc(100vh - var(--header-height));
+    transition: transform 0.25s ease-in;
+}
+
+
+.NavigationDrawerContainer--closed{
+    transform: translateX(-100%);
+   
+}

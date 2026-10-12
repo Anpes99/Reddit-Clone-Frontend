@@ -8,10 +8,12 @@ import {
 import f1 from "../fake data/f1.png";
 import moment from "moment";
 import PostVotingArrows from "./PostVotingArrows";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 const PostPageMainInfoSection = ({ post }) => {
   const date = new Date(post?.createdAt);
-
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col sm:flex-row max-w-[40rem]  bg-white  mb-4">
       <div className=" hidden sm:flex flex-col items-center  w-25">
@@ -22,26 +24,26 @@ const PostPageMainInfoSection = ({ post }) => {
         <div className="flex flex-col p-2">
           <div className="flex items-center space-x-2 ">
             <div
-              onClick={() =>
-                (window.location.href = `/r/${post.subreddit.name}`)
-              }
+              onClick={() => {
+                navigate(`/r/${post.subreddit.name}`);
+              }}
               className="inline-block rounded-full overflow-hidden h-7 w-7 cursor-pointer flex-shrink-0"
             >
               <img src={f1} alt="user img" />
             </div>
             <p
-              onClick={() =>
-                (window.location.href = `/r/${post.subreddit.name}`)
-              }
+              onClick={() => {
+                navigate(`/r/${post.subreddit.name}`);
+              }}
               className="inline mr-2 font-bold text-sm cursor-pointer"
             >
               r/{post?.subreddit?.name || "noName"}
             </p>
             <p className="inline text-xs text-gray-400">
               posted by{" "}
-              <a href={`/user/${post?.user?.username}`}>
+              <Link to={`/user/${post?.user?.username}`}>
                 u/{post?.user?.username || "noName"}
-              </a>{" "}
+              </Link>{" "}
               {moment(date.getTime()).fromNow()}
             </p>
           </div>

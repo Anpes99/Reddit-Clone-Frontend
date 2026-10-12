@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import useGetSearchPageItems from "../../hooks/useGetSearchPageItems";
-import { useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { MenuItem, Select } from "@mui/material";
 import f1 from "../../fake data/f1.png";
 import { makeStringSafeForURL } from "../../utils/utils";
@@ -8,8 +8,8 @@ import moment from "moment";
 
 const ListItemSubreddit = ({ subreddit }) => {
   return (
-    <a
-      href={`/r/${subreddit?.name}`}
+    <Link
+      to={`/r/${subreddit?.name}`}
       className="border-b py-5  flex flex-row  items-center hover:bg-gray-100 rounded-md px-4"
     >
       <div className="inline-block rounded-full overflow-hidden h-[48px] w-[48px] cursor-pointer flex-shrink-0">
@@ -26,7 +26,7 @@ const ListItemSubreddit = ({ subreddit }) => {
           <p className="font-extralight text-sm">100 members · 123 online</p>
         </div>
       </div>
-    </a>
+    </Link>
   );
 };
 
@@ -34,8 +34,8 @@ const ListItemPost = ({ post }) => {
   const date = new Date(post.createdAt);
   const { title } = post;
   return (
-    <a
-      href={`/r/${post?.subreddit?.name || "noName"}/comments/${post.id}/${
+    <Link
+      to={`/r/${post?.subreddit?.name || "noName"}/comments/${post.id}/${
         makeStringSafeForURL(post?.title) || "noTitle"
       }`}
       className="border-b py-5  flex flex-row justify-between items-center hover:bg-gray-100 rounded-md px-4"
@@ -70,7 +70,7 @@ const ListItemPost = ({ post }) => {
           src={post.imageUrl}
         />
       )}
-    </a>
+    </Link>
   );
 };
 
@@ -97,6 +97,8 @@ const SearchPageList = ({}) => {
     if (node) observer.current.observe(node);
   });
 
+  const navigate = useNavigate();
+
   return (
     <div className="pr-0 lg:pr-7 w-full">
       {itemsType !== "communities" && (
@@ -104,7 +106,9 @@ const SearchPageList = ({}) => {
           <Select
             value={orderType}
             onChange={(e) => {
-              window.location.href = `/search?type=${itemsType}&sort=${e.target.value}&searchquery=${searchQuery}`;
+              navigate(
+                `/search?type=${itemsType}&sort=${e.target.value}&searchquery=${searchQuery}`,
+              );
             }}
           >
             <MenuItem value={"new"}>New</MenuItem>

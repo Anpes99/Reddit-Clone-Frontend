@@ -13,10 +13,12 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import f1 from "../fake data/f1.png";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import _ from "lodash";
+import { useNavigate } from "react-router";
 
 const UserSubredditsDropDownList = ({}) => {
   const [open, setOpen] = useState(false);
   const user = useSelector((state) => state.app.user);
+  const navigate = useNavigate();
   const handleClick = () => {
     setOpen(!open);
   };
@@ -52,7 +54,7 @@ const UserSubredditsDropDownList = ({}) => {
               {user?.subreddits.map((subreddit) => (
                 <ListItemButton
                   onClick={() => {
-                    window.location.href = `/r/${subreddit.name}`;
+                    navigate(`/r/${subreddit.name}`);
                   }}
                   key={subreddit.name}
                   sx={{ pl: 4 }}

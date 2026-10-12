@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import JoinSubredditButton from "./Buttons/JoinSubredditButton";
 import { SUBREDDIT_ORDER_BY_TYPES } from "../constants/subreddits";
 import Axios from "../utils/axios";
+import { useNavigate } from "react-router";
 
 const TopCommunities = () => {
   const [subreddits, setSubreddits] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(async () => {
     const res = await Axios.get("/api/subreddits", {
@@ -39,16 +41,18 @@ const TopCommunities = () => {
                 <p className="w-3">{i + 1}</p>
                 <ChevronUpIcon className="h-6 text-green-400" />
                 <div
-                  onClick={() =>
-                    (window.location.href = `/r/${subreddit.name}`)
-                  }
+                  onClick={() => {
+                    navigate(`/r/${subreddit.name}`);
+                  }}
                   className="rounded-full overflow-hidden h-8 w-8 cursor-pointer"
                 >
                   <img src={f1} />
                 </div>
               </div>
               <p
-                onClick={() => (window.location.href = `/r/${subreddit.name}`)}
+                onClick={() => {
+                  navigate(`/r/${subreddit.name}`);
+                }}
                 className="text-xs w-1/2 truncate cursor-pointer max-w-[100px] overflow-hidden"
               >
                 r/{subreddit.name}

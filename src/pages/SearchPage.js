@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { setHeaderDropDownVisible } from "../slices/appSlice";
 
 import SearchPageList from "../components/Search/SearchPageList";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const SearchPage = ({}) => {
   const dispatch = useDispatch();
@@ -17,22 +17,22 @@ const SearchPage = ({}) => {
   const SearchPageContentSelectionButtons = () => {
     return (
       <div className="flex ">
-        <a
-          href={`/search?type=posts&sort=${orderType}&searchquery=${searchQuery}`}
+        <Link
+          to={`/search?type=posts&sort=${orderType}&searchquery=${searchQuery}`}
           className={`${
             itemsType === "posts" ? "bg-gray-300" : ""
           } pl-4 pr-4 py-2 rounded-3xl font-semibold mr-4 hover:underline`}
         >
           Posts
-        </a>
-        <a
-          href={`/search?type=communities&searchquery=${searchQuery}`}
+        </Link>
+        <Link
+          to={`/search?type=communities&searchquery=${searchQuery}`}
           className={`${
             itemsType === "communities" ? "bg-gray-300" : ""
           } pl-4 pr-4 py-2  rounded-3xl font-semibold hover:underline "`}
         >
           Communities
-        </a>
+        </Link>
       </div>
     );
   };

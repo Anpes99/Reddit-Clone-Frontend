@@ -10,6 +10,7 @@ import SubredditPage from "./pages/SubredditPage";
 import UserPage from "./pages/UserPage";
 import SearchPage from "./pages/SearchPage";
 import Header from "./components/Header";
+import NavigationDrawer from "./components/NavigationDrawer";
 
 const App = () => {
   useEffect(() => {
@@ -22,25 +23,42 @@ const App = () => {
       <Router>
         <Provider store={store}>
           <Header />
-          <Routes>
-            <Route
-              path="/r/:subredditName/submit"
-              element={<SubmitNewPostPage />}
-            />
-            <Route
-              path="/r/:subredditName/comments/:postId/:postTitle"
-              element={<PostPage />}
-            />
-            <Route
-              path="/r/:subredditName/top"
-              element={<SubredditPage orderType={"top"} />}
-            />
-            <Route path="/r/:subredditName" element={<SubredditPage />} />
-            <Route path="/top" element={<HomePage orderType={"top"} />} />
-            <Route path="/user/:username" element={<UserPage />} />
-            <Route path="/search/" element={<SearchPage />} />
-            <Route path="/" element={<HomePage />} />
-          </Routes>
+          <div className="w-full h-[var(--header-height)]"></div>
+          <div
+            style={{
+              position: "relative",
+              display: "grid",
+              alignItems: "start",
+            }}
+            className="grid-cols-[1fr] xl:grid-cols-[1fr_auto_1fr]"
+          >
+            <NavigationDrawer />
+
+            <div
+              style={{ justifySelf: "center" }}
+              className="col-start-1 xl:col-start-2"
+            >
+              <Routes>
+                <Route
+                  path="/r/:subredditName/submit"
+                  element={<SubmitNewPostPage />}
+                />
+                <Route
+                  path="/r/:subredditName/comments/:postId/:postTitle"
+                  element={<PostPage />}
+                />
+                <Route
+                  path="/r/:subredditName/top"
+                  element={<SubredditPage orderType={"top"} />}
+                />
+                <Route path="/r/:subredditName" element={<SubredditPage />} />
+                <Route path="/top" element={<HomePage orderType={"top"} />} />
+                <Route path="/user/:username" element={<UserPage />} />
+                <Route path="/search/" element={<SearchPage />} />
+                <Route path="/" element={<HomePage />} />
+              </Routes>
+            </div>
+          </div>
         </Provider>
       </Router>
     </div>

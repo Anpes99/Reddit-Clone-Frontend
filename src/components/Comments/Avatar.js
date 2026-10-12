@@ -1,17 +1,31 @@
 import moment from "moment";
 import f1 from "../../fake data/f1.png";
+import { useNavigate } from "react-router";
 
 const Avatar = ({ comment }) => {
   const { createdAt } = comment;
   const date = new Date(createdAt);
+  const navigate = useNavigate();
 
   return (
     <div className="flex space-x-2 items-center">
-      <div className="rounded-full overflow-hidden h-5 w-5 sm:h-8 sm:w-8">
+      <div
+        onClick={() => {
+          navigate(`/user/${comment.user.username}`);
+        }}
+        className="rounded-full overflow-hidden h-5 w-5 sm:h-8 sm:w-8 cursor-pointer"
+      >
         <img src={f1} alt="user img" />
       </div>
       <div className="inline-block flex items-center text-xs font-medium  text-gray-900">
-        {comment.user.username}{" "}
+        <p
+          onClick={() => {
+            navigate(`/user/${comment.user.username}`);
+          }}
+          className="cursor-pointer"
+        >
+          {comment.user.username}
+        </p>{" "}
         <p className="font-sm ml-2 text-gray-500">
           {moment(date.getTime()).fromNow()}
         </p>

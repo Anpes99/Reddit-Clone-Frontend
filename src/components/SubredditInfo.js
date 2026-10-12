@@ -2,7 +2,7 @@ import { setCurrentSubreddit } from "../slices/appSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 import f1 from "../fake data/f1.png";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useEffect } from "react";
 import JoinSubredditButton from "./Buttons/JoinSubredditButton";
 import Axios from "../utils/axios";
@@ -10,7 +10,7 @@ import Axios from "../utils/axios";
 const SubredditInfo = ({ style = {} }) => {
   const dispatch = useDispatch();
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
-
+  const navigate = useNavigate();
   const subredditName = useParams().subredditName;
   useEffect(async () => {
     const res = await Axios.get("/api/subreddits", {
@@ -26,9 +26,7 @@ const SubredditInfo = ({ style = {} }) => {
     >
       <div className="p-2 flex flex-col space-y-3 ">
         <div
-          onClick={() =>
-            (window.location.href = `/r/${currentSubreddit?.name}`)
-          }
+          onClick={() => navigate(`/r/${currentSubreddit?.name}`)}
           className=" font-bold flex space-x-5 items-center self-start cursor-pointer"
         >
           <div className="rounded-full overflow-hidden h-[3rem] w-[3rem]">
