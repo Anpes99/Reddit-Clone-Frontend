@@ -76,7 +76,7 @@ const ListItemPost = ({ post }) => {
 
 const SearchPageList = ({}) => {
   const [searchParams] = useSearchParams();
-  const orderType = searchParams.get("sort") || "new";
+  const orderType = searchParams.get("sort") || "NEW";
   const itemsType = searchParams.get("type") || "posts";
   const searchQuery = searchParams.get("searchquery");
 
@@ -97,8 +97,6 @@ const SearchPageList = ({}) => {
     if (node) observer.current.observe(node);
   });
 
-  const navigate = useNavigate();
-
   return (
     <div className="pr-0 lg:pr-7 w-full">
       {itemsType !== "communities" && (
@@ -106,13 +104,11 @@ const SearchPageList = ({}) => {
           <Select
             value={orderType}
             onChange={(e) => {
-              navigate(
-                `/search?type=${itemsType}&sort=${e.target.value}&searchquery=${searchQuery}`,
-              );
+              window.location.href = `/search?type=${itemsType}&sort=${e.target.value}&searchquery=${searchQuery}`;
             }}
           >
-            <MenuItem value={"new"}>New</MenuItem>
-            <MenuItem value={"top"}>Top</MenuItem>
+            <MenuItem value={"NEW"}>New</MenuItem>
+            <MenuItem value={"TOP"}>Top</MenuItem>
           </Select>
         </div>
       )}

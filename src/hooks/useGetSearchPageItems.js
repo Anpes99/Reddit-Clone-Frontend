@@ -11,18 +11,15 @@ const useGetSearchPageItems = ({
   const [loading, setLoading] = useState(true);
   const [totalItemsCount, setTotalItemsCount] = useState(true);
   const [error, setError] = useState(false);
-  let sortBy = "createdAt";
-  let order = "DESC";
-  let sort;
+
   let orderType;
 
-  if (queryParamSort === "new") {
-    order = "DESC";
-    sortBy = "createdAt";
+  if (queryParamSort === "NEW") {
+    orderType = "NEW";
   }
 
-  if (queryParamSort === "top") {
-    orderType = "top";
+  if (queryParamSort === "TOP") {
+    orderType = "TOP";
   }
 
   //////////////////   GET INITIAL POSTS/SUBREDDITS  /////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +28,7 @@ const useGetSearchPageItems = ({
     if (itemsType === "posts") {
       if (
         orderType === null ||
-        orderType === "new" ||
+        orderType === "NEW" ||
         orderType === undefined
       ) {
         setLoading(true);
@@ -40,14 +37,13 @@ const useGetSearchPageItems = ({
           searchQuery,
           offset: 0,
           limit: 5,
-          order,
-          sortBy,
+
           orderType,
         });
         setItems(result.data.posts);
         setTotalItemsCount(result.data.totalCount);
         setLoading(false);
-      } else if (orderType === "top") {
+      } else if (orderType === "TOP") {
         setLoading(true);
 
         const result = await Axios.post(`/api/search/posts`, {
@@ -81,7 +77,7 @@ const useGetSearchPageItems = ({
       if (itemsType === "posts") {
         if (
           orderType === null ||
-          orderType === "new" ||
+          orderType === "NEW" ||
           orderType === undefined
         ) {
           setLoading(true);
@@ -89,14 +85,13 @@ const useGetSearchPageItems = ({
             searchQuery,
             offset: items.length,
             limit: 5,
-            order,
-            sortBy,
+
             orderType,
           });
           setItems([...items, ...result.data.posts]);
           setTotalItemsCount(result.data.totalCount);
           setLoading(false);
-        } else if (orderType === "top") {
+        } else if (orderType === "TOP") {
           setLoading(true);
 
           const result = await Axios.post(`/api/search/posts`, {

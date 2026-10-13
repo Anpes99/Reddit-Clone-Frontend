@@ -11,28 +11,28 @@ const SearchPage = ({}) => {
   const [searchParams] = useSearchParams();
 
   const itemsType = searchParams.get("type") || "posts";
-  const orderType = searchParams.get("sort") || "new";
+  const orderType = searchParams.get("sort") || "NEW";
   const searchQuery = searchParams.get("searchquery");
 
   const SearchPageContentSelectionButtons = () => {
     return (
-      <div className="flex ">
-        <Link
-          to={`/search?type=posts&sort=${orderType}&searchquery=${searchQuery}`}
+      <div className="flex pl-3">
+        <a
+          href={`/search?type=posts&sort=${orderType}&searchquery=${searchQuery}`}
           className={`${
             itemsType === "posts" ? "bg-gray-300" : ""
           } pl-4 pr-4 py-2 rounded-3xl font-semibold mr-4 hover:underline`}
         >
           Posts
-        </Link>
-        <Link
-          to={`/search?type=communities&searchquery=${searchQuery}`}
+        </a>
+        <a
+          href={`/search?type=communities&searchquery=${searchQuery}`}
           className={`${
             itemsType === "communities" ? "bg-gray-300" : ""
           } pl-4 pr-4 py-2  rounded-3xl font-semibold hover:underline "`}
         >
           Communities
-        </Link>
+        </a>
       </div>
     );
   };
@@ -43,7 +43,7 @@ const SearchPage = ({}) => {
         onClick={() => {
           dispatch(setHeaderDropDownVisible(false));
         }}
-        className="flex flex-row min-h-screen justify-between bg-white"
+        className="flex flex-row min-h-screen justify-between bg-white pt-5"
       >
         <div className=""></div>
 

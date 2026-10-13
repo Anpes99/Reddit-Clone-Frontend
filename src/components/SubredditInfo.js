@@ -13,10 +13,8 @@ const SubredditInfo = ({ style = {} }) => {
   const navigate = useNavigate();
   const subredditName = useParams().subredditName;
   useEffect(async () => {
-    const res = await Axios.get("/api/subreddits", {
-      params: { name: subredditName },
-    });
-    dispatch(setCurrentSubreddit(res.data[0]));
+    const res = await Axios.get("/api/subreddits/" + subredditName);
+    dispatch(setCurrentSubreddit(res.data));
   }, [subredditName]);
   if (!currentSubreddit) return <></>;
   return (

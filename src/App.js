@@ -23,7 +23,7 @@ const App = () => {
       <Router>
         <Provider store={store}>
           <Header />
-          <div className="w-full h-[var(--header-height)]"></div>
+          <div className="w-full h-[var(--header-height)] hidden sm:block"></div>
           <div
             style={{
               position: "relative",

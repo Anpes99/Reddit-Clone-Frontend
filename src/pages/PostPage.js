@@ -32,9 +32,7 @@ const PostPage = () => {
     let queryString = "";
     queryString = sortBy ? queryString + "&sortBy=" + sortBy : queryString;
     queryString = order ? queryString + "&order=" + order : queryString;
-    const result = await Axios.get(
-      `/api/posts/${postId}?commentCommentAmount=10${queryString}`,
-    );
+    const result = await Axios.get(`/api/posts/${postId}?${queryString}`);
     setPost(result.data.post);
   }, []);
 

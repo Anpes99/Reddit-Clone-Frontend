@@ -55,7 +55,11 @@ const Header = () => {
       return;
     }
 
-    const response = await Axios.post("/api/search", { searchWord: word }, {});
+    const response = await Axios.post(
+      "/api/search/suggestions",
+      { searchWord: word },
+      {},
+    );
     setSearchResults(response.data.result);
   }, 200);
 
@@ -67,7 +71,7 @@ const Header = () => {
             dispatch(setHeaderDropDownVisible(false));
           }
         }}
-        className="fixed top-0 left-0 w-full pb-2 sm:pb-0 flex flex-col sm:flex-row min-h-12 bg-white  items-center justify-between z-[90] pl-0 sm:pl-2 sm:space-x-2 border-b-[3px] h-[var(--header-height)]"
+        className=" relative  sm:fixed sm:top-0 sm:left-0 w-full pb-2 sm:pb-0 flex flex-col sm:flex-row min-h-12 bg-white  items-center justify-between z-[90] pl-0 sm:pl-2 sm:space-x-2 border-b-[3px] h-[var(--header-height)]"
       >
         <div
           onClick={() => navigate("/")}
@@ -89,11 +93,10 @@ const Header = () => {
             className="flex flex-grow bg-gray-200 p-2 text-gray-700 placeholder:text-gray-500 sm:pl-20 hover:bg-white focus:bg-white"
             placeholder="Search Reddit"
             type="text"
+            maxLength={500}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                navigate(
-                  `/search?type=posts&sort=top&searchquery=${searchWord}`,
-                );
+              if (e.key === "Enter" && searchWord.length) {
+                window.location.href = `/search?type=posts&sort=TOP&searchquery=${searchWord}`;
               }
             }}
           />
@@ -106,7 +109,7 @@ const Header = () => {
                     <>
                       <li
                         onClick={() => {
-                          navigate(`/r/${searchResult.name}`);
+                          window.location.href = `/r/${searchResult.name}`;
                         }}
                         className="cursor-pointer hover:underline"
                       >

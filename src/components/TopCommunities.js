@@ -15,7 +15,7 @@ const TopCommunities = () => {
       params: {
         limit: 10,
         sortBy: SUBREDDIT_ORDER_BY_TYPES.MEMBER_COUNT,
-        order: "desc",
+        order: "DESC",
       },
     });
 

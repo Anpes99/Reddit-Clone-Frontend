@@ -150,7 +150,6 @@ const NewPostForm = ({}) => {
               maxFiles={1}
               getUploadParams={getUploadParams}
               onChangeStatus={handleChangeStatus}
-              accept="image/*"
               inputContent={(files, extra) =>
                 extra.reject
                   ? "Image files only"
