@@ -31,6 +31,7 @@ const CommentCommentSection = ({
             setComment(event.target.value);
           }}
           className="w-full px-5 pt-3 border m-0 min-h-[5rem] "
+          maxLength={10000}
         />
         <div className="bg-gray-100 w-full h-10 -mt-1.5 rounded-b-md flex items-center justify-end">
           <button
@@ -41,7 +42,7 @@ const CommentCommentSection = ({
                 subredditId,
                 postId,
                 commentId,
-                user
+                user,
               );
 
               if (res.success) {

@@ -30,12 +30,17 @@ export const SignUpContainer = ({ onSubmit, setSignUpVisible, newError }) => {
     >
       {({ handleSubmit }) => (
         <div className="space-y-4">
-          <FormikTextInput name="username" placeholder="Username" />
+          <FormikTextInput
+            name="username"
+            placeholder="Username"
+            inputProps={{ maxLength: 25 }}
+          />
 
           <FormikTextInput
             type="password"
             name="password"
             placeholder="Password"
+            inputProps={{ minLength: 4, maxLength: 128 }}
           />
 
           {newError && <p className="text-red-600">{newError}</p>}

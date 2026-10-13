@@ -110,7 +110,7 @@ const NavigationDrawer = () => {
 
   return (
     <div
-      className={`NavigationDrawerContainer ${!isVisible ? "NavigationDrawerContainer--closed" : ""}`}
+      className={`NavigationDrawerContainer text-gray-500 font-semibold ${!isVisible ? "NavigationDrawerContainer--closed" : ""}`}
     >
       <div
         onClick={() => {
@@ -122,7 +122,7 @@ const NavigationDrawer = () => {
         <MenuIcon className="text-gray-400" style={{ height: "20px" }} />
       </div>
       <div className="pt-5 pl-7 pr-9">
-        <div className="flex flex-col  text-gray-500 font-semibold pb-2 border-b-2">
+        <div className="flex flex-col   pb-2 border-b-2">
           <Link
             to={"/"}
             className={`flex space-x-2  cursor-pointer py-3 pl-4 rounded-lg ${isHomePage ? "bg-gray-200" : "hover:bg-gray-100"}`}

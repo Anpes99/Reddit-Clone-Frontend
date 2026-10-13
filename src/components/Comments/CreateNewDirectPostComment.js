@@ -22,6 +22,7 @@ const CreateNewDirectPostComment = ({ user, post }) => {
           onChange={(event) => {
             setCommentPost(event.target.value);
           }}
+          maxLength={10000}
           className="w-full px-5 pt-3 border m-0 min-h-[10rem] "
         />
 
@@ -35,7 +36,7 @@ const CreateNewDirectPostComment = ({ user, post }) => {
                   post.subredditId,
                   post.id,
                   null,
-                  user
+                  user,
                 );
                 if (res.success) {
                   setCommentPost("");

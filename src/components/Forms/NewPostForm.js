@@ -128,6 +128,7 @@ const NewPostForm = ({}) => {
               onChange={(event) => setTitle(event.target.value)}
               value={title}
               id="newPostTitle"
+              maxLength={300}
             />
 
             <TextareaAutosize
@@ -138,6 +139,7 @@ const NewPostForm = ({}) => {
                 setText(event.target.value);
               }}
               className="w-full pl-3 pt-1.5 border m-0 min-h-[10rem]"
+              maxLength={40000}
             />
           </div>
         )}
