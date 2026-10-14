@@ -20,7 +20,7 @@ const SubmitNewPostPage = () => {
 
   return (
     <div>
-      <main className="max-w-screen-lg mx-auto min-h-screen ">
+      <main className="max-w-screen-lg mx-auto min-h-[100dvh] ">
         <div className="flex mt-10 md:space-x-5">
           <section className="flex-grow flex flex-col ">
             <div className="pb-3 pl-3 border-b border-gray-100 font-semibold text-gray-700 mb-5 text-lg">
@@ -32,7 +32,7 @@ const SubmitNewPostPage = () => {
 
           <section>
             <section className="hidden md:flex flex-col items-center bg-white  rounded-lg mt-10">
-              <div className="flex flex-col border rounded-sm pt-5 text-gray-800 border border-gray-300">
+              <div className="flex flex-col border rounded-sm pt-5 text-gray-800 border-gray-300">
                 <SubredditInfo />
               </div>
             </section>

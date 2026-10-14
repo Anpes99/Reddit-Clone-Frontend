@@ -202,7 +202,7 @@ const UserPage = ({ orderType = "new" }) => {
         onClick={() => {
           dispatch(setHeaderDropDownVisible(false));
         }}
-        className="flex flex-row min-h-screen justify-between bg-white"
+        className="flex flex-row min-h-[100dvh] justify-between bg-white"
       >
         {/* LEFT SIDE BAR SECTION */}
         <div className=""></div>

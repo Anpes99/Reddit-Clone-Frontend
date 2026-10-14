@@ -29,7 +29,7 @@ const SubredditPage = ({ orderType = "new" }) => {
         onClick={() => {
           dispatch(setHeaderDropDownVisible(false));
         }}
-        className="bg-gray-200 min-h-screen"
+        className="bg-gray-200 min-h-[100dvh]"
       >
         <div>
           <div className="bg-blue-500 h-20"></div>

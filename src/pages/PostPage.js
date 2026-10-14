@@ -37,14 +37,14 @@ const PostPage = () => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-[100dvh]">
       <div
         onClick={() => {
           dispatch(setHeaderDropDownVisible(false));
         }}
         className="bg-gray-600"
       >
-        <main className=" max-w-screen-xl mx-auto bg-white min-h-screen">
+        <main className=" max-w-screen-xl mx-auto bg-white min-h-[100dvh]">
           <div className="h-10 bg-black flex items-center justify-between sticky top-0 z-40">
             <div className="flex items-center">
               <div className="flex text-gray-400 items-center border-l border-r border-gray-600 mr-3 ml-1 sm:ml-10">
