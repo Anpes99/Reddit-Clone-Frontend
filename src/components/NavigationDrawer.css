@@ -2,7 +2,7 @@
     @apply bg-white border-r-[3px] absolute xl:sticky top-0 xl:top-[68px] ;
     left:0;
     width:270px;
-    height: calc(100vh - var(--header-height));
+    height: calc(100dvh - var(--header-height));
     transition: transform 0.25s ease-in;
     z-index: 95;
 }
