@@ -16,7 +16,7 @@ const TrendingFeedItem = (props) => {
         alt=""
       />
       <div className="bg-black  z-10 h-full w-full absolute top-0 left-0 opacity-20 rounded-lg"></div>
-      <p className="m-1 font-bold z-20 text-gray-50 absolute bottom-0 left-0 line-clamp-3">
+      <p className="m-1 font-bold z-[11] text-gray-50 absolute bottom-0 left-0 line-clamp-3">
         {props?.data?.title}
       </p>
     </div>

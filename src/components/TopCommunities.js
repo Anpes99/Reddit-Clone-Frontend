@@ -25,7 +25,7 @@ const TopCommunities = () => {
   return (
     <div className=" bg-white rounded-t-sm relative border border-gray-300">
       <div className=" h-20 bg-blue-600 rounded-t-sm flex items-end p-1 pl-4">
-        <h3 className="text-white z-20 font-semibold text-lg">
+        <h3 className="text-white z-[11] font-semibold text-lg">
           Top Communities
         </h3>
         <div className="absolute top-0 left-0 z-10 h-20 w-full bg-gradient-to-t from-black to-white opacity-50 rounded-t-sm"></div>

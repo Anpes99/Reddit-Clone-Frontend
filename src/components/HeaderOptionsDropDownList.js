@@ -7,7 +7,7 @@ const HeaderOptionsDropDownList = ({ isVisible }) => {
 
   return (
     <div
-      className={`flex right-0  top-[9rem] sm:top-14 w-full sm:w-auto ${
+      className={`flex right-0   top-14 w-auto ${
         isVisible ? "" : "h-0 overflow-hidden"
       } absolute  flex-col bg-gray-50 text-sm font-medium select-none duration-200 z-[100]`}
     >

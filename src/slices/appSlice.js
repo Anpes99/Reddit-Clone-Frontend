@@ -6,6 +6,8 @@ const initialState = {
   loginVisible: false,
   signUpVisible: false,
   currentSubreddit: null,
+  navigationDrawerVisible: false,
+  navigationDrawerOpenedFromHeader: false,
 };
 
 export const appSlice = createSlice({
@@ -27,6 +29,12 @@ export const appSlice = createSlice({
     setCurrentSubreddit: (state, action) => {
       state.currentSubreddit = action.payload;
     },
+    setNavigationDrawerVisible: (state, action) => {
+      state.navigationDrawerVisible = action.payload;
+    },
+    setNavigationDrawerOpenedFromHeader: (state, action) => {
+      state.navigationDrawerOpenedFromHeader = action.payload;
+    },
   },
 });
 
@@ -36,6 +44,8 @@ export const {
   setLoginVisible,
   setSignUpVisible,
   setCurrentSubreddit,
+  setNavigationDrawerVisible,
+  setNavigationDrawerOpenedFromHeader,
 } = appSlice.actions;
 
 export default appSlice.reducer;

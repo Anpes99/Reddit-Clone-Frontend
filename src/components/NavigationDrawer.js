@@ -4,7 +4,7 @@ import {
   MenuIcon,
 } from "@heroicons/react/solid";
 import "./NavigationDrawer.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Article,
   Book,
@@ -26,10 +26,15 @@ import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import { PlusIcon } from "@heroicons/react/solid";
 import CreateCommunityForm from "./Forms/CreateCommunityForm";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setNavigationDrawerOpenedFromHeader,
+  setNavigationDrawerVisible,
+} from "../slices/appSlice";
 
 const NavigationDrawer = () => {
-  const [isVisible, setIsVisible] = useState(true);
+  const dispatch = useDispatch();
+  const isVisible = useSelector((state) => state.app.navigationDrawerVisible);
   const [isVisibleCreateCommunityForm, setIsVisibleCreateCommunityForm] =
     useState(false);
   const user = useSelector((state) => state.app.user);
@@ -114,6 +119,34 @@ const NavigationDrawer = () => {
     );
   };
 
+  const [isDesktop, setIsDesktop] = useState(false);
+  const navigationDrawerOpenedFromHeader = useSelector(
+    (state) => state.app.navigationDrawerOpenedFromHeader,
+  );
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 1280px)");
+    const update = () => setIsDesktop(media.matches);
+
+    update();
+
+    media.addEventListener("change", update);
+
+    return () => {
+      media.removeEventListener("change", update);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isDesktop) {
+      dispatch(setNavigationDrawerVisible(false));
+    } else {
+      dispatch(setNavigationDrawerVisible(true));
+      dispatch(setNavigationDrawerOpenedFromHeader(false));
+      document.body.style.overflow = "";
+    }
+  }, [isDesktop]);
+
   return (
     <>
       <CreateCommunityForm
@@ -122,15 +155,24 @@ const NavigationDrawer = () => {
           setIsVisibleCreateCommunityForm(false);
         }}
       />
+      {navigationDrawerOpenedFromHeader && (
+        <div
+          onClick={() => {
+            dispatch(setNavigationDrawerVisible(false));
+            dispatch(setNavigationDrawerOpenedFromHeader(false));
+            document.body.style.overflow = "";
+          }}
+          className="fixed top-0 left-0  h-full w-full bg-black opacity-60 z-20 "
+        ></div>
+      )}
       <div
         className={`NavigationDrawerContainer text-gray-500 font-semibold ${!isVisible ? "NavigationDrawerContainer--closed" : ""}`}
       >
         <div
           onClick={() => {
-            setIsVisible(!isVisible);
-            console.log(isVisible);
+            dispatch(setNavigationDrawerVisible(!isVisible));
           }}
-          className="absolute right-0 top-5 translate-x-[50%] bg-white rounded-full border-4 border-gray-400 p-1 w-min cursor-pointer"
+          className="hidden xl:block absolute right-0 top-5 translate-x-[50%] bg-white rounded-full border-4 border-gray-400 p-1 w-min cursor-pointer"
         >
           <MenuIcon className="text-gray-400" style={{ height: "20px" }} />
         </div>

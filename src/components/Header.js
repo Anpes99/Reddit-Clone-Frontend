@@ -1,6 +1,6 @@
 import { PlusIcon, SearchIcon } from "@heroicons/react/outline";
 import { UserIcon } from "@heroicons/react/outline";
-import { ChevronDownIcon } from "@heroicons/react/solid";
+import { ChevronDownIcon, MenuIcon } from "@heroicons/react/solid";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -11,6 +11,8 @@ import {
   setUser,
   setLoginVisible,
   setSignUpVisible,
+  setNavigationDrawerVisible,
+  setNavigationDrawerOpenedFromHeader,
 } from "../slices/appSlice";
 import LoginForm from "./Forms/LoginForm";
 import SignUpForm from "./Forms/SignUpForm";
@@ -62,6 +64,9 @@ const Header = () => {
     );
     setSearchResults(response.data.result);
   }, 200);
+  const navigationDrawerVisible = useSelector(
+    (state) => state.app.navigationDrawerVisible,
+  );
 
   return (
     <>
@@ -71,8 +76,28 @@ const Header = () => {
             dispatch(setHeaderDropDownVisible(false));
           }
         }}
-        className=" relative  sm:fixed sm:top-0 sm:left-0 w-full pb-2 sm:pb-0 flex flex-col sm:flex-row min-h-12 bg-white  items-center justify-between z-[90] pl-0 sm:pl-2 sm:space-x-2 border-b-[3px] h-[var(--header-height)]"
+        className=" relative  sm:fixed sm:top-0 sm:left-0 w-full  sm:pb-0 flex sm:flex-row min-h-12 bg-white  items-center justify-between z-[150] pl-0 sm:pl-2 sm:space-x-2 border-b-[3px] "
       >
+        <button
+          onClick={() => {
+            dispatch(
+              setNavigationDrawerOpenedFromHeader(
+                navigationDrawerVisible ? false : true,
+              ),
+            );
+            if (navigationDrawerVisible) {
+              document.body.style.overflow = "";
+            } else {
+              document.body.style.overflow = "hidden";
+            }
+
+            dispatch(setNavigationDrawerVisible(!navigationDrawerVisible));
+          }}
+          className="xl:hidden ml-3 mr-1"
+        >
+          <MenuIcon className="text-gray-400" style={{ height: "25px" }} />
+        </button>
+
         <div
           onClick={() => navigate("/")}
           className=" h-full flex items-center space-x-1 cursor-pointer"
@@ -85,12 +110,12 @@ const Header = () => {
         <div className="hidden sm:block">
           {user && <UserSubredditsDropDownList />}
         </div>
-        <div className="w-full sm:w-auto flex flex-col border rounded-sm relative bg-gray-100 flex-grow">
+        <div className="w-full sm:w-auto flex flex-col border rounded-sm relative bg-gray-100 basis-full flex-shrink min-w-0">
           <SearchIcon className="hidden sm:inline-block pl-4 h-7 top-1/2 translate-y-[-50%] text-gray-400 absolute" />
           <input
             value={searchWord}
             onChange={handleSearchWordChange}
-            className="flex flex-grow bg-gray-200 p-2 text-gray-700 placeholder:text-gray-500 sm:pl-20 hover:bg-white focus:bg-white"
+            className="flex flex-grow bg-gray-200 p-2 text-gray-700 placeholder:text-gray-500 sm:pl-20 hover:bg-white focus:bg-white min-w-0"
             placeholder="Search Reddit"
             type="text"
             maxLength={500}
@@ -125,7 +150,7 @@ const Header = () => {
           )}
         </div>
 
-        <div className="flex items-center space-x-3 p-4">
+        <div className="flex items-center space-x-3 p-4 sm:pr-10">
           {currentSubreddit && (
             <Tooltip title="Submit a new post">
               <button

@@ -1,11 +1,10 @@
 .NavigationDrawerContainer{
-    @apply bg-white border-r-[3px] hidden xl:block;
-    position:sticky;
-    top:68px;
+    @apply bg-white border-r-[3px] absolute xl:sticky top-0 xl:top-[68px] ;
     left:0;
     width:270px;
     height: calc(100vh - var(--header-height));
     transition: transform 0.25s ease-in;
+    z-index: 95;
 }
 
 
