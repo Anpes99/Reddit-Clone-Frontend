@@ -24,9 +24,15 @@ import {
 } from "@mui/icons-material";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
+import { PlusIcon } from "@heroicons/react/solid";
+import CreateCommunityForm from "./Forms/CreateCommunityForm";
+import { useSelector } from "react-redux";
 
 const NavigationDrawer = () => {
   const [isVisible, setIsVisible] = useState(true);
+  const [isVisibleCreateCommunityForm, setIsVisibleCreateCommunityForm] =
+    useState(false);
+  const user = useSelector((state) => state.app.user);
 
   const location = useLocation();
   const isHomePage = location.pathname === "/";
@@ -109,68 +115,90 @@ const NavigationDrawer = () => {
   };
 
   return (
-    <div
-      className={`NavigationDrawerContainer text-gray-500 font-semibold ${!isVisible ? "NavigationDrawerContainer--closed" : ""}`}
-    >
-      <div
-        onClick={() => {
-          setIsVisible(!isVisible);
-          console.log(isVisible);
+    <>
+      <CreateCommunityForm
+        isVisible={isVisibleCreateCommunityForm}
+        closeForm={() => {
+          setIsVisibleCreateCommunityForm(false);
         }}
-        className="absolute right-0 top-5 translate-x-[50%] bg-white rounded-full border-4 border-gray-400 p-1 w-min cursor-pointer"
+      />
+      <div
+        className={`NavigationDrawerContainer text-gray-500 font-semibold ${!isVisible ? "NavigationDrawerContainer--closed" : ""}`}
       >
-        <MenuIcon className="text-gray-400" style={{ height: "20px" }} />
-      </div>
-      <div className="pt-5 pl-7 pr-9">
-        <div className="flex flex-col   pb-2 border-b-2">
-          <Link
-            to={"/"}
-            className={`flex space-x-2  cursor-pointer py-3 pl-4 rounded-lg ${isHomePage ? "bg-gray-200" : "hover:bg-gray-100"}`}
-          >
-            <HouseOutlined />
-            <p>Home</p>
-          </Link>
-          <Link
-            to={""}
-            className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-          >
-            <TrendingUp />
-            <p>Popular</p>
-          </Link>
-          <Link
-            to={""}
-            className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-          >
-            <QuestionAnswer />
-            <p>Answers</p>
-          </Link>
-          <Link
-            to={""}
-            className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-          >
-            <Workspaces />
-            <p>Explore</p>
-          </Link>
+        <div
+          onClick={() => {
+            setIsVisible(!isVisible);
+            console.log(isVisible);
+          }}
+          className="absolute right-0 top-5 translate-x-[50%] bg-white rounded-full border-4 border-gray-400 p-1 w-min cursor-pointer"
+        >
+          <MenuIcon className="text-gray-400" style={{ height: "20px" }} />
         </div>
-        <ResourcesDropDownList />
-        <div className="pt-2">
-          <Link
-            to={""}
-            className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-          >
-            <Groups />
-            <p>Communities</p>
-          </Link>{" "}
-          <Link
-            to={""}
-            className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-          >
-            <Rocket />
-            <p>Best of Reddit</p>
-          </Link>{" "}
+        <div className="pt-5 pl-7 pr-9">
+          <div className="flex flex-col   pb-2 border-b-2">
+            <Link
+              to={"/"}
+              className={`flex space-x-2  cursor-pointer py-3 pl-4 rounded-lg ${isHomePage ? "bg-gray-200" : "hover:bg-gray-100"}`}
+            >
+              <HouseOutlined />
+              <p>Home</p>
+            </Link>
+            <Link
+              to={""}
+              className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
+            >
+              <TrendingUp />
+              <p>Popular</p>
+            </Link>
+            <Link
+              to={""}
+              className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
+            >
+              <QuestionAnswer />
+              <p>Answers</p>
+            </Link>
+            <Link
+              to={""}
+              className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
+            >
+              <Workspaces />
+              <p>Explore</p>
+            </Link>
+
+            {user && (
+              <button
+                onClick={() => {
+                  setIsVisibleCreateCommunityForm(
+                    !isVisibleCreateCommunityForm,
+                  );
+                }}
+                className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
+              >
+                <PlusIcon className="h-[24px]" />
+                <p>Create community</p>
+              </button>
+            )}
+          </div>
+          <ResourcesDropDownList />
+          <div className="pt-2">
+            <Link
+              to={""}
+              className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
+            >
+              <Groups />
+              <p>Communities</p>
+            </Link>{" "}
+            <Link
+              to={""}
+              className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
+            >
+              <Rocket />
+              <p>Best of Reddit</p>
+            </Link>{" "}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

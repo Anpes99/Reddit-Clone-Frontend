@@ -7,7 +7,7 @@ const TrendingFeedItem = (props) => {
     <div
       className="relative cursor-pointer rounded-lg"
       onClick={() => {
-        navigate(props?.data?.url);
+        window.location.href = props?.data?.url;
       }}
     >
       <img

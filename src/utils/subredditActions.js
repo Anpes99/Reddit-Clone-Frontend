@@ -3,15 +3,7 @@ import Axios from "./axios";
 
 export const handleJoinSubreddit = async (user, subreddit, dispatch) => {
   try {
-    const res = await Axios.post(
-      `/api/subreddits/${subreddit.id}/user`,
-      {},
-      {
-        headers: {
-          Authorization: `bearer ${user.token}`,
-        },
-      },
-    );
+    const res = await Axios.post(`/api/subreddits/${subreddit.id}/user`);
 
     if (res.status === 200) {
       const updatedUser = {
@@ -32,11 +24,7 @@ export const handleJoinSubreddit = async (user, subreddit, dispatch) => {
 
 export const handleLeaveSubreddit = async (user, subreddit, dispatch) => {
   try {
-    const res = await Axios.delete(`/api/subreddits/${subreddit.id}/user`, {
-      headers: {
-        Authorization: `bearer ${user.token}`,
-      },
-    });
+    const res = await Axios.delete(`/api/subreddits/${subreddit.id}/user`);
     if (res.status === 204) {
       const updatedUser = {
         ...user,

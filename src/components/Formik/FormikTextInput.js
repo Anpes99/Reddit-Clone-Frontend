@@ -2,12 +2,19 @@ import React, { useEffect } from "react";
 import { useField } from "formik";
 import TextField from "@mui/material/TextField";
 
-const FormikTextInput = ({ name, type, placeholder, ...props }) => {
+const FormikTextInput = ({
+  name,
+  type,
+  placeholder,
+  marginBottom,
+  containerStyle,
+  ...props
+}) => {
   const [field, meta, helpers] = useField(name); // useField has to be under Formik component to work
   const showError = meta.touched && meta.error;
 
   return (
-    <div>
+    <div style={containerStyle}>
       <TextField
         type={type ? type : "text"}
         variant="outlined"
@@ -20,7 +27,9 @@ const FormikTextInput = ({ name, type, placeholder, ...props }) => {
         {...props}
       />
 
-      {showError && <p className="text-red-600">{meta.error}</p>}
+      <p className={showError ? "text-red-600" : "opacity-0 "}>
+        {meta.error || "error placeholder"}
+      </p>
     </div>
   );
 };

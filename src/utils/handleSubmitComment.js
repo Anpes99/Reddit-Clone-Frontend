@@ -28,11 +28,7 @@ const handleSubmitComment = async (
     }
 
     try {
-      await Axios.post("/api/comments", data, {
-        headers: {
-          Authorization: `bearer ${user.token}`,
-        },
-      });
+      await Axios.post("/api/comments", data);
       return { success: true };
     } catch (e) {
       return { success: false };

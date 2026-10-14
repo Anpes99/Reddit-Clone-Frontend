@@ -34,7 +34,9 @@ const SubredditInfo = ({ style = {} }) => {
             r/{currentSubreddit?.name}
           </p>{" "}
         </div>
-        <p className="max-w-xs text-base">{currentSubreddit.text}</p>
+        <p className="max-w-xs text-base break-words">
+          {currentSubreddit.description}
+        </p>
         <div className="flex space-x-20 border-b pb-5">
           <div className="">
             <p className="font-bold">{currentSubreddit.memberCount || 0}</p>

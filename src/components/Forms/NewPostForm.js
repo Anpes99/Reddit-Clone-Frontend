@@ -54,12 +54,10 @@ const NewPostForm = ({}) => {
 
     try {
       if (img) {
-        const res = await Axios.get("/api/utils/s3Url", {
+        const res = await Axios.get(
+          "/api/utils/s3Url",
           // get aws s3 put url // expires in 1min
-          headers: {
-            Authorization: `bearer ${user.token}`,
-          },
-        });
+        );
 
         await axios.put(res.data.url, img); //  put request to save img in aws s3 storage
 
@@ -67,11 +65,7 @@ const NewPostForm = ({}) => {
         newPost.imageUrl = imageUrl;
       }
 
-      const response = await Axios.post("/api/posts", newPost, {
-        headers: {
-          Authorization: `bearer ${user.token}`,
-        },
-      });
+      const response = await Axios.post("/api/posts", newPost);
       if (response.status === 201) {
         setMessage("New Post Created");
         setText("");
