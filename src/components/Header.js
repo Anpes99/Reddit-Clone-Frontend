@@ -76,7 +76,7 @@ const Header = () => {
             dispatch(setHeaderDropDownVisible(false));
           }
         }}
-        className=" relative  sm:fixed sm:top-0 sm:left-0 w-full  sm:pb-0 flex sm:flex-row min-h-12 bg-white  items-center justify-between z-[150] pl-0 sm:pl-2 sm:space-x-2 border-b-[3px] "
+        className=" relative  lg:fixed lg:top-0 lg:left-0 w-full  sm:pb-0 flex sm:flex-row min-h-12 bg-white  items-center justify-between z-[150] pl-0 sm:pl-2 sm:space-x-2 border-b-[3px] "
       >
         <button
           onClick={() => {
