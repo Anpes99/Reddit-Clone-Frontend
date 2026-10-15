@@ -192,9 +192,9 @@ const Header = () => {
               }}
               className={`hidden  ${
                 user ? "" : "sm:inline-block"
-              } btn hover:bg-blue-50 text-blue-500 border-blue-500`}
+              } btn hover:bg-blue-50 text-blue-500 border-blue-500 `}
             >
-              Log In
+              <p className="whitespace-nowrap">Log In</p>
             </button>
           }
           {
@@ -207,7 +207,7 @@ const Header = () => {
                 user ? "sm:inline-block" : ""
               } btn hover:bg-blue-50 text-blue-500 border-blue-500 flex-shrink-0`}
             >
-              Log Out
+              <p className="whitespace-nowrap">Log Out</p>
             </button>
           }
           <button
@@ -219,7 +219,7 @@ const Header = () => {
               user ? "" : "sm:inline-block"
             } hidden  btn bg-blue-500 text-white  hover:bg-blue-400`}
           >
-            Sign Up
+            <p className="whitespace-nowrap">Sign Up</p>
           </button>
           <div
             onClick={() => {
