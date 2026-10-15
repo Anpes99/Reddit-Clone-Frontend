@@ -1,7 +1,7 @@
 import { PlusIcon, SearchIcon } from "@heroicons/react/outline";
 import { UserIcon } from "@heroicons/react/outline";
 import { ChevronDownIcon, MenuIcon } from "@heroicons/react/solid";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
@@ -68,6 +68,24 @@ const Header = () => {
     (state) => state.app.navigationDrawerVisible,
   );
 
+  const headerRef = useRef(null);
+
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+    const observer = new ResizeObserver((entries) => {
+      const resizedHeader = entries[0];
+      const newHeaderHeight = resizedHeader.contentRect.height;
+      document.documentElement.style.setProperty(
+        "--header-height",
+        newHeaderHeight + "px",
+      );
+    });
+    observer.observe(header);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
       <div
@@ -76,6 +94,7 @@ const Header = () => {
             dispatch(setHeaderDropDownVisible(false));
           }
         }}
+        ref={headerRef}
         className=" relative  lg:fixed lg:top-0 lg:left-0 w-full  sm:pb-0 flex sm:flex-row min-h-12 bg-white  items-center justify-between z-[150] pl-0 sm:pl-2 sm:space-x-2 border-b-[3px] "
       >
         <button

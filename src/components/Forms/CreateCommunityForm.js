@@ -52,7 +52,10 @@ const CreateCommunityForm = ({ isVisible, closeForm }) => {
     >
       {({ handleSubmit, values }) => (
         <div className="flex fixed top-0 left-0 w-full h-full justify-center items-center z-[160] ">
-          <div className="fixed top-0 left-0 w-full h-full bg-black opacity-70 z-[100] "></div>
+          <div
+            onClick={() => closeForm()}
+            className="fixed top-0 left-0 w-full h-full bg-black opacity-70 z-[100] "
+          ></div>
           <div className="z-[101]  bg-white  p-5 basis-[385px] md:basis-[768px] rounded-xl max-w-full overflow-y-auto overscroll-contain max-h-[100dvh] h-min">
             <div className="flex justify-between mb-10">
               <div>

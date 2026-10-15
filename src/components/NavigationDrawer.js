@@ -161,6 +161,7 @@ const NavigationDrawer = () => {
             dispatch(setNavigationDrawerVisible(false));
             dispatch(setNavigationDrawerOpenedFromHeader(false));
             document.body.style.overflow = "";
+            setIsVisibleCreateCommunityForm(false);
           }}
           className="fixed top-0 left-0  h-full w-full bg-black opacity-60 z-20 "
         ></div>
