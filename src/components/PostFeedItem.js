@@ -9,6 +9,7 @@ import {
   MoreHoriz,
   Reply,
 } from "@mui/icons-material";
+import DefaultSubredditIcon from "../icons/DefaultSubredditIcon";
 
 const PostFeedItem = ({ post }) => {
   const date = new Date(post.createdAt);
@@ -57,7 +58,11 @@ const PostFeedItem = ({ post }) => {
         <div className="flex flex-col p-2">
           <div className="flex items-center space-x-2 ">
             <div className="inline-block rounded-full overflow-hidden h-7 w-7">
-              <img src={f1} alt="subreddit img" />
+              {post?.subreddit?.iconUrl ? (
+                <img src={post?.subreddit?.iconUrl} alt="subreddit img" />
+              ) : (
+                <DefaultSubredditIcon />
+              )}
             </div>
             <p className="inline mr-2 font-bold text-sm">
               r/{post?.subreddit?.name || "noName"}

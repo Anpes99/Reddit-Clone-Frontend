@@ -1,12 +1,11 @@
-import { Cancel, Close } from "@mui/icons-material";
-import { Formik } from "formik";
+import { Close } from "@mui/icons-material";
+import { Formik, useFormikContext } from "formik";
 import FormikTextInput from "../Formik/FormikTextInput";
 import * as yup from "yup";
 import Axios from "../../utils/axios";
 import { useState } from "react";
 import { InputAdornment } from "@mui/material";
-import f1 from "../../fake data/f1.png";
-
+import DefaultSubredditIcon from "../../icons/DefaultSubredditIcon";
 const initialValues = {
   communityName: "",
   description: "",
@@ -21,15 +20,75 @@ const validationSchema = yup.object().shape({
   description: yup.string().min(1).max(500).required("Description is required"),
 });
 
+const AvatarOptions = () => {
+  const { setFieldValue } = useFormikContext();
+  const [seeds, setSeeds] = useState(
+    Array(4)
+      .fill("reddit-subreddit")
+      .map((text) => text + Math.random()),
+  );
+  const getNewSeeds = () => {
+    const newSeeds = [];
+    for (let i = 0; i < 4; i++) {
+      newSeeds.push("reddit-subreddit" + String(Math.random()));
+    }
+    setSeeds(newSeeds);
+  };
+
+  const getIconUrl = (seed) =>
+    `https://api.dicebear.com/10.x/icons/svg?seed=${encodeURIComponent(seed)}`;
+
+  const SubredditIcon = ({ seed, size = 36 }) => (
+    <img
+      src={getIconUrl(seed)}
+      alt=""
+      width={size}
+      height={size}
+      style={{ borderRadius: "50%" }}
+    />
+  );
+
+  const onChooseSubredditIcon = (chosenUrl) => {
+    setFieldValue("subredditIconUrl", chosenUrl);
+  };
+
+  return (
+    <div className="mr-3 mb-5 flex flex-col items-center">
+      <p className="font-semibold mb-1">Choose subreddit icon:</p>
+      <div className="flex space-x-3">
+        {[0, 1, 2, 3].map((_, i) => {
+          return (
+            <button
+              key={"subreddit_icon_option" + i}
+              onClick={() => {
+                onChooseSubredditIcon(getIconUrl(seeds[i]));
+              }}
+            >
+              <SubredditIcon seed={seeds[i]} size={"50px"} />
+            </button>
+          );
+        })}
+      </div>
+
+      <button
+        className="btn2 mt-3 border-gray-600"
+        onClick={() => {
+          getNewSeeds();
+        }}
+      >
+        Refresh icons
+      </button>
+    </div>
+  );
+};
+
 const CreateCommunityForm = ({ isVisible, closeForm }) => {
   const [newError, setNewError] = useState(null);
+
   const onSubmit = async (values) => {
-    const { communityName, description } = values;
+    const { communityName } = values;
     try {
-      await Axios.post("api/subreddits", {
-        communityName,
-        description,
-      });
+      await Axios.post("api/subreddits", values);
       closeForm();
       window.location.href = "/r/" + communityName;
     } catch (e) {
@@ -112,7 +171,11 @@ const CreateCommunityForm = ({ isVisible, closeForm }) => {
                 <div className="flex flex-col p-4">
                   <div className="flex items-center">
                     <div className="rounded-full overflow-hidden h-[3rem] w-[3rem] mr-3">
-                      <img src={f1} />
+                      {values.subredditIconUrl ? (
+                        <img src={values.subredditIconUrl} />
+                      ) : (
+                        <DefaultSubredditIcon />
+                      )}
                     </div>
                     <div className="flex flex-col">
                       <p className="text-lg font-semibold">
@@ -129,12 +192,13 @@ const CreateCommunityForm = ({ isVisible, closeForm }) => {
                 </div>
               </div>
             </div>
-            <div className="flex justify-end mt-12">
+            <div className="flex flex-col md:flex-row justify-between mt-12 ">
+              <AvatarOptions />
               <button
                 disabled={!canSubmit(values)}
                 type="submit"
                 onClick={handleSubmit}
-                className={`p-3 rounded-2xl bg-gray-200 ${!canSubmit(values) ? "text-gray-400" : ""}  font-semibold`}
+                className={`p-3 rounded-2xl bg-gray-200 ${!canSubmit(values) ? "text-gray-400" : ""}  font-semibold h-min md:self-end`}
               >
                 Create community
               </button>

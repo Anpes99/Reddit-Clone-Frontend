@@ -151,9 +151,7 @@ const NavigationDrawer = () => {
     <>
       <CreateCommunityForm
         isVisible={isVisibleCreateCommunityForm}
-        closeForm={() => {
-          setIsVisibleCreateCommunityForm(false);
-        }}
+        closeForm={() => setIsVisibleCreateCommunityForm(false)}
       />
       {navigationDrawerOpenedFromHeader && (
         <div
@@ -212,9 +210,7 @@ const NavigationDrawer = () => {
               {user && (
                 <button
                   onClick={() => {
-                    setIsVisibleCreateCommunityForm(
-                      !isVisibleCreateCommunityForm,
-                    );
+                    setIsVisibleCreateCommunityForm(true);
                   }}
                   className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
                 >

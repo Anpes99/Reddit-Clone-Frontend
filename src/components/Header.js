@@ -25,6 +25,7 @@ import HeaderOptionsDropDownList from "./HeaderOptionsDropDownList";
 import UserSubredditsDropDownList from "./UserSubredditsDropDown";
 import { useSearchParams } from "react-router-dom";
 import Axios from "../utils/axios";
+import UserAvatarImg from "./UserAvatarImg";
 
 const Header = () => {
   const dropDownVisible = useSelector(
@@ -225,10 +226,16 @@ const Header = () => {
             onClick={() => {
               dispatch(setHeaderDropDownVisible(!dropDownVisible));
             }}
-            className="px-2 rounded-sm md:px-4 flex items-center text-gray-400 border self-stretch border-gray-50 hover:border-gray-300 transition-all cursor-pointer"
+            className="min-w-max px-2 rounded-sm md:px-4 flex items-center text-gray-400 border self-stretch border-gray-50 hover:border-gray-300 transition-all cursor-pointer"
           >
-            <UserIcon className="h-5" />
-            <ChevronDownIcon className="h-4 -ml-1" />
+            {user ? (
+              <UserAvatarImg seed={user.username} size={"30px"} />
+            ) : (
+              <>
+                <UserIcon className="h-5" />
+                <ChevronDownIcon className="h-4 -ml-1" />
+              </>
+            )}
           </div>
         </div>
 

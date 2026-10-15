@@ -1,11 +1,11 @@
 import { setCurrentSubreddit } from "../slices/appSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-import f1 from "../fake data/f1.png";
 import { useNavigate, useParams } from "react-router";
 import { useEffect } from "react";
 import JoinSubredditButton from "./Buttons/JoinSubredditButton";
 import Axios from "../utils/axios";
+import DefaultSubredditIcon from "../icons/DefaultSubredditIcon";
 
 const SubredditInfo = ({ style = {} }) => {
   const dispatch = useDispatch();
@@ -19,7 +19,7 @@ const SubredditInfo = ({ style = {} }) => {
   if (!currentSubreddit) return <></>;
   return (
     <div
-      className="flex flex-col border rounded-sm pt-5 text-gray-800 border border-gray-300 bg-white"
+      className="flex flex-col border rounded-sm pt-5 text-gray-800  border-gray-300 bg-white"
       style={style}
     >
       <div className="p-2 flex flex-col space-y-3 ">
@@ -28,7 +28,11 @@ const SubredditInfo = ({ style = {} }) => {
           className=" font-bold flex space-x-5 items-center self-start cursor-pointer"
         >
           <div className="rounded-full overflow-hidden h-[3rem] w-[3rem]">
-            <img src={f1} />
+            {currentSubreddit.iconUrl ? (
+              <img src={currentSubreddit.iconUrl} />
+            ) : (
+              <DefaultSubredditIcon />
+            )}
           </div>
           <p className="text-lg font-semibold">
             r/{currentSubreddit?.name}

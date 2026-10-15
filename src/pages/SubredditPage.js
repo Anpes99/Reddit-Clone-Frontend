@@ -7,14 +7,21 @@ import {
   setCurrentSubreddit,
   setHeaderDropDownVisible,
 } from "../slices/appSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import JoinSubredditButton from "../components/Buttons/JoinSubredditButton";
 import Axios from "../utils/axios";
+import DefaultSubredditIcon from "../icons/DefaultSubredditIcon";
+import EditSubredditIconModal from "../components/Forms/EditSubredditIconModal";
+import { hasSubredditPermission } from "../config/moderator-permissions";
+import { SubredditPermissions } from "../enums/subreddit.enum";
 
 const SubredditPage = ({ orderType = "new" }) => {
   const dispatch = useDispatch();
   const subredditName = useParams().subredditName;
+  const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
+  const [isVisibleEditSubredditIconModal, setIsVisibleEditSubredditIconModal] =
+    useState(false);
 
   const [subredditId, setSubredditId] = useState(null);
   useEffect(async () => {
@@ -23,8 +30,18 @@ const SubredditPage = ({ orderType = "new" }) => {
     dispatch(setCurrentSubreddit(res.data));
   }, [subredditName]);
 
+  const canManageSettings = () =>
+    hasSubredditPermission(
+      currentSubreddit?.currentUserRole,
+      SubredditPermissions.SETTINGS_MANAGE,
+    );
+
   return (
     <>
+      <EditSubredditIconModal
+        isVisible={isVisibleEditSubredditIconModal}
+        closeForm={() => setIsVisibleEditSubredditIconModal(false)}
+      />
       <div
         onClick={() => {
           dispatch(setHeaderDropDownVisible(false));
@@ -32,11 +49,29 @@ const SubredditPage = ({ orderType = "new" }) => {
         className="bg-gray-200 min-h-[100dvh]"
       >
         <div>
-          <div className="bg-blue-500 h-20"></div>
+          <div
+            className="bg-blue-500 h-20"
+            style={{
+              backgroundImage: `url(https://api.dicebear.com/10.x/glass/svg?animationProbability=0&seed=${subredditName})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          ></div>
           <div className="bg-white h-[6rem]">
             <div className="max-w-screen-lg m-auto flex space-x-4">
-              <div className="rounded-full h-20 w-20 overflow-hidden border-4 border-white -translate-y-5">
-                <img src={f1} alt="" />
+              <div
+                onClick={() => {
+                  if (canManageSettings()) {
+                    setIsVisibleEditSubredditIconModal(true);
+                  }
+                }}
+                className={`rounded-full h-20 w-20 overflow-hidden border-4 border-white -translate-y-5 ${canManageSettings() ? "cursor-pointer" : ""}`}
+              >
+                {currentSubreddit?.iconUrl ? (
+                  <img src={currentSubreddit?.iconUrl} alt="" />
+                ) : (
+                  <DefaultSubredditIcon />
+                )}
               </div>
               <div className="flex flex-col items-start space-y-1 py-2">
                 <h2 className="font-bold text-lg">{subredditName}</h2>

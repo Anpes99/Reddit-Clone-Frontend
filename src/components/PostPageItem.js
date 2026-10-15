@@ -5,11 +5,11 @@ import {
   EyeOffIcon,
   FlagIcon,
 } from "@heroicons/react/outline";
-import f1 from "../fake data/f1.png";
 import moment from "moment";
 import PostVotingArrows from "./PostVotingArrows";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import DefaultSubredditIcon from "../icons/DefaultSubredditIcon";
 
 const PostPageMainInfoSection = ({ post }) => {
   const date = new Date(post?.createdAt);
@@ -29,7 +29,11 @@ const PostPageMainInfoSection = ({ post }) => {
               }}
               className="inline-block rounded-full overflow-hidden h-7 w-7 cursor-pointer flex-shrink-0"
             >
-              <img src={f1} alt="user img" />
+              {post.subreddit?.iconUrl ? (
+                <img src={post.subreddit?.iconUrl} alt="subreddit img" />
+              ) : (
+                <DefaultSubredditIcon />
+              )}
             </div>
             <p
               onClick={() => {

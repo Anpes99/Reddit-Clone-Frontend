@@ -1,16 +1,14 @@
 import { useParams } from "react-router";
-import Header from "../components/Header";
 import { useDispatch } from "react-redux";
 import { setHeaderDropDownVisible } from "../slices/appSlice";
 
-import f1 from "../fake data/f1.png";
-import lakeImg from "../fake data/lakeImg.jpg";
 import { PlusCircleIcon } from "@heroicons/react/outline";
 
 import UserPagePostFeed from "../components/UserPagePostFeed";
 import { useState } from "react";
 import { ArrowSmUpIcon } from "@heroicons/react/outline";
 import { ArrowSmDownIcon } from "@heroicons/react/outline";
+import UserAvatarImg from "../components/UserAvatarImg";
 
 const UserPage = ({ orderType = "new" }) => {
   const username = useParams().username;
@@ -24,15 +22,15 @@ const UserPage = ({ orderType = "new" }) => {
           style={{
             height: "100px",
             width: "100%",
-            backgroundImage: `url(${lakeImg})`,
-            backgroundSize: "cover",
+            backgroundImage: `url(https://api.dicebear.com/10.x/landscape/svg?orbProbability=0&seed=${username})`,
+            backgroundSize: "fit",
             backgroundPosition: "center",
           }}
         />
         <div className="flex justify-between pr-4">
           <div className="flex flex-col lg:flex-row  lg:pb-6 bg-white pl-4">
             <div className="rounded-full h-20 w-20 overflow-hidden border-4 border-white mr-4 lg:translate-y-0 -translate-y-5">
-              <img src={f1} alt="" />
+              <UserAvatarImg seed={username} size={"auto"} />
             </div>
             <div className="flex flex-col justify-center lg:translate-y-0 -translate-y-5">
               <h1 className="text-xl font-bold">firstname lastname</h1>
@@ -132,8 +130,8 @@ const UserPage = ({ orderType = "new" }) => {
           style={{
             height: "100px",
             width: "300px",
-            backgroundImage: `url(${lakeImg})`,
-            backgroundSize: "cover",
+            backgroundImage: `url(https://api.dicebear.com/10.x/landscape/svg?orbProbability=0&seed=${username})`,
+            backgroundSize: "fit",
             backgroundPosition: "center",
           }}
         />

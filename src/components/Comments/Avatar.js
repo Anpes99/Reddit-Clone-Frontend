@@ -1,6 +1,7 @@
 import moment from "moment";
 import f1 from "../../fake data/f1.png";
 import { useNavigate } from "react-router";
+import UserAvatarImg from "../UserAvatarImg";
 
 const Avatar = ({ comment }) => {
   const { createdAt } = comment;
@@ -15,7 +16,7 @@ const Avatar = ({ comment }) => {
         }}
         className="rounded-full overflow-hidden h-5 w-5 sm:h-8 sm:w-8 cursor-pointer"
       >
-        <img src={f1} alt="user img" />
+        <UserAvatarImg seed={comment.user.username} />
       </div>
       <div className="inline-block flex items-center text-xs font-medium  text-gray-900">
         <p

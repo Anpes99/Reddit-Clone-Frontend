@@ -1,10 +1,10 @@
 import { ChevronUpIcon } from "@heroicons/react/solid";
-import f1 from "../fake data/f1.png";
 import { useEffect, useState } from "react";
 import JoinSubredditButton from "./Buttons/JoinSubredditButton";
 import { SUBREDDIT_ORDER_BY_TYPES } from "../constants/subreddits";
 import Axios from "../utils/axios";
 import { useNavigate } from "react-router";
+import DefaultSubredditIcon from "../icons/DefaultSubredditIcon";
 
 const TopCommunities = () => {
   const [subreddits, setSubreddits] = useState(null);
@@ -46,7 +46,11 @@ const TopCommunities = () => {
                   }}
                   className="rounded-full overflow-hidden h-8 w-8 cursor-pointer"
                 >
-                  <img src={f1} />
+                  {subreddit.iconUrl ? (
+                    <img src={subreddit.iconUrl} />
+                  ) : (
+                    <DefaultSubredditIcon />
+                  )}
                 </div>
               </div>
               <p
