@@ -4,11 +4,15 @@ import { SunIcon } from "@heroicons/react/outline";
 import { TrendingUpIcon } from "@heroicons/react/outline";
 import { useCallback, useRef } from "react";
 import useGetPosts from "../hooks/useGetPosts";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SubredditInfo from "./SubredditInfo";
+import FeedItemSkeleton from "./FeedItemSkeleton";
+import { setLoginVisible } from "../slices/appSlice";
 
 const PostFeed = ({ subredditId, orderType }) => {
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
+  const user = useSelector((state) => state.app.user);
+  const dispatch = useDispatch();
 
   const [fetchMorePosts, loading, posts] = useGetPosts({
     queryParamSort: orderType,
@@ -26,6 +30,29 @@ const PostFeed = ({ subredditId, orderType }) => {
     });
     if (node) observer.current.observe(node);
   });
+
+  const NoPostsYet = () =>
+    currentSubreddit.name ? (
+      <div className="flex flex-col items-center space-y-2 py-40 px-5 bg-white ">
+        <p className="text-2xl font-bold text-gray-700">
+          This community doesnt have any posts yet
+        </p>
+        <p className="text-gray-500">Make one and get this feed started.</p>
+        <button
+          onClick={
+            user
+              ? () =>
+                  (window.location.href = `/r/${currentSubreddit.name}/submit`)
+              : () => dispatch(setLoginVisible(true))
+          }
+          className="btn2 w-max"
+        >
+          Create post
+        </button>
+      </div>
+    ) : (
+      <div></div>
+    );
 
   return (
     <div className="flex flex-col  w-full">
@@ -68,15 +95,23 @@ const PostFeed = ({ subredditId, orderType }) => {
               <p className="inline">Top</p>
             </button>
           </div>
-          {posts.map((post, i) => {
-            if (i + 1 === posts.length) {
-              return (
-                <div key={post.id} ref={lastPostRef}>
-                  <PostFeedItem post={post} />
-                </div>
-              );
-            } else return <PostFeedItem post={post} key={post.id} />;
-          })}
+          {posts.length ? (
+            posts.map((post, i) => {
+              if (i + 1 === posts.length) {
+                return (
+                  <div key={post.id} ref={lastPostRef}>
+                    <PostFeedItem post={post} />
+                  </div>
+                );
+              } else return <PostFeedItem post={post} key={post.id} />;
+            })
+          ) : loading ? (
+            Array(5)
+              .fill(null)
+              .map((_) => <FeedItemSkeleton loading={true} />)
+          ) : (
+            <NoPostsYet />
+          )}
         </div>
         <div className="hidden lg:block">
           {currentSubreddit?.id && (

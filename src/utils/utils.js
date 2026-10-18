@@ -45,12 +45,8 @@ export const handleLikePost = async (post, user, dispatch) => {
                 rating: data.newRating,
               });
         dispatch(setUser(updatedUser));
-        localStorage.setItem(
-          "loggedInRedditAppUser",
-          JSON.stringify(updatedUser)
-        );
       }
-    }
+    },
   );
 
   return new Promise((resolve, reject) => {
@@ -73,15 +69,11 @@ export const handleDislikePost = async (post, user, dispatch) => {
         const updatedUser = { ...user };
         updatedUser.ratedPosts = await createOrUpdateObjInListById(
           updatedUser.ratedPosts,
-          { id: post.id, rating: data.newRating }
+          { id: post.id, rating: data.newRating },
         );
         dispatch(setUser(updatedUser));
-        localStorage.setItem(
-          "loggedInRedditAppUser",
-          JSON.stringify(updatedUser)
-        );
       }
-    }
+    },
   );
 
   return new Promise((resolve, reject) => {

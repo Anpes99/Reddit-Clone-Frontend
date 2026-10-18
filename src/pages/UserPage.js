@@ -9,10 +9,15 @@ import { useState } from "react";
 import { ArrowSmUpIcon } from "@heroicons/react/outline";
 import { ArrowSmDownIcon } from "@heroicons/react/outline";
 import UserAvatarImg from "../components/UserAvatarImg";
+import { useSearchParams } from "react-router-dom";
 
 const UserPage = ({ orderType = "new" }) => {
   const username = useParams().username;
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const currentlySelectedContent =
+    searchParams.get("contentType") || "overview";
 
   const UserIntroductionSection = () => {
     return (
@@ -33,7 +38,7 @@ const UserPage = ({ orderType = "new" }) => {
               <UserAvatarImg seed={username} size={"auto"} />
             </div>
             <div className="flex flex-col justify-center lg:translate-y-0 -translate-y-5">
-              <h1 className="text-xl font-bold">firstname lastname</h1>
+              <h1 className="text-xl font-bold">{username}</h1>
               <h2 className="font-bold text-neutral-500 text-sm">
                 u/{username}
               </h2>
@@ -50,24 +55,39 @@ const UserPage = ({ orderType = "new" }) => {
   const UserPageContentSelectionButtons = () => {
     return (
       <div className="flex ">
-        <a
-          href="#"
-          className=" pl-4 pr-4 py-2  rounded-3xl font-semibold mr-4 hover:underline"
+        <button
+          onClick={() => {
+            setSearchParams({ contentType: "overview" });
+            window.location.reload();
+          }}
+          className={`${currentlySelectedContent === "overview" ? "bg-gray-300" : ""} pl-4 pr-4 py-2  rounded-3xl font-semibold mr-4 hover:underline`}
         >
           Overview
-        </a>
-        <a
-          href="#"
-          className="bg-gray-300 pl-4 pr-4 py-2 rounded-3xl font-semibold mr-4 hover:underline"
+        </button>
+        <button
+          onClick={() => {
+            setSearchParams({
+              contentType: "posts",
+              sort: searchParams.get("sort") || "new",
+            });
+            window.location.reload();
+          }}
+          className={`${currentlySelectedContent === "posts" ? "bg-gray-300" : ""} pl-4 pr-4 py-2 rounded-3xl font-semibold mr-4 hover:underline`}
         >
           Posts
-        </a>
-        <a
-          href="#"
-          className=" pl-4 pr-4 py-2  rounded-3xl font-semibold hover:underline "
+        </button>
+        <button
+          onClick={() => {
+            setSearchParams({
+              contentType: "comments",
+              sort: searchParams.get("sort") || "new",
+            });
+            window.location.reload();
+          }}
+          className={`${currentlySelectedContent === "comments" ? "bg-gray-300" : ""} pl-4 pr-4 py-2  rounded-3xl font-semibold hover:underline `}
         >
           Comments
-        </a>
+        </button>
       </div>
     );
   };
@@ -137,7 +157,7 @@ const UserPage = ({ orderType = "new" }) => {
         />
 
         <div className="p-4 w-full">
-          <div className="mb-4 font-bold">FirstName Lastname</div>
+          <div className="mb-4 font-bold">{username}</div>
           <FollowUserButton />
           <div className="text-sm  mb-4 text-gray-700 border-b">
             Lorem ipsum, cras non ex sit amet arcu commodo feugiat sed sed
@@ -200,7 +220,7 @@ const UserPage = ({ orderType = "new" }) => {
         onClick={() => {
           dispatch(setHeaderDropDownVisible(false));
         }}
-        className="flex flex-row min-h-[100dvh] justify-between bg-white"
+        className="flex flex-row min-h-[100dvh] justify-between bg-white "
       >
         {/* LEFT SIDE BAR SECTION */}
         <div className=""></div>
@@ -213,7 +233,10 @@ const UserPage = ({ orderType = "new" }) => {
 
           <div className="flex flex-col  w-full">
             <div className="flex justify-center lg:justify-between w-full mt-4">
-              <UserPagePostFeed orderType={orderType} />
+              <UserPagePostFeed
+                contentType={currentlySelectedContent}
+                orderType={orderType}
+              />
 
               <div className="hidden lg:block">
                 <UserInfoSectionBigScreen />

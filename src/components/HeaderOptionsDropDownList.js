@@ -35,7 +35,6 @@ const HeaderOptionsDropDownList = ({ isVisible }) => {
         <a
           onClick={() => {
             dispatch(setUser(null));
-            localStorage.removeItem("loggedInRedditAppUser");
           }}
           className="link border-t"
         >

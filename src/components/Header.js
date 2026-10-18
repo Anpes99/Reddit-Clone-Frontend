@@ -200,8 +200,8 @@ const Header = () => {
           }
           {
             <button
-              onClick={() => {
-                localStorage.removeItem("loggedInRedditAppUser");
+              onClick={async () => {
+                await Axios.post("/api/auth/logout");
                 dispatch(setUser(null));
               }}
               className={`hidden  ${

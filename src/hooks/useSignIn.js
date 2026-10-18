@@ -10,17 +10,14 @@ const useSignIn = () => {
 
   const signIn = async ({ username, password }) => {
     try {
-      const response = await Axios.post("/api/login", {
+      const response = await Axios.post("/api/auth/login", {
         username,
         password,
       });
 
       if (response.status === 200 && response.data.token) {
         setSuccess(true);
-        localStorage.setItem(
-          "loggedInRedditAppUser",
-          JSON.stringify(response.data),
-        );
+
         dispatch(setUser(response.data));
         dispatch(setLoginVisible(false));
       }

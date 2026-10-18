@@ -12,10 +12,6 @@ export const handleJoinSubreddit = async (user, subreddit, dispatch) => {
       };
 
       dispatch(setUser(updatedUser));
-      localStorage.setItem(
-        "loggedInRedditAppUser",
-        JSON.stringify(updatedUser),
-      );
     }
   } catch (e) {
     console.log(e.response);
@@ -32,10 +28,7 @@ export const handleLeaveSubreddit = async (user, subreddit, dispatch) => {
           (userJoinedSubreddit) => userJoinedSubreddit.id !== subreddit.id,
         ),
       };
-      localStorage.setItem(
-        "loggedInRedditAppUser",
-        JSON.stringify(updatedUser),
-      );
+
       dispatch(setUser(updatedUser));
     }
   } catch (e) {

@@ -51,7 +51,7 @@ const UserSubredditsDropDownList = ({}) => {
               disablePadding
               sx={{ position: "absolute", bgcolor: "background.paper" }}
             >
-              {user?.subreddits.map((subreddit) => (
+              {user?.subreddits?.map((subreddit) => (
                 <ListItemButton
                   onClick={() => {
                     navigate(`/r/${subreddit.name}`);

@@ -69,7 +69,7 @@ const SignUp = () => {
 
   const onSubmit = async (values) => {
     try {
-      const response = await Axios.post("api/users", values);
+      await Axios.post("/api/users", values);
       await signIn({ username: values.username, password: values.password });
       dispatch(setSignUpVisible(false));
       navigate("/");

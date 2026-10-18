@@ -88,7 +88,7 @@ const CreateCommunityForm = ({ isVisible, closeForm }) => {
   const onSubmit = async (values) => {
     const { communityName } = values;
     try {
-      await Axios.post("api/subreddits", values);
+      await Axios.post("/api/subreddits", values);
       closeForm();
       window.location.href = "/r/" + communityName;
     } catch (e) {

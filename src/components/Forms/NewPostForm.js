@@ -138,7 +138,9 @@ const NewPostForm = ({}) => {
           </div>
         )}
         {
-          <div className={`p-1 ${currentWindow === 2 ? "" : "hidden"}`}>
+          <div
+            className={`p-1 ${currentWindow === 2 ? "" : "hidden"} md:min-w-[435px]`}
+          >
             <Dropzone
               accept="image/*"
               maxFiles={1}

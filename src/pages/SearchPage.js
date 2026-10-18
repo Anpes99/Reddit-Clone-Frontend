@@ -43,7 +43,7 @@ const SearchPage = ({}) => {
         onClick={() => {
           dispatch(setHeaderDropDownVisible(false));
         }}
-        className="flex flex-row min-h-[100dvh] justify-between bg-white pt-5"
+        className="flex flex-row min-h-[100dvh] justify-between bg-white pt-5 md:min-w-[700px]"
       >
         <div className=""></div>
 
