@@ -11,8 +11,9 @@ import { ArrowSmDownIcon } from "@heroicons/react/outline";
 import UserAvatarImg from "../components/UserAvatarImg";
 import { useSearchParams } from "react-router-dom";
 import Axios from "../utils/axios";
-import { EditSharp } from "@mui/icons-material";
+import { EditSharp, ImageOutlined } from "@mui/icons-material";
 import { TextareaAutosize, useMediaQuery } from "@mui/material";
+import EditUserAvatarImageModal from "../components/Forms/EditUserAvatarImageModal";
 
 const UserPage = ({ orderType = "new" }) => {
   const username = useParams().username;
@@ -28,6 +29,11 @@ const UserPage = ({ orderType = "new" }) => {
   const [isVisibleEditIntroduction, setIsVisibleEditIntroduction] =
     useState(false);
   const [loading, setLoading] = useState(false);
+
+  const [
+    isVisibleEditUserAvatarImageModal,
+    setIsVisibleEditUserAvatarImageModal,
+  ] = useState(false);
 
   useEffect(async () => {
     const result = await Axios.get("/api/users/" + username);
@@ -49,6 +55,8 @@ const UserPage = ({ orderType = "new" }) => {
     setLoading(false);
   };
 
+  const getIsOwnPage = () => user?.username === viewedUserDetails.username;
+
   const UserIntroductionSection = () => {
     return (
       <div>
@@ -64,9 +72,27 @@ const UserPage = ({ orderType = "new" }) => {
         />
         <div className="flex justify-between pr-4">
           <div className="flex flex-col lg:flex-row  lg:pb-6 bg-white pl-4">
-            <div className="rounded-full h-20 w-20 overflow-hidden border-4 border-white mr-4 lg:translate-y-0 -translate-y-5">
-              <UserAvatarImg seed={username} size={"auto"} />
-            </div>
+            <span className="relative flex mr-4">
+              <div className="rounded-full h-20 w-20 overflow-hidden border-4 border-white lg:translate-y-0 -translate-y-5">
+                <UserAvatarImg
+                  url={viewedUserDetails.avatarImageUrl}
+                  size={"auto"}
+                />
+              </div>
+
+              <span
+                onClick={() => {
+                  if (getIsOwnPage()) {
+                    setIsVisibleEditUserAvatarImageModal(
+                      !isVisibleEditUserAvatarImageModal,
+                    );
+                  }
+                }}
+                className={`absolute right-0 bottom-0 ${getIsOwnPage() ? "cursor-pointer" : ""} p-1.5 bg-gray-200 rounded-full h-min flex items-center justify-center`}
+              >
+                <ImageOutlined style={{ height: "20px" }} />
+              </span>
+            </span>
             <div className="flex flex-col justify-center lg:translate-y-0 -translate-y-5">
               <h1 className="text-xl font-bold">{username}</h1>
               <h2 className="font-bold text-neutral-500 text-sm">
@@ -288,6 +314,14 @@ const UserPage = ({ orderType = "new" }) => {
 
   return (
     <>
+      {isVisibleEditUserAvatarImageModal && (
+        <EditUserAvatarImageModal
+          isVisible={isVisibleEditUserAvatarImageModal}
+          closeForm={() => {
+            setIsVisibleEditUserAvatarImageModal(false);
+          }}
+        />
+      )}
       <div
         onClick={() => {
           dispatch(setHeaderDropDownVisible(false));

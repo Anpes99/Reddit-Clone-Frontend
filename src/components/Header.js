@@ -229,7 +229,7 @@ const Header = () => {
             className="min-w-max px-2 rounded-sm md:px-4 flex items-center text-gray-400 border self-stretch border-gray-50 hover:border-gray-300 transition-all cursor-pointer"
           >
             {user ? (
-              <UserAvatarImg seed={user.username} size={"30px"} />
+              <UserAvatarImg url={user.avatarImageUrl} size={"30px"} />
             ) : (
               <>
                 <UserIcon className="h-5" />

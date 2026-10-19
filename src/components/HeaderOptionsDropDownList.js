@@ -20,7 +20,7 @@ const HeaderOptionsDropDownList = ({ isVisible }) => {
           }}
           className="flex text-xs link"
         >
-          <UserAvatarImg seed={user.username} size={"30px"} />{" "}
+          <UserAvatarImg url={user.avatarImageUrl} size={"30px"} />{" "}
           <div className="ml-2">
             <p>Show profile</p>
             <p className="text-gray-500">u/{user.username}</p>

@@ -16,7 +16,7 @@ const Avatar = ({ comment }) => {
         }}
         className="rounded-full overflow-hidden h-5 w-5 sm:h-8 sm:w-8 cursor-pointer"
       >
-        <UserAvatarImg seed={comment.user.username} />
+        <UserAvatarImg url={comment.user.avatarImageUrl} />
       </div>
       <div className="inline-block flex items-center text-xs font-medium  text-gray-900">
         <p
