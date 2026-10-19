@@ -43,7 +43,7 @@ const useGetPosts = ({ queryParamSort, subredditId, username }) => {
           setPosts(data.posts);
           setTotalPostCount(data.totalCount);
           setLoading(false);
-        }
+        },
       );
     }
 
@@ -59,7 +59,7 @@ const useGetPosts = ({ queryParamSort, subredditId, username }) => {
           setPosts(data.posts);
           setTotalPostCount(data.totalCount);
           setLoading(false);
-        }
+        },
       );
     }
   }, [subredditId]);
@@ -84,11 +84,10 @@ const useGetPosts = ({ queryParamSort, subredditId, username }) => {
             username,
           },
           (data) => {
-            console.log("socket data ", data);
             setPosts([...posts, ...data.posts]);
             setTotalPostCount(data.totalCount);
             setLoading(false);
-          }
+          },
         );
       }
 
@@ -106,7 +105,7 @@ const useGetPosts = ({ queryParamSort, subredditId, username }) => {
             setPosts([...posts, ...data.posts]);
             setTotalPostCount(data.totalCount);
             setLoading(false);
-          }
+          },
         );
       }
     }

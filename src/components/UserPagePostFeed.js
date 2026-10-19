@@ -76,7 +76,7 @@ const UserPagePostFeed = ({ subredditId, contentType }) => {
         feedItems.map((item, i) => {
           if (i + 1 === feedItems.length) {
             return (
-              <div key={item.id} ref={lastPostRef}>
+              <div key={item.data.id} ref={lastPostRef}>
                 {item.type === "comment" ? (
                   <CommentFeedItem
                     key={"userFeedItem" + i}
@@ -87,24 +87,20 @@ const UserPagePostFeed = ({ subredditId, contentType }) => {
                 )}
               </div>
             );
-          } else
-            return (
-              <>
-                {item.type === "comment" ? (
-                  <CommentFeedItem
-                    key={"userFeedItem" + i}
-                    comment={item.data}
-                  />
-                ) : (
-                  <PostFeedItem key={"userFeedItem" + i} post={item.data} />
-                )}
-              </>
+          } else {
+            return item.type === "comment" ? (
+              <CommentFeedItem key={"userFeedItem" + i} comment={item.data} />
+            ) : (
+              <PostFeedItem key={"userFeedItem" + i} post={item.data} />
             );
+          }
         })
       ) : loading ? (
         Array(5)
           .fill(null)
-          .map((_) => <FeedItemSkeleton loading={true} />)
+          .map((_, i) => (
+            <FeedItemSkeleton key={"feed-item-skeleton" + i} loading={true} />
+          ))
       ) : (
         <NoPostsYet />
       )}

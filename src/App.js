@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import HomePage from "./pages/Homepage";
 import PostPage from "./pages/PostPage";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { setUser } from "./slices/appSlice";
 import SubmitNewPostPage from "./pages/SubmitNewPostPage";
 import SubredditPage from "./pages/SubredditPage";
@@ -16,13 +16,18 @@ import ScrollToTop from "./ScrollToTop";
 const App = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.app.user);
-  useEffect(async () => {
-    if (user) {
-      console.log(user);
-    }
-    if (user) return;
-    const result = await Axios.post("/api/auth/refresh");
 
+  const [authInitialized, setAuthInitialized] = useState(false);
+
+  useEffect(async () => {
+    if (user) return;
+    let result;
+    try {
+      result = await Axios.post("/api/auth/refresh");
+    } catch (e) {
+      setAuthInitialized(true);
+      return;
+    }
     const { accessToken, username } = result.data;
 
     const userResult = await Axios.get("/api/loggedInUser", {
@@ -32,49 +37,52 @@ const App = () => {
 
     if (userResult.data)
       dispatch(setUser({ ...userResult.data, token: accessToken }));
-  }, [user, dispatch]);
 
+    setAuthInitialized(true);
+  }, [user, dispatch]);
   return (
     <div className=" bg-gray-200">
       <Router>
         <ScrollToTop />
         <Header />
         <div className="w-full h-[var(--header-height)] hidden lg:block"></div>
-        <div
-          style={{
-            position: "relative",
-            display: "grid",
-            alignItems: "start",
-          }}
-          className="grid-cols-[1fr] xl:grid-cols-[1fr_auto_1fr]"
-        >
-          <NavigationDrawer />
-
+        {authInitialized && (
           <div
-            style={{ justifySelf: "center" }}
-            className="col-start-1 xl:col-start-2 w-full"
+            style={{
+              position: "relative",
+              display: "grid",
+              alignItems: "start",
+            }}
+            className="grid-cols-[1fr] xl:grid-cols-[1fr_auto_1fr]"
           >
-            <Routes>
-              <Route
-                path="/r/:subredditName/submit"
-                element={<SubmitNewPostPage />}
-              />
-              <Route
-                path="/r/:subredditName/comments/:postId/:postTitle"
-                element={<PostPage />}
-              />
-              <Route
-                path="/r/:subredditName/top"
-                element={<SubredditPage orderType={"top"} />}
-              />
-              <Route path="/r/:subredditName" element={<SubredditPage />} />
-              <Route path="/top" element={<HomePage orderType={"top"} />} />
-              <Route path="/user/:username" element={<UserPage />} />
-              <Route path="/search/" element={<SearchPage />} />
-              <Route path="/" element={<HomePage />} />
-            </Routes>
+            <NavigationDrawer />
+
+            <div
+              style={{ justifySelf: "center" }}
+              className="col-start-1 xl:col-start-2 w-full"
+            >
+              <Routes>
+                <Route
+                  path="/r/:subredditName/submit"
+                  element={<SubmitNewPostPage />}
+                />
+                <Route
+                  path="/r/:subredditName/comments/:postId/:postTitle"
+                  element={<PostPage />}
+                />
+                <Route
+                  path="/r/:subredditName/top"
+                  element={<SubredditPage orderType={"top"} />}
+                />
+                <Route path="/r/:subredditName" element={<SubredditPage />} />
+                <Route path="/top" element={<HomePage orderType={"top"} />} />
+                <Route path="/user/:username" element={<UserPage />} />
+                <Route path="/search/" element={<SearchPage />} />
+                <Route path="/" element={<HomePage />} />
+              </Routes>
+            </div>
           </div>
-        </div>
+        )}
       </Router>
     </div>
   );

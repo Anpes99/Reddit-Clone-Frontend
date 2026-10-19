@@ -1,5 +1,5 @@
 .NavigationDrawerContainer{
-    @apply bg-white border-r-[3px] absolute xl:sticky top-0 xl:top-[68px] ;
+    @apply bg-white border-r-[3px] absolute xl:sticky top-[0] xl:top-[68px] ;
     left:0;
     width:270px;
     height: calc(100dvh - var(--header-height));

@@ -15,6 +15,7 @@ import DefaultSubredditIcon from "../icons/DefaultSubredditIcon";
 import EditSubredditIconModal from "../components/Forms/EditSubredditIconModal";
 import { hasSubredditPermission } from "../config/moderator-permissions";
 import { SubredditPermissions } from "../enums/subreddit.enum";
+import { ImageOutlined } from "@mui/icons-material";
 
 const SubredditPage = ({ orderType = "new" }) => {
   const dispatch = useDispatch();
@@ -23,18 +24,39 @@ const SubredditPage = ({ orderType = "new" }) => {
   const [isVisibleEditSubredditIconModal, setIsVisibleEditSubredditIconModal] =
     useState(false);
 
+  const user = useSelector((state) => state.app.user);
+
+  const [canManageSettings, setCanManageSettings] = useState(false);
+
   const [subredditId, setSubredditId] = useState(null);
   useEffect(async () => {
     const res = await Axios.get("/api/subreddits/" + subredditName);
     setSubredditId(res.data.id);
     dispatch(setCurrentSubreddit(res.data));
-  }, [subredditName]);
 
-  const canManageSettings = () =>
-    hasSubredditPermission(
-      currentSubreddit?.currentUserRole,
-      SubredditPermissions.SETTINGS_MANAGE,
-    );
+    const getCanManageSettings = () =>
+      hasSubredditPermission(
+        res.data?.currentUserRole,
+        SubredditPermissions.SETTINGS_MANAGE,
+      );
+
+    setCanManageSettings(getCanManageSettings());
+  }, [subredditName, user]);
+
+  const EditIconButton = ({ className }) => (
+    <span
+      onClick={() => {
+        if (canManageSettings) {
+          setIsVisibleEditSubredditIconModal(true);
+        }
+      }}
+      className={className}
+    >
+      <span className="p-1.5 bg-gray-200 rounded-full h-min flex items-center justify-center">
+        <ImageOutlined style={{ height: "20px" }} />
+      </span>
+    </span>
+  );
 
   return (
     <>
@@ -59,20 +81,23 @@ const SubredditPage = ({ orderType = "new" }) => {
           ></div>
           <div className="bg-white h-[6rem]">
             <div className="max-w-screen-lg m-auto flex space-x-4">
-              <div
-                onClick={() => {
-                  if (canManageSettings()) {
-                    setIsVisibleEditSubredditIconModal(true);
-                  }
-                }}
-                className={`rounded-full h-20 w-20 overflow-hidden border-4 border-white -translate-y-5 ${canManageSettings() ? "cursor-pointer" : ""}`}
-              >
+              <div className={`-translate-y-5 `}>
                 {currentSubreddit?.iconUrl ? (
-                  <img src={currentSubreddit?.iconUrl} alt="" />
+                  <div className="rounded-full overflow-hidden h-20 w-20 border-4 border-white ">
+                    <img src={currentSubreddit?.iconUrl} alt="" />
+                  </div>
                 ) : (
-                  <DefaultSubredditIcon />
+                  <div className="rounded-full overflow-hidden h-20 w-20 border-4 border-white  ">
+                    <DefaultSubredditIcon />
+                  </div>
+                )}
+                {canManageSettings && (
+                  <EditIconButton
+                    className={`absolute bottom-0 right-0 ${canManageSettings ? "cursor-pointer" : ""}  `}
+                  />
                 )}
               </div>
+
               <div className="flex flex-col items-start space-y-1 py-2">
                 <h2 className="font-bold text-lg">{subredditName}</h2>
                 <p className="font-semibold text-xs text-gray-400">

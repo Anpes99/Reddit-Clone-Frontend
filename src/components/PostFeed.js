@@ -108,7 +108,12 @@ const PostFeed = ({ subredditId, orderType }) => {
           ) : loading ? (
             Array(5)
               .fill(null)
-              .map((_) => <FeedItemSkeleton loading={true} />)
+              .map((_, i) => (
+                <FeedItemSkeleton
+                  key={"feed-item-skeleton" + i}
+                  loading={true}
+                />
+              ))
           ) : (
             <NoPostsYet />
           )}

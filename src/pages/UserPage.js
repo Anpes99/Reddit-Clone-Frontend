@@ -75,7 +75,7 @@ const UserPage = ({ orderType = "new" }) => {
             </div>
           </div>
           <div className="height-full flex items-center lg:hidden">
-            <FollowUserButton />
+            {username !== user?.username && <FollowUserButton />}
           </div>
         </div>
       </div>
@@ -184,13 +184,15 @@ const UserPage = ({ orderType = "new" }) => {
         {!isVisibleEditIntroduction && viewedUserDetails.introduction}
         {isVisibleEditIntroduction && (
           <TextareaAutosize
+            maxLength={500}
             key={resetKey}
             onChange={(e) => {
               editedIntroductionRef.current = e.target.value;
             }}
             defaultValue={editedIntroductionRef.current}
-            className="p-1 w-full border border-gray-600"
+            className="p-1 w-full border border-gray-600 max-h-[500px]"
             minRows={5}
+            maxRows={20}
           />
         )}
 

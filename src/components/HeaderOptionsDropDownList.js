@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setLoginVisible, setUser } from "../slices/appSlice";
 import UserAvatarImg from "./UserAvatarImg";
+import Axios from "../utils/axios";
 
 const HeaderOptionsDropDownList = ({ isVisible }) => {
   const dispatch = useDispatch();
@@ -48,8 +49,10 @@ const HeaderOptionsDropDownList = ({ isVisible }) => {
 
       {user && (
         <a
-          onClick={() => {
+          onClick={async () => {
+            await Axios.post("/api/auth/logout");
             dispatch(setUser(null));
+            window.location.href = "/";
           }}
           className="link border-t"
         >
