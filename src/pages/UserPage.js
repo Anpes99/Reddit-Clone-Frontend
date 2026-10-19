@@ -14,6 +14,7 @@ import Axios from "../utils/axios";
 import { EditSharp, ImageOutlined } from "@mui/icons-material";
 import { TextareaAutosize, useMediaQuery } from "@mui/material";
 import EditUserAvatarImageModal from "../components/Forms/EditUserAvatarImageModal";
+import moment from "moment";
 
 const UserPage = ({ orderType = "new" }) => {
   const username = useParams().username;
@@ -55,7 +56,7 @@ const UserPage = ({ orderType = "new" }) => {
     setLoading(false);
   };
 
-  const getIsOwnPage = () => user?.username === viewedUserDetails.username;
+  const isOwnPage = () => user?.username === viewedUserDetails.username;
 
   const UserIntroductionSection = () => {
     return (
@@ -80,18 +81,20 @@ const UserPage = ({ orderType = "new" }) => {
                 />
               </div>
 
-              <span
-                onClick={() => {
-                  if (getIsOwnPage()) {
-                    setIsVisibleEditUserAvatarImageModal(
-                      !isVisibleEditUserAvatarImageModal,
-                    );
-                  }
-                }}
-                className={`absolute right-0 bottom-0 ${getIsOwnPage() ? "cursor-pointer" : ""} p-1.5 bg-gray-200 rounded-full h-min flex items-center justify-center`}
-              >
-                <ImageOutlined style={{ height: "20px" }} />
-              </span>
+              {isOwnPage() && (
+                <span
+                  onClick={() => {
+                    if (isOwnPage()) {
+                      setIsVisibleEditUserAvatarImageModal(
+                        !isVisibleEditUserAvatarImageModal,
+                      );
+                    }
+                  }}
+                  className={`absolute right-0 bottom-0 ${isOwnPage() ? "cursor-pointer" : ""} p-1.5 bg-gray-200 rounded-full h-min flex items-center justify-center`}
+                >
+                  <ImageOutlined style={{ height: "20px" }} />
+                </span>
+              )}
             </span>
             <div className="flex flex-col justify-center lg:translate-y-0 -translate-y-5">
               <h1 className="text-xl font-bold">{username}</h1>
@@ -170,7 +173,11 @@ const UserPage = ({ orderType = "new" }) => {
           </div>
 
           <div>
-            <p className="font-semibold text-[15px]">1 y</p>{" "}
+            <p className="font-semibold text-[15px]">
+              {moment
+                .duration(moment().diff(viewedUserDetails.createdAt))
+                .humanize()}
+            </p>{" "}
             <p className="text-[13px] text-gray-700 translate-y-[-3px] font-light">
               Reddit Age
             </p>
@@ -178,14 +185,18 @@ const UserPage = ({ orderType = "new" }) => {
         </div>
         <div className="w-full">
           <div>
-            <p className="font-semibold text-[15px]">10</p>{" "}
+            <p className="font-semibold text-[15px]">
+              {viewedUserDetails.contributionsCount}
+            </p>{" "}
             <p className="text-[13px] text-gray-700 translate-y-[-3px] font-light">
               Contributions
             </p>
           </div>
 
           <div>
-            <p className="font-semibold text-[15px]">50</p>{" "}
+            <p className="font-semibold text-[15px]">
+              {viewedUserDetails.subredditsJoinedCount}
+            </p>{" "}
             <p className="text-[13px] text-gray-700 translate-y-[-3px] font-light">
               Subreddits joined
             </p>
