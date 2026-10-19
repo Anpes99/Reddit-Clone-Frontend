@@ -5,11 +5,14 @@ import { setHeaderDropDownVisible } from "../slices/appSlice";
 import { PlusCircleIcon } from "@heroicons/react/outline";
 
 import UserPagePostFeed from "../components/UserPagePostFeed";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowSmUpIcon } from "@heroicons/react/outline";
 import { ArrowSmDownIcon } from "@heroicons/react/outline";
 import UserAvatarImg from "../components/UserAvatarImg";
 import { useSearchParams } from "react-router-dom";
+import Axios from "../utils/axios";
+import { EditSharp } from "@mui/icons-material";
+import { TextareaAutosize, useMediaQuery } from "@mui/material";
 
 const UserPage = ({ orderType = "new" }) => {
   const username = useParams().username;
@@ -19,6 +22,32 @@ const UserPage = ({ orderType = "new" }) => {
 
   const currentlySelectedContent =
     searchParams.get("contentType") || "overview";
+
+  const [viewedUserDetails, setViewedUserDetails] = useState({});
+  const editedIntroductionRef = useRef("");
+  const [isVisibleEditIntroduction, setIsVisibleEditIntroduction] =
+    useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(async () => {
+    const result = await Axios.get("/api/users/" + username);
+
+    setViewedUserDetails(result.data);
+    editedIntroductionRef.current = result.data.introduction;
+  }, []);
+
+  const handleUpdateIntroduction = async () => {
+    setLoading(true);
+    await Axios.patch("/api/loggedInUser", {
+      introduction: editedIntroductionRef.current,
+    });
+    setViewedUserDetails({
+      ...viewedUserDetails,
+      introduction: editedIntroductionRef.current,
+    });
+    setIsVisibleEditIntroduction(false);
+    setLoading(false);
+  };
 
   const UserIntroductionSection = () => {
     return (
@@ -140,6 +169,56 @@ const UserPage = ({ orderType = "new" }) => {
     );
   };
 
+  const UserIntroductionAndEditSection = () => {
+    const isSmallScreen = useMediaQuery("(max-width: 1024px)");
+    const [resetKey, setResetKey] = useState(0);
+
+    useEffect(() => {
+      // this is for making the textarea auto size use defaultValue everytime
+      //  that it becomes visible when screen width changes
+      setResetKey((k) => k + 1);
+    }, [isSmallScreen]);
+
+    return (
+      <div className="text-sm  flex flex-col mb-4 text-gray-700 border-b break-words">
+        {!isVisibleEditIntroduction && viewedUserDetails.introduction}
+        {isVisibleEditIntroduction && (
+          <TextareaAutosize
+            key={resetKey}
+            onChange={(e) => {
+              editedIntroductionRef.current = e.target.value;
+            }}
+            defaultValue={editedIntroductionRef.current}
+            className="p-1 w-full border border-gray-600"
+            minRows={5}
+          />
+        )}
+
+        <div
+          className={`py-2 flex ${isVisibleEditIntroduction ? "justify-between" : "justify-end"}`}
+        >
+          {isVisibleEditIntroduction && (
+            <button
+              disabled={loading}
+              onClick={() => handleUpdateIntroduction()}
+              className="btn2 hover:bg-blue-500 disabled:bg-gray-300"
+            >
+              Update description
+            </button>
+          )}
+          {user?.username === username && (
+            <EditSharp
+              onClick={() => {
+                setIsVisibleEditIntroduction(!isVisibleEditIntroduction);
+              }}
+              className="cursor-pointer self-end"
+            />
+          )}
+        </div>
+      </div>
+    );
+  };
+
   const UserInfoSectionBigScreen = () => {
     return (
       <div
@@ -160,12 +239,7 @@ const UserPage = ({ orderType = "new" }) => {
         <div className="p-4 w-full">
           <div className="mb-4 font-bold">{username}</div>
           {username !== user?.username && <FollowUserButton />}
-          <div className="text-sm  mb-4 text-gray-700 border-b">
-            Lorem ipsum, cras non ex sit amet arcu commodo feugiat sed sed
-            lorem. Nam auctor, lacus quis varius accumsan, urna est tristique
-            lacus, vulputate pharetra arcu mauris sed felis. Aliquam faucibus
-            metus risus, nec sagittis urna ultricies eget
-          </div>
+          <UserIntroductionAndEditSection />
           <UserInfoSectionDetails />
         </div>
       </div>
@@ -176,12 +250,7 @@ const UserPage = ({ orderType = "new" }) => {
     const [dropDownExpanded, setDropDownExpanded] = useState(false);
     return (
       <div className="lg:hidden px-4">
-        <div className="text-sm  mb-4 text-gray-700 bg-[#f6f8f9] p-4 rounded-3xl">
-          Lorem ipsum, cras non ex sit amet arcu commodo feugiat sed sed lorem.
-          Nam auctor, lacus quis varius accumsan, urna est tristique lacus,
-          vulputate pharetra arcu mauris sed felis. Aliquam faucibus metus
-          risus, nec sagittis urna ultricies eget
-        </div>
+        <UserIntroductionAndEditSection />
         <div
           className="w-full bg-[#f6f8f9] rounded-3xl mb-4  overflow-hidden transition-all duration-200"
           style={{
