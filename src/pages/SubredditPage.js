@@ -26,27 +26,28 @@ const SubredditPage = ({ orderType = "new" }) => {
 
   const user = useSelector((state) => state.app.user);
 
-  const [canManageSettings, setCanManageSettings] = useState(false);
-
   const [subredditId, setSubredditId] = useState(null);
   useEffect(async () => {
     const res = await Axios.get("/api/subreddits/" + subredditName);
     setSubredditId(res.data.id);
-    dispatch(setCurrentSubreddit(res.data));
 
     const getCanManageSettings = () =>
       hasSubredditPermission(
         res.data?.currentUserRole,
         SubredditPermissions.SETTINGS_MANAGE,
       );
-
-    setCanManageSettings(getCanManageSettings());
+    dispatch(
+      setCurrentSubreddit({
+        ...res.data,
+        currentUserCanManageSettings: getCanManageSettings(),
+      }),
+    );
   }, [subredditName, user]);
 
   const EditIconButton = ({ className }) => (
     <span
       onClick={() => {
-        if (canManageSettings) {
+        if (currentSubreddit?.currentUserCanManageSettings) {
           setIsVisibleEditSubredditIconModal(true);
         }
       }}
@@ -91,10 +92,8 @@ const SubredditPage = ({ orderType = "new" }) => {
                     <DefaultSubredditIcon />
                   </div>
                 )}
-                {canManageSettings && (
-                  <EditIconButton
-                    className={`absolute bottom-0 right-0 ${canManageSettings ? "cursor-pointer" : ""}  `}
-                  />
+                {currentSubreddit?.currentUserCanManageSettings && (
+                  <EditIconButton className="absolute bottom-0 right-0 cursor-pointer " />
                 )}
               </div>
 

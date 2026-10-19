@@ -80,7 +80,10 @@ const PostPage = () => {
             </section>
 
             <section className="hidden lg:block ">
-              <SubredditInfo style={{ marginBottom: "20px" }} />
+              <SubredditInfo
+                style={{ marginBottom: "20px" }}
+                isOnPostPage={true}
+              />
 
               <TopCommunities />
             </section>
