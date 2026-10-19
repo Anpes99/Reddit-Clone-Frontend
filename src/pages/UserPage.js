@@ -1,5 +1,5 @@
 import { useParams } from "react-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setHeaderDropDownVisible } from "../slices/appSlice";
 
 import { PlusCircleIcon } from "@heroicons/react/outline";
@@ -14,6 +14,7 @@ import { useSearchParams } from "react-router-dom";
 const UserPage = ({ orderType = "new" }) => {
   const username = useParams().username;
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.app.user);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const currentlySelectedContent =
@@ -158,7 +159,7 @@ const UserPage = ({ orderType = "new" }) => {
 
         <div className="p-4 w-full">
           <div className="mb-4 font-bold">{username}</div>
-          <FollowUserButton />
+          {username !== user?.username && <FollowUserButton />}
           <div className="text-sm  mb-4 text-gray-700 border-b">
             Lorem ipsum, cras non ex sit amet arcu commodo feugiat sed sed
             lorem. Nam auctor, lacus quis varius accumsan, urna est tristique

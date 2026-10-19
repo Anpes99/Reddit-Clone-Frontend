@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setLoginVisible, setUser } from "../slices/appSlice";
+import UserAvatarImg from "./UserAvatarImg";
 
 const HeaderOptionsDropDownList = ({ isVisible }) => {
   const dispatch = useDispatch();
@@ -11,6 +12,20 @@ const HeaderOptionsDropDownList = ({ isVisible }) => {
         isVisible ? "" : "h-0 overflow-hidden"
       } absolute  flex-col bg-gray-50 text-sm font-medium select-none duration-200 z-[100]`}
     >
+      {user && (
+        <div
+          onClick={() => {
+            window.location.href = "/user/" + user.username;
+          }}
+          className="flex text-xs link"
+        >
+          <UserAvatarImg seed={user.username} size={"30px"} />{" "}
+          <div className="ml-2">
+            <p>Show profile</p>
+            <p className="text-gray-500">u/{user.username}</p>
+          </div>
+        </div>
+      )}
       <h4 className="p-2 text-xs text-gray-400">VIEW OPTIONS</h4>
       <a className="link">Dark Mode</a>
       <h4 className="p-2 text-xs text-gray-400">MORE STUFF</h4>
