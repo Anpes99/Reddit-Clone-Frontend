@@ -86,7 +86,7 @@ const SubredditPage = ({ orderType = "new" }) => {
             <div className="max-w-screen-lg m-auto flex space-x-4">
               <div className={`-translate-y-5 `}>
                 {currentSubreddit?.iconUrl ? (
-                  <div className="rounded-full overflow-hidden h-20 w-20 border-4 border-white ">
+                  <div className="rounded-full overflow-hidden h-20 w-20 border-4 border-white bg-gray-300">
                     <img src={currentSubreddit?.iconUrl} alt="" />
                   </div>
                 ) : (

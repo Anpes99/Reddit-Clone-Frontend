@@ -3,6 +3,8 @@ import { Formik, useFormikContext } from "formik";
 import Axios from "../../utils/axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import ImageUpload from "../ImageUpload";
+import axios from "axios";
 
 const initialValues = { subredditIconUrl: "" };
 
@@ -33,10 +35,19 @@ const AvatarOptions = ({ iconsToShow = 16 }) => {
       style={{ borderRadius: "50%" }}
     />
   );
-
+  const [message, setMessage] = useState("");
   const onChooseSubredditIcon = (chosenUrl) => {
     console.log(chosenUrl);
     setFieldValue("subredditIconUrl", chosenUrl);
+    setMessage("");
+  };
+
+  const onUploadImage = async (file) => {
+    const res = await Axios.get("/api/utils/s3Url");
+    await axios.put(res.data.url, file);
+    const imageUrl = res.data.url.split("?")[0];
+    setFieldValue("subredditIconUrl", imageUrl);
+    setMessage("File chosen: " + file.name);
   };
 
   return (
@@ -65,7 +76,6 @@ const AvatarOptions = ({ iconsToShow = 16 }) => {
             );
           })}
       </div>
-
       <button
         className="btn2 mt-3 border-gray-600"
         onClick={() => {
@@ -75,6 +85,12 @@ const AvatarOptions = ({ iconsToShow = 16 }) => {
       >
         Refresh icons
       </button>
+      <ImageUpload
+        onUpload={onUploadImage}
+        text="Upload your own"
+        className="btn2 mt-2"
+      />
+      <p className="">{message}</p>
     </div>
   );
 };
