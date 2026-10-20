@@ -119,12 +119,10 @@ const NavigationDrawer = () => {
     );
   };
 
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState("not-initialized");
   const navigationDrawerOpenedFromHeader = useSelector(
     (state) => state.app.navigationDrawerOpenedFromHeader,
   );
-
-  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 1280px)");
@@ -140,18 +138,14 @@ const NavigationDrawer = () => {
   }, []);
 
   useEffect(() => {
+    if (isMobile === "not-initialized") return;
     if (isMobile) {
-      if (!isMounted) {
-        setIsMounted(true);
-        return;
-      }
       dispatch(setNavigationDrawerVisible(false));
     } else {
       dispatch(setNavigationDrawerVisible(true));
       dispatch(setNavigationDrawerOpenedFromHeader(false));
       document.body.style.overflow = "";
     }
-    setIsMounted(true);
   }, [isMobile]);
 
   return (

@@ -1,7 +1,6 @@
-const UserAvatarImg = ({ url, size = 36 }) => (
+const UserAvatarImg = ({ url, size = 36, altSrc = "" }) => (
   <img
-    src={url}
-    alt=""
+    src={url || altSrc}
     width={size}
     height={size}
     style={{ borderRadius: "50%" }}

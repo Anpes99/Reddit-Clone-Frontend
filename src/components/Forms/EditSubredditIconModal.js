@@ -10,6 +10,7 @@ import { Close } from "@mui/icons-material";
 const initialValues = { subredditIconUrl: "" };
 
 const AvatarOptions = ({ iconsToShow = 16 }) => {
+  const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
   const { setFieldValue, values } = useFormikContext();
   const [seeds, setSeeds] = useState(
     Array(iconsToShow)
@@ -60,6 +61,11 @@ const AvatarOptions = ({ iconsToShow = 16 }) => {
   return (
     <div className="mr-3 mb-5 flex flex-col items-center">
       <p className="font-semibold mb-1">Choose subreddit icon:</p>
+      <div className="rounded-full overflow-hidden h-[100px] w-[100px] mr-3">
+        <img
+          src={values.subredditIconUrl.previewUrl || currentSubreddit.iconUrl}
+        />
+      </div>
       <div className="grid grid-cols-4">
         {Array(16)
           .fill(null)

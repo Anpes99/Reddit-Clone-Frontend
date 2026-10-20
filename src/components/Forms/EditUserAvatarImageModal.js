@@ -9,6 +9,7 @@ import { Close } from "@mui/icons-material";
 const initialValues = { userAvatarImageUrl: "" };
 
 const AvatarOptions = ({ iconsToShow = 16 }) => {
+  const user = useSelector((state) => state.app.user);
   const { setFieldValue, values } = useFormikContext();
   const [seeds, setSeeds] = useState(
     Array(iconsToShow)
@@ -33,6 +34,11 @@ const AvatarOptions = ({ iconsToShow = 16 }) => {
   return (
     <div className="mr-3 mb-5 flex flex-col items-center">
       <p className="font-semibold mb-1">Choose user avatar:</p>
+      <UserAvatarImg
+        url={values.userAvatarImageUrl}
+        size={"100px"}
+        altSrc={user.avatarImageUrl}
+      />
       <div className="grid grid-cols-4">
         {Array(16)
           .fill(null)
