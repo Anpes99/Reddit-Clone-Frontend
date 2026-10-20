@@ -12,10 +12,14 @@ const SubmitNewPostPage = () => {
   const subredditName = useParams().subredditName;
   const dispatch = useDispatch();
 
-  useEffect(async () => {
-    const res = await Axios.get("/api/subreddits/" + subredditName);
+  useEffect(() => {
+    const runUseEffectFunction = async () => {
+      const res = await Axios.get("/api/subreddits/" + subredditName);
 
-    dispatch(setCurrentSubreddit(res.data));
+      dispatch(setCurrentSubreddit(res.data));
+    };
+
+    runUseEffectFunction();
   }, []);
 
   return (

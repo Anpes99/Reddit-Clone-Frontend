@@ -7,7 +7,7 @@ import UserAvatarImg from "../UserAvatarImg";
 
 const initialValues = { userAvatarImageUrl: "" };
 
-const AvatarOptions = ({ iconsToShow = 4 }) => {
+const AvatarOptions = ({ iconsToShow = 16 }) => {
   const { setFieldValue, values } = useFormikContext();
   const [seeds, setSeeds] = useState(
     Array(iconsToShow)
@@ -16,7 +16,7 @@ const AvatarOptions = ({ iconsToShow = 4 }) => {
   );
   const getNewSeeds = () => {
     const newSeeds = [];
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 16; i++) {
       newSeeds.push("reddit-user" + String(Math.random()));
     }
     setSeeds(newSeeds);
@@ -32,26 +32,28 @@ const AvatarOptions = ({ iconsToShow = 4 }) => {
   return (
     <div className="mr-3 mb-5 flex flex-col items-center">
       <p className="font-semibold mb-1">Choose user avatar:</p>
-      <div className="flex space-x-3">
-        {[0, 1, 2, 3].map((_, i) => {
-          return (
-            <button
-              key={"user_avatar_image_option" + i}
-              onClick={() => {
-                onChooseUserAvatarImage(getImageUrl(seeds[i]));
-              }}
-              style={{
-                border:
-                  values.userAvatarImageUrl === getImageUrl(seeds[i])
-                    ? "solid blue 4px"
-                    : "solid white 4px",
-                borderRadius: "50%",
-              }}
-            >
-              <UserAvatarImg url={getImageUrl(seeds[i])} size={"50px"} />
-            </button>
-          );
-        })}
+      <div className="grid grid-cols-4">
+        {Array(16)
+          .fill(null)
+          .map((_, i) => {
+            return (
+              <button
+                key={"user_avatar_image_option" + i}
+                onClick={() => {
+                  onChooseUserAvatarImage(getImageUrl(seeds[i]));
+                }}
+                style={{
+                  border:
+                    values.userAvatarImageUrl === getImageUrl(seeds[i])
+                      ? "solid blue 4px"
+                      : "solid white 4px",
+                  borderRadius: "50%",
+                }}
+              >
+                <UserAvatarImg url={getImageUrl(seeds[i])} size={"50px"} />
+              </button>
+            );
+          })}
       </div>
 
       <button
@@ -61,7 +63,7 @@ const AvatarOptions = ({ iconsToShow = 4 }) => {
           setFieldValue("userAvatarImageUrl", "");
         }}
       >
-        Refresh icons
+        Refresh avatars
       </button>
     </div>
   );

@@ -1,10 +1,10 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import useGetSearchPageItems from "../../hooks/useGetSearchPageItems";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { MenuItem, Select } from "@mui/material";
-import f1 from "../../fake data/f1.png";
 import { makeStringSafeForURL } from "../../utils/utils";
 import moment from "moment";
+import DefaultSubredditIcon from "../../icons/DefaultSubredditIcon";
 
 const ListItemSubreddit = ({ subreddit }) => {
   return (
@@ -13,7 +13,11 @@ const ListItemSubreddit = ({ subreddit }) => {
       className="border-b py-5  flex flex-row  items-center hover:bg-gray-100 rounded-md px-4"
     >
       <div className="inline-block rounded-full overflow-hidden h-[48px] w-[48px] cursor-pointer flex-shrink-0">
-        <img src={f1} alt="user img" />
+        {subreddit?.iconUrl ? (
+          <img src={subreddit?.iconUrl} alt="subreddit img" />
+        ) : (
+          <DefaultSubredditIcon />
+        )}
       </div>
       <div className="flex flex-col ml-4">
         <div className="flex flex-row mb-1.5 items-center">
@@ -43,7 +47,7 @@ const ListItemPost = ({ post }) => {
       <div className="flex flex-col">
         <div className="flex flex-row mb-1.5 items-center">
           <div className="inline-block rounded-full overflow-hidden h-7 w-7 cursor-pointer flex-shrink-0">
-            <img src={f1} alt="user img" />
+            <img src={post.subreddit.iconUrl} alt="user img" />
           </div>
           <p className="font-semibold text-sm mr-1.5 ml-3">
             r/{post?.subreddit?.name}
@@ -58,7 +62,8 @@ const ListItemPost = ({ post }) => {
         </div>
         <div>
           <p className="font-extralight text-sm">
-            {post.upVotes - post.downVotes} votes · 100 comments
+            {post.upVotes - post.downVotes} votes · {post.commentCount} comments{" "}
+            <img src={"/fake%20data/pizza.svg"} className="h-10" />
           </p>
         </div>
       </div>

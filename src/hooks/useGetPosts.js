@@ -25,43 +25,50 @@ const useGetPosts = ({ queryParamSort, subredditId, username }) => {
   }
 
   //////////////////   GET INITIAL POSTS  /////////////////////////////////////////////////////////////////////////////////////
-  useEffect(async () => {
-    setLoading(true);
+  useEffect(() => {
+    const runUseEffectFunction = async () => {
+      setLoading(true);
 
-    if (orderType === null || orderType === "new" || orderType === undefined) {
-      socket.emit(
-        "fetch_more_posts",
-        {
-          order,
-          sortBy,
-          offset: 0,
-          limit: 5,
-          subredditId,
-          username,
-        },
-        (data) => {
-          setPosts(data.posts);
-          setTotalPostCount(data.totalCount);
-          setLoading(false);
-        },
-      );
-    }
+      if (
+        orderType === null ||
+        orderType === "new" ||
+        orderType === undefined
+      ) {
+        socket.emit(
+          "fetch_more_posts",
+          {
+            order,
+            sortBy,
+            offset: 0,
+            limit: 5,
+            subredditId,
+            username,
+          },
+          (data) => {
+            setPosts(data.posts);
+            setTotalPostCount(data.totalCount);
+            setLoading(false);
+          },
+        );
+      }
 
-    if (orderType === "top") {
-      socket.emit(
-        "fetch_top_posts",
-        {
-          offset: 0,
-          subredditId,
-          username,
-        },
-        (data) => {
-          setPosts(data.posts);
-          setTotalPostCount(data.totalCount);
-          setLoading(false);
-        },
-      );
-    }
+      if (orderType === "top") {
+        socket.emit(
+          "fetch_top_posts",
+          {
+            offset: 0,
+            subredditId,
+            username,
+          },
+          (data) => {
+            setPosts(data.posts);
+            setTotalPostCount(data.totalCount);
+            setLoading(false);
+          },
+        );
+      }
+    };
+    runUseEffectFunction();
   }, [subredditId]);
 
   //////////////////////////////////// GET MORE  POSTS ///////////////////////////////////////////////////

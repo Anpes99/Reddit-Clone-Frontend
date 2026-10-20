@@ -10,10 +10,10 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import f1 from "../fake data/f1.png";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import _ from "lodash";
 import { useNavigate } from "react-router";
+import DefaultSubredditIcon from "../icons/DefaultSubredditIcon";
 
 const UserSubredditsDropDownList = ({}) => {
   const [open, setOpen] = useState(false);
@@ -61,7 +61,11 @@ const UserSubredditsDropDownList = ({}) => {
                 >
                   <ListItemIcon>
                     <div className="rounded-full w-6 h-6 overflow-hidden">
-                      <img src={f1} alt="" />
+                      {subreddit?.iconUrl ? (
+                        <img src={subreddit?.iconUrl} alt="subreddit img" />
+                      ) : (
+                        <DefaultSubredditIcon />
+                      )}
                     </div>
                   </ListItemIcon>
                   <ListItemText primary={"r/" + subreddit.name} />

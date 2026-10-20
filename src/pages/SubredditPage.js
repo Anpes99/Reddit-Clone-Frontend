@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import Header from "../components/Header";
 import PostFeed from "../components/PostFeed";
-import f1 from "../fake data/f1.png";
 import {
   setCurrentSubreddit,
   setHeaderDropDownVisible,
@@ -27,21 +25,25 @@ const SubredditPage = ({ orderType = "new" }) => {
   const user = useSelector((state) => state.app.user);
 
   const [subredditId, setSubredditId] = useState(null);
-  useEffect(async () => {
-    const res = await Axios.get("/api/subreddits/" + subredditName);
-    setSubredditId(res.data.id);
+  useEffect(() => {
+    const runUseEffectFunction = async () => {
+      const res = await Axios.get("/api/subreddits/" + subredditName);
+      setSubredditId(res.data.id);
 
-    const getCanManageSettings = () =>
-      hasSubredditPermission(
-        res.data?.currentUserRole,
-        SubredditPermissions.SETTINGS_MANAGE,
+      const getCanManageSettings = () =>
+        hasSubredditPermission(
+          res.data?.currentUserRole,
+          SubredditPermissions.SETTINGS_MANAGE,
+        );
+      dispatch(
+        setCurrentSubreddit({
+          ...res.data,
+          currentUserCanManageSettings: getCanManageSettings(),
+        }),
       );
-    dispatch(
-      setCurrentSubreddit({
-        ...res.data,
-        currentUserCanManageSettings: getCanManageSettings(),
-      }),
-    );
+    };
+
+    runUseEffectFunction();
   }, [subredditName, user]);
 
   const EditIconButton = ({ className }) => (

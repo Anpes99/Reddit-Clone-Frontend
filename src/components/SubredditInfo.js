@@ -8,6 +8,7 @@ import Axios from "../utils/axios";
 import DefaultSubredditIcon from "../icons/DefaultSubredditIcon";
 import { TextareaAutosize } from "@mui/material";
 import { EditSharp } from "@mui/icons-material";
+import moment from "moment";
 
 const SubredditInfo = ({ style = {}, isOnPostPage }) => {
   const dispatch = useDispatch();
@@ -17,10 +18,13 @@ const SubredditInfo = ({ style = {}, isOnPostPage }) => {
 
   const editedIntroductionRef = useRef("");
 
-  useEffect(async () => {
-    if (!isOnPostPage) return;
-    const res = await Axios.get("/api/subreddits/" + subredditName);
-    dispatch(setCurrentSubreddit(res.data));
+  useEffect(() => {
+    const runUseEffectFunction = async () => {
+      if (!isOnPostPage) return;
+      const res = await Axios.get("/api/subreddits/" + subredditName);
+      dispatch(setCurrentSubreddit(res.data));
+    };
+    runUseEffectFunction();
   }, [subredditName]);
 
   useEffect(() => {
@@ -123,7 +127,9 @@ const SubredditInfo = ({ style = {}, isOnPostPage }) => {
             <p className="font-medium text-xs text-gray-800">Online</p>
           </div>
         </div>
-        <div className="text-base font-normal">created aug 27 2008</div>
+        <div className="text-base font-normal">
+          created {moment(currentSubreddit.createdAt).format("D MMM YYYY")}
+        </div>
         <JoinSubredditButton subreddit={currentSubreddit} size="big" />
       </div>
     </div>

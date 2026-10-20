@@ -1,4 +1,3 @@
-import f1 from "../fake data/f1.png";
 import moment from "moment";
 import { useNavigate } from "react-router";
 import PostVotingArrows from "./PostVotingArrows";

@@ -28,12 +28,16 @@ const PostPage = () => {
 
   const user = useSelector((state) => state.app.user);
 
-  useEffect(async () => {
-    let queryString = "";
-    queryString = sortBy ? queryString + "&sortBy=" + sortBy : queryString;
-    queryString = order ? queryString + "&order=" + order : queryString;
-    const result = await Axios.get(`/api/posts/${postId}?${queryString}`);
-    setPost(result.data.post);
+  useEffect(() => {
+    const runUseEffectFunction = async () => {
+      let queryString = "";
+      queryString = sortBy ? queryString + "&sortBy=" + sortBy : queryString;
+      queryString = order ? queryString + "&order=" + order : queryString;
+      const result = await Axios.get(`/api/posts/${postId}?${queryString}`);
+      setPost(result.data.post);
+    };
+
+    runUseEffectFunction();
   }, []);
 
   return (

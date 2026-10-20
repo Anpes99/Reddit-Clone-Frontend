@@ -23,13 +23,13 @@ const validationSchema = yup.object().shape({
 const AvatarOptions = () => {
   const { setFieldValue } = useFormikContext();
   const [seeds, setSeeds] = useState(
-    Array(4)
+    Array(8)
       .fill("reddit-subreddit")
       .map((text) => text + Math.random()),
   );
   const getNewSeeds = () => {
     const newSeeds = [];
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 8; i++) {
       newSeeds.push("reddit-subreddit" + String(Math.random()));
     }
     setSeeds(newSeeds);
@@ -55,19 +55,21 @@ const AvatarOptions = () => {
   return (
     <div className="mr-3 mb-5 flex flex-col items-center">
       <p className="font-semibold mb-1">Choose subreddit icon:</p>
-      <div className="flex space-x-3">
-        {[0, 1, 2, 3].map((_, i) => {
-          return (
-            <button
-              key={"subreddit_icon_option" + i}
-              onClick={() => {
-                onChooseSubredditIcon(getIconUrl(seeds[i]));
-              }}
-            >
-              <SubredditIcon seed={seeds[i]} size={"50px"} />
-            </button>
-          );
-        })}
+      <div className="grid grid-cols-4 gap-1">
+        {Array(8)
+          .fill(null)
+          .map((_, i) => {
+            return (
+              <button
+                key={"subreddit_icon_option" + i}
+                onClick={() => {
+                  onChooseSubredditIcon(getIconUrl(seeds[i]));
+                }}
+              >
+                <SubredditIcon seed={seeds[i]} size={"50px"} />
+              </button>
+            );
+          })}
       </div>
 
       <button

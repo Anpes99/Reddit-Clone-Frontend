@@ -19,26 +19,30 @@ const App = () => {
 
   const [authInitialized, setAuthInitialized] = useState(false);
 
-  useEffect(async () => {
-    if (user) return;
-    let result;
-    try {
-      result = await Axios.post("/api/auth/refresh");
-    } catch (e) {
+  useEffect(() => {
+    const runUseEffectFunction = async () => {
+      if (user) return;
+      let result;
+      try {
+        result = await Axios.post("/api/auth/refresh");
+      } catch (e) {
+        setAuthInitialized(true);
+        return;
+      }
+      const { accessToken, username } = result.data;
+
+      const userResult = await Axios.get("/api/loggedInUser", {
+        params: { username },
+        headers: { Authorization: `bearer ${accessToken}` },
+      });
+
+      if (userResult.data)
+        dispatch(setUser({ ...userResult.data, token: accessToken }));
+
       setAuthInitialized(true);
-      return;
-    }
-    const { accessToken, username } = result.data;
+    };
 
-    const userResult = await Axios.get("/api/loggedInUser", {
-      params: { username },
-      headers: { Authorization: `bearer ${accessToken}` },
-    });
-
-    if (userResult.data)
-      dispatch(setUser({ ...userResult.data, token: accessToken }));
-
-    setAuthInitialized(true);
+    runUseEffectFunction();
   }, [user, dispatch]);
   return (
     <div className=" bg-gray-200">

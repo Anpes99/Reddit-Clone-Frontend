@@ -10,16 +10,19 @@ const TopCommunities = () => {
   const [subreddits, setSubreddits] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(async () => {
-    const res = await Axios.get("/api/subreddits", {
-      params: {
-        limit: 10,
-        sortBy: SUBREDDIT_ORDER_BY_TYPES.MEMBER_COUNT,
-        order: "DESC",
-      },
-    });
+  useEffect(() => {
+    const runUseEffectFunction = async () => {
+      const res = await Axios.get("/api/subreddits", {
+        params: {
+          limit: 10,
+          sortBy: SUBREDDIT_ORDER_BY_TYPES.MEMBER_COUNT,
+          order: "DESC",
+        },
+      });
 
-    setSubreddits(res.data);
+      setSubreddits(res.data);
+    };
+    runUseEffectFunction();
   }, []);
 
   return (

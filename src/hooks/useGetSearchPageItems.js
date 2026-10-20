@@ -23,52 +23,55 @@ const useGetSearchPageItems = ({
   }
 
   //////////////////   GET INITIAL POSTS/SUBREDDITS  /////////////////////////////////////////////////////////////////////////////////////
-  useEffect(async () => {
-    setLoading(true);
-    if (itemsType === "posts") {
-      if (
-        orderType === null ||
-        orderType === "NEW" ||
-        orderType === undefined
-      ) {
+  useEffect(() => {
+    const runUseEffectFunction = async () => {
+      setLoading(true);
+      if (itemsType === "posts") {
+        if (
+          orderType === null ||
+          orderType === "NEW" ||
+          orderType === undefined
+        ) {
+          setLoading(true);
+
+          const result = await Axios.post(`/api/search/posts`, {
+            searchQuery,
+            offset: 0,
+            limit: 5,
+
+            orderType,
+          });
+          setItems(result.data.posts);
+          setTotalItemsCount(result.data.totalCount);
+          setLoading(false);
+        } else if (orderType === "TOP") {
+          setLoading(true);
+
+          const result = await Axios.post(`/api/search/posts`, {
+            searchQuery,
+            offset: 0,
+            limit: 5,
+            orderType,
+          });
+          setLoading(false);
+          setItems(result.data.posts);
+          setTotalItemsCount(result.data.totalCount);
+          setLoading(false);
+        }
+      } else if (itemsType === "communities") {
         setLoading(true);
 
-        const result = await Axios.post(`/api/search/posts`, {
+        const result = await Axios.post(`/api/search/subreddits`, {
           searchQuery,
           offset: 0,
-          limit: 5,
-
-          orderType,
+          limit: 10,
         });
-        setItems(result.data.posts);
-        setTotalItemsCount(result.data.totalCount);
-        setLoading(false);
-      } else if (orderType === "TOP") {
-        setLoading(true);
-
-        const result = await Axios.post(`/api/search/posts`, {
-          searchQuery,
-          offset: 0,
-          limit: 5,
-          orderType,
-        });
-        setLoading(false);
-        setItems(result.data.posts);
+        setItems(result.data.subreddits);
         setTotalItemsCount(result.data.totalCount);
         setLoading(false);
       }
-    } else if (itemsType === "communities") {
-      setLoading(true);
-
-      const result = await Axios.post(`/api/search/subreddits`, {
-        searchQuery,
-        offset: 0,
-        limit: 10,
-      });
-      setItems(result.data.subreddits);
-      setTotalItemsCount(result.data.totalCount);
-      setLoading(false);
-    }
+    };
+    runUseEffectFunction();
   }, [subredditId]);
 
   //////////////////////////////////// GET MORE  POSTS ///////////////////////////////////////////////////

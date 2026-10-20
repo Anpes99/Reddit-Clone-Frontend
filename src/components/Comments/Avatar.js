@@ -1,5 +1,4 @@
 import moment from "moment";
-import f1 from "../../fake data/f1.png";
 import { useNavigate } from "react-router";
 import UserAvatarImg from "../UserAvatarImg";
 

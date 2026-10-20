@@ -36,11 +36,14 @@ const UserPage = ({ orderType = "new" }) => {
     setIsVisibleEditUserAvatarImageModal,
   ] = useState(false);
 
-  useEffect(async () => {
-    const result = await Axios.get("/api/users/" + username);
+  useEffect(() => {
+    const runUseEffectFunction = async () => {
+      const result = await Axios.get("/api/users/" + username);
 
-    setViewedUserDetails(result.data);
-    editedIntroductionRef.current = result.data.introduction;
+      setViewedUserDetails(result.data);
+      editedIntroductionRef.current = result.data.introduction;
+    };
+    runUseEffectFunction();
   }, []);
 
   const handleUpdateIntroduction = async () => {
@@ -82,7 +85,7 @@ const UserPage = ({ orderType = "new" }) => {
               </div>
 
               {isOwnPage() && (
-                <span
+                <div
                   onClick={() => {
                     if (isOwnPage()) {
                       setIsVisibleEditUserAvatarImageModal(
@@ -90,10 +93,10 @@ const UserPage = ({ orderType = "new" }) => {
                       );
                     }
                   }}
-                  className={`absolute right-0 bottom-0 ${isOwnPage() ? "cursor-pointer" : ""} p-1.5 bg-gray-200 rounded-full h-min flex items-center justify-center`}
+                  className={`absolute right-0 bottom-5 lg:right-0 lg:bottom-0 ${isOwnPage() ? "cursor-pointer" : ""} p-1.5 bg-gray-200 rounded-full h-min flex items-center justify-center`}
                 >
                   <ImageOutlined style={{ height: "20px" }} />
-                </span>
+                </div>
               )}
             </span>
             <div className="flex flex-col justify-center lg:translate-y-0 -translate-y-5">

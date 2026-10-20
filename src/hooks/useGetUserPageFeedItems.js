@@ -10,16 +10,20 @@ const useGetUserPageFeedItems = ({ username, contentType, sortByType }) => {
   let order = "DESC";
 
   //////////////////   GET INITIAL ITEMS  /////////////////////////////////////////////////////////////////////////////////////
-  useEffect(async () => {
-    setLoading(true);
+  useEffect(() => {
+    const runUseEffectFunction = async () => {
+      setLoading(true);
 
-    Axios.get(`api/users/${username}/feed`, {
-      params: { offset: 0, contentType, sortByType, getTotalCount: true },
-    }).then((result) => {
-      setItems(result.data.feedItems);
-      setTotalItemsCount(result.data.totalCount);
-      setLoading(false);
-    });
+      Axios.get(`api/users/${username}/feed`, {
+        params: { offset: 0, contentType, sortByType, getTotalCount: true },
+      }).then((result) => {
+        setItems(result.data.feedItems);
+        setTotalItemsCount(result.data.totalCount);
+        setLoading(false);
+      });
+    };
+
+    runUseEffectFunction();
   }, []);
 
   //////////////////////////////////// GET MORE  ITEMS ///////////////////////////////////////////////////
