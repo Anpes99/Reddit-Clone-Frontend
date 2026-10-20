@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import ImageUpload from "../ImageUpload";
 import axios from "axios";
+import { Close } from "@mui/icons-material";
 
 const initialValues = { subredditIconUrl: "" };
 
@@ -37,16 +38,22 @@ const AvatarOptions = ({ iconsToShow = 16 }) => {
   );
   const [message, setMessage] = useState("");
   const onChooseSubredditIcon = (chosenUrl) => {
-    console.log(chosenUrl);
-    setFieldValue("subredditIconUrl", chosenUrl);
+    setFieldValue("subredditIconUrl", {
+      url: chosenUrl,
+      previewUrl: chosenUrl,
+      source: "defaultOptions",
+      file: null,
+    });
     setMessage("");
   };
 
   const onUploadImage = async (file) => {
-    const res = await Axios.get("/api/utils/s3Url");
-    await axios.put(res.data.url, file);
-    const imageUrl = res.data.url.split("?")[0];
-    setFieldValue("subredditIconUrl", imageUrl);
+    setFieldValue("subredditIconUrl", {
+      url: "",
+      previewUrl: URL.createObjectURL(file),
+      source: "uploaded",
+      file: file,
+    });
     setMessage("File chosen: " + file.name);
   };
 
@@ -65,7 +72,7 @@ const AvatarOptions = ({ iconsToShow = 16 }) => {
                 }}
                 style={{
                   border:
-                    values.subredditIconUrl === getIconUrl(seeds[i])
+                    values.subredditIconUrl.url === getIconUrl(seeds[i])
                       ? "solid blue 4px"
                       : "solid white 4px",
                   borderRadius: "50%",
@@ -100,11 +107,22 @@ const EditSubredditIconModal = ({ isVisible, closeForm }) => {
 
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
   const onSubmit = async (values) => {
+    const uploadImageToS3 = async () => {
+      const res = await Axios.get("/api/utils/s3Url");
+      await axios.put(res.data.url, values.subredditIconUrl.file);
+      const imageUrl = res.data.url.split("?")[0];
+      return imageUrl;
+    };
+
     try {
-      await Axios.patch(
-        `api/subreddits/${currentSubreddit.id}/settings`,
-        values,
-      );
+      const ímageUrl =
+        values.subredditIconUrl.source === "uploaded"
+          ? await uploadImageToS3()
+          : values.subredditIconUrl.url;
+
+      await Axios.patch(`api/subreddits/${currentSubreddit.id}/settings`, {
+        subredditIconUrl: ímageUrl,
+      });
       closeForm();
       window.location.href = "/r/" + currentSubreddit.name;
     } catch (e) {
@@ -116,7 +134,7 @@ const EditSubredditIconModal = ({ isVisible, closeForm }) => {
     }
   };
 
-  const canSubmit = (values) => values.subredditIconUrl?.length;
+  const canSubmit = (values) => values.subredditIconUrl;
 
   return isVisible ? (
     <Formik initialValues={initialValues} onSubmit={onSubmit}>
@@ -126,10 +144,16 @@ const EditSubredditIconModal = ({ isVisible, closeForm }) => {
             onClick={() => closeForm()}
             className="fixed top-0 left-0 w-full h-full bg-black opacity-70 z-[100] "
           ></div>
-          <div className="z-[101] flex flex-col  bg-white  p-5 basis-[385px] rounded-xl max-w-full overflow-y-auto overscroll-contain max-h-[100dvh] h-min">
+          <div className="relative z-[101] flex flex-col  bg-white  p-5 basis-[385px] rounded-xl max-w-full overflow-y-auto overscroll-contain max-h-[100dvh] h-min">
+            <button
+              className="absolute top-4 right-4"
+              onClick={() => closeForm()}
+            >
+              <Close />
+            </button>
             <AvatarOptions />
             <button
-              disabled={!values.subredditIconUrl?.length}
+              disabled={!values.subredditIconUrl}
               onClick={handleSubmit}
               type="submit"
               className={`p-3 rounded-2xl bg-gray-200 ${!canSubmit(values) ? "text-gray-400" : ""}  font-semibold h-min self-end`}

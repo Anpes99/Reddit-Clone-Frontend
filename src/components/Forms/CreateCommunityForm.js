@@ -6,6 +6,8 @@ import Axios from "../../utils/axios";
 import { useState } from "react";
 import { InputAdornment } from "@mui/material";
 import DefaultSubredditIcon from "../../icons/DefaultSubredditIcon";
+import axios from "axios";
+import ImageUpload from "../ImageUpload";
 const initialValues = {
   communityName: "",
   description: "",
@@ -48,8 +50,26 @@ const AvatarOptions = () => {
     />
   );
 
+  const [message, setMessage] = useState("");
+
   const onChooseSubredditIcon = (chosenUrl) => {
-    setFieldValue("subredditIconUrl", chosenUrl);
+    setFieldValue("subredditIconUrl", {
+      url: chosenUrl,
+      previewUrl: chosenUrl,
+      source: "defaultOptions",
+      file: null,
+    });
+    setMessage("");
+  };
+
+  const onUploadImage = async (file) => {
+    setFieldValue("subredditIconUrl", {
+      url: "",
+      previewUrl: URL.createObjectURL(file),
+      source: "uploaded",
+      file: file,
+    });
+    setMessage("File chosen: " + file.name);
   };
 
   return (
@@ -80,6 +100,12 @@ const AvatarOptions = () => {
       >
         Refresh icons
       </button>
+      <ImageUpload
+        onUpload={onUploadImage}
+        text="Upload your own"
+        className="btn2 mt-2"
+      />
+      <p className="">{message}</p>
     </div>
   );
 };
@@ -88,9 +114,24 @@ const CreateCommunityForm = ({ isVisible, closeForm }) => {
   const [newError, setNewError] = useState(null);
 
   const onSubmit = async (values) => {
+    const uploadImageToS3 = async () => {
+      const res = await Axios.get("/api/utils/s3Url");
+      await axios.put(res.data.url, values.subredditIconUrl.file);
+      const imageUrl = res.data.url.split("?")[0];
+      return imageUrl;
+    };
+
     const { communityName } = values;
     try {
-      await Axios.post("/api/subreddits", values);
+      const ímageUrl =
+        values.subredditIconUrl.source === "uploaded"
+          ? await uploadImageToS3()
+          : values.subredditIconUrl.url;
+
+      await Axios.post("/api/subreddits", {
+        ...values,
+        subredditIconUrl: ímageUrl,
+      });
       closeForm();
       window.location.href = "/r/" + communityName;
     } catch (e) {
@@ -173,8 +214,8 @@ const CreateCommunityForm = ({ isVisible, closeForm }) => {
                 <div className="flex flex-col p-4">
                   <div className="flex items-center">
                     <div className="rounded-full overflow-hidden h-[3rem] w-[3rem] mr-3">
-                      {values.subredditIconUrl ? (
-                        <img src={values.subredditIconUrl} />
+                      {values.subredditIconUrl?.previewUrl ? (
+                        <img src={values.subredditIconUrl.previewUrl} />
                       ) : (
                         <DefaultSubredditIcon />
                       )}

@@ -4,6 +4,7 @@ import Axios from "../../utils/axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import UserAvatarImg from "../UserAvatarImg";
+import { Close } from "@mui/icons-material";
 
 const initialValues = { userAvatarImageUrl: "" };
 
@@ -92,7 +93,14 @@ const EditUserAvatarImageModal = ({ isVisible, closeForm }) => {
             onClick={() => closeForm()}
             className="fixed top-0 left-0 w-full h-full bg-black opacity-70 z-[100] "
           ></div>
-          <div className="z-[101] flex flex-col  bg-white  p-5 basis-[385px] rounded-xl max-w-full overflow-y-auto overscroll-contain max-h-[100dvh] h-min">
+          <div className="relative z-[101] flex flex-col  bg-white  p-5 basis-[385px] rounded-xl max-w-full overflow-y-auto overscroll-contain max-h-[100dvh] h-min">
+            <button
+              className="absolute top-4 right-4"
+              onClick={() => closeForm()}
+            >
+              <Close />
+            </button>
+
             <AvatarOptions />
             <button
               disabled={!values.userAvatarImageUrl?.length}
