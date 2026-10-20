@@ -15,6 +15,7 @@ import { EditSharp, ImageOutlined } from "@mui/icons-material";
 import { TextareaAutosize, useMediaQuery } from "@mui/material";
 import EditUserAvatarImageModal from "../components/Forms/EditUserAvatarImageModal";
 import moment from "moment";
+import EditUserPageBackgroundModal from "../components/Forms/EditUserPageBackgroundModal";
 
 const UserPage = ({ orderType = "new" }) => {
   const username = useParams().username;
@@ -61,19 +62,37 @@ const UserPage = ({ orderType = "new" }) => {
 
   const isOwnPage = () => user?.username === viewedUserDetails.username;
 
+  const [isVisibleEditBackgroundModal, setisVisibleEditBackgroundModal] =
+    useState(false);
+
+  const openEditUserPageBackgroundModal = () => {
+    setisVisibleEditBackgroundModal(true);
+  };
+
   const UserIntroductionSection = () => {
     return (
       <div>
         <div
-          className="lg:hidden"
+          className="relative lg:hidden"
           style={{
             height: "100px",
             width: "100%",
-            backgroundImage: `url(https://api.dicebear.com/10.x/landscape/svg?orbProbability=0&seed=${username})`,
-            backgroundSize: "fit",
+            backgroundImage: viewedUserDetails.profilePageBackgroundImageUrl
+              ? `url(${viewedUserDetails.profilePageBackgroundImageUrl})`
+              : `url(https://api.dicebear.com/10.x/landscape/svg?orbProbability=0&seed=${username})`,
+            backgroundSize: "cover",
             backgroundPosition: "center",
           }}
-        />
+        >
+          {isOwnPage() && (
+            <button
+              className="absolute bottom-0 right-0"
+              onClick={() => openEditUserPageBackgroundModal()}
+            >
+              <ImageOutlined className=" bg-gray-200 border border-gray-500" />
+            </button>
+          )}
+        </div>
         <div className="flex justify-between pr-4">
           <div className="flex flex-col lg:flex-row  lg:pb-6 bg-white pl-4">
             <span className="relative flex mr-4">
@@ -260,7 +279,6 @@ const UserPage = ({ orderType = "new" }) => {
       </div>
     );
   };
-
   const UserInfoSectionBigScreen = () => {
     return (
       <div
@@ -268,15 +286,26 @@ const UserPage = ({ orderType = "new" }) => {
         style={{ maxWidth: "300px" }}
       >
         <div
-          className=""
+          className="relative"
           style={{
             height: "100px",
             width: "300px",
-            backgroundImage: `url(https://api.dicebear.com/10.x/landscape/svg?orbProbability=0&seed=${username})`,
-            backgroundSize: "fit",
+            backgroundImage: viewedUserDetails.profilePageBackgroundImageUrl
+              ? `url(${viewedUserDetails.profilePageBackgroundImageUrl})`
+              : `url(https://api.dicebear.com/10.x/landscape/svg?orbProbability=0&seed=${username})`,
+            backgroundSize: "cover",
             backgroundPosition: "center",
           }}
-        />
+        >
+          {isOwnPage() && (
+            <button
+              className="absolute bottom-0 right-0"
+              onClick={() => openEditUserPageBackgroundModal()}
+            >
+              <ImageOutlined className=" bg-gray-200 border border-gray-500" />
+            </button>
+          )}
+        </div>
 
         <div className="p-4 w-full">
           <div className="mb-4 font-bold">{username}</div>
@@ -336,6 +365,15 @@ const UserPage = ({ orderType = "new" }) => {
           }}
         />
       )}
+      {isVisibleEditBackgroundModal && (
+        <EditUserPageBackgroundModal
+          isVisible={isVisibleEditBackgroundModal}
+          closeForm={() => {
+            setisVisibleEditBackgroundModal(false);
+          }}
+        />
+      )}
+
       <div
         onClick={() => {
           dispatch(setHeaderDropDownVisible(false));

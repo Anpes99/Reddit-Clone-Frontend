@@ -110,9 +110,10 @@ const AvatarOptions = ({ iconsToShow = 16 }) => {
 
 const EditSubredditIconModal = ({ isVisible, closeForm }) => {
   const [newError, setNewError] = useState(null);
-
+  const [loading, setLoading] = useState(false);
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
   const onSubmit = async (values) => {
+    setLoading(true);
     const uploadImageToS3 = async () => {
       const res = await Axios.get("/api/utils/s3Url");
       await axios.put(res.data.url, values.subredditIconUrl.file);
@@ -129,18 +130,15 @@ const EditSubredditIconModal = ({ isVisible, closeForm }) => {
       await Axios.patch(`api/subreddits/${currentSubreddit.id}/settings`, {
         subredditIconUrl: ímageUrl,
       });
+      setLoading(false);
       closeForm();
       window.location.href = "/r/" + currentSubreddit.name;
     } catch (e) {
-      if (e.response.status === 409) {
-        setNewError("A subreddit with this name already exists.");
-      } else {
-        setNewError("Something went wrong while creating new subreddit.");
-      }
+      setLoading(false);
     }
   };
 
-  const canSubmit = (values) => values.subredditIconUrl;
+  const canSubmit = (values) => values.subredditIconUrl && !loading;
 
   return isVisible ? (
     <Formik initialValues={initialValues} onSubmit={onSubmit}>
@@ -159,7 +157,7 @@ const EditSubredditIconModal = ({ isVisible, closeForm }) => {
             </button>
             <AvatarOptions />
             <button
-              disabled={!values.subredditIconUrl}
+              disabled={!canSubmit(values)}
               onClick={handleSubmit}
               type="submit"
               className={`p-3 rounded-2xl bg-gray-200 ${!canSubmit(values) ? "text-gray-400" : ""}  font-semibold h-min self-end`}
