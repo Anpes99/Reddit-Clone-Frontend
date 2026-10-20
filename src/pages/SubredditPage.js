@@ -14,6 +14,7 @@ import EditSubredditIconModal from "../components/Forms/EditSubredditIconModal";
 import { hasSubredditPermission } from "../config/moderator-permissions";
 import { SubredditPermissions } from "../enums/subreddit.enum";
 import { ImageOutlined } from "@mui/icons-material";
+import EditSubredditPageBackgroundModal from "../components/Forms/EditSubredditPageBackgroundModal";
 
 const SubredditPage = ({ orderType = "new" }) => {
   const dispatch = useDispatch();
@@ -21,7 +22,10 @@ const SubredditPage = ({ orderType = "new" }) => {
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
   const [isVisibleEditSubredditIconModal, setIsVisibleEditSubredditIconModal] =
     useState(false);
-
+  const [
+    isVisibleEditSubredditPageBackgroundModal,
+    setIsVisibleEditSubredditPageBackgroundModal,
+  ] = useState(false);
   const user = useSelector((state) => state.app.user);
 
   const [subredditId, setSubredditId] = useState(null);
@@ -61,11 +65,18 @@ const SubredditPage = ({ orderType = "new" }) => {
     </span>
   );
 
+  const openEditSubredditPageBackgroundModal = () =>
+    setIsVisibleEditSubredditPageBackgroundModal(true);
+
   return (
     <>
       <EditSubredditIconModal
         isVisible={isVisibleEditSubredditIconModal}
         closeForm={() => setIsVisibleEditSubredditIconModal(false)}
+      />
+      <EditSubredditPageBackgroundModal
+        isVisible={isVisibleEditSubredditPageBackgroundModal}
+        closeForm={() => setIsVisibleEditSubredditPageBackgroundModal(false)}
       />
       <div
         onClick={() => {
@@ -75,13 +86,24 @@ const SubredditPage = ({ orderType = "new" }) => {
       >
         <div>
           <div
-            className="bg-blue-500 h-20"
+            className="relative bg-blue-500 h-20"
             style={{
-              backgroundImage: `url(https://api.dicebear.com/10.x/glass/svg?animationProbability=0&seed=${subredditName})`,
+              backgroundImage: currentSubreddit?.subredditPageBackgroundImageUrl
+                ? `url(${currentSubreddit.subredditPageBackgroundImageUrl})`
+                : `url(https://api.dicebear.com/10.x/glass/svg?animationProbability=0&seed=${subredditName})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
-          ></div>
+          >
+            {currentSubreddit?.currentUserCanManageSettings && (
+              <button
+                className="absolute bottom-0 right-0"
+                onClick={() => openEditSubredditPageBackgroundModal()}
+              >
+                <ImageOutlined className=" bg-gray-200 border border-gray-500" />
+              </button>
+            )}
+          </div>
           <div className="bg-white h-[6rem]">
             <div className="max-w-screen-lg m-auto flex space-x-4">
               <div className={`-translate-y-5 `}>
