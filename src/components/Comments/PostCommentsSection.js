@@ -6,7 +6,7 @@ const PostCommentsSection = ({ post }) => {
   const user = useSelector((state) => state.app.user);
 
   return (
-    <div className="max-w-[15rem] sm:max-w-[20rem] md:max-w-[25rem] text-center">
+    <div className="max-w-full md:max-w-[700px] text-center">
       {post?.comments?.length <= 0 && (
         <p className="text-gray-500">This post doesn't have any comments.</p>
       )}

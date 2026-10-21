@@ -57,13 +57,13 @@ const App = () => {
               display: "grid",
               alignItems: "start",
             }}
-            className="grid-cols-[1fr] xl:grid-cols-[1fr_auto_1fr]"
+            className="grid-cols-[0_minmax(0,1fr)] xl:grid-cols-[1fr_auto_1fr]"
           >
             <NavigationDrawer />
 
             <div
               style={{ justifySelf: "center" }}
-              className="col-start-1 xl:col-start-2 w-full"
+              className="col-start-2 min-w-0 w-full"
             >
               <Routes>
                 <Route

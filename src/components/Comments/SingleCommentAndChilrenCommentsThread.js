@@ -27,7 +27,7 @@ const SingleCommentInfoAndActions = ({ post, comment }) => {
 
 const CommentCommentsSection = ({ post, fetchedComments }) => {
   return (
-    <div className="translate-x-3 sm:translate-x-10">
+    <div className="ml-3 sm:ml-10">
       {fetchedComments.map((comment) => (
         <SingleCommentAndCommentCommentsThread
           key={"comment_" + comment.id}

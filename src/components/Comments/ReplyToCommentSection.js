@@ -2,7 +2,7 @@ import { useState } from "react";
 import handleSubmitComment from "../../utils/handleSubmitComment";
 import TextareaAutosize from "react-textarea-autosize";
 
-const CommentCommentSection = ({
+const ReplyToCommentSection = ({
   commentId,
   setComment,
   comment,
@@ -63,4 +63,4 @@ const CommentCommentSection = ({
   );
 };
 
-export default CommentCommentSection;
+export default ReplyToCommentSection;

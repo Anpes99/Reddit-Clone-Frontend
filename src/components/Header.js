@@ -74,6 +74,36 @@ const Header = () => {
   useEffect(() => {
     const header = headerRef.current;
     if (!header) return;
+
+    let rafId = 0;
+
+    const update = () => {
+      rafId = 0;
+      document.documentElement.style.setProperty(
+        "--header-offset-from-viewport-top",
+        `${header.getBoundingClientRect().top}px`,
+      );
+    };
+
+    const scheduleUpdate = () => {
+      if (!rafId) rafId = requestAnimationFrame(update);
+    };
+
+    update();
+
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+
+    return () => {
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      cancelAnimationFrame(rafId);
+    };
+  }, []);
+
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
     const observer = new ResizeObserver((entries) => {
       const resizedHeader = entries[0];
       const newHeaderHeight = resizedHeader.contentRect.height;

@@ -1,10 +1,10 @@
 import { ArrowSmDownIcon, ArrowSmUpIcon } from "@heroicons/react/outline";
 import { handleDislikeComment, handleLikeComment } from "../../utils/utils";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import socket from "../../websockets/posts";
 import { setLoginVisible } from "../../slices/appSlice";
 import { ChatIcon } from "@heroicons/react/outline";
-import CommentCommentSection from "./CommentCommentSection";
+import ReplyToCommentSection from "./ReplyToCommentSection";
 
 const CommentLikes = ({ comment }) => {
   const [likes, setLikes] = useState(comment.upVotes - comment.downVotes);
@@ -60,7 +60,7 @@ const CommentActionsBar = ({ post, comment, user, dispatch }) => {
         <p className="hover:bg-gray-200 cursor-pointer">Save</p>
         <p className="hover:bg-gray-200 cursor-pointer">Follow</p>
       </div>
-      <CommentCommentSection
+      <ReplyToCommentSection
         commentId={comment.id}
         comment={newComment}
         setComment={setNewComment}
