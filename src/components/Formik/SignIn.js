@@ -34,6 +34,7 @@ export const SignInContainer = ({ onSubmit, setSignUpVisible, newError }) => {
 
           <FormikTextInput
             name="password"
+            type={"password"}
             placeholder="Password"
             inputProps={{ maxLength: 128 }}
           />

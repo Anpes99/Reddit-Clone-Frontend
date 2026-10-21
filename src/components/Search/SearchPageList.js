@@ -19,15 +19,19 @@ const ListItemSubreddit = ({ subreddit }) => {
           <DefaultSubredditIcon />
         )}
       </div>
-      <div className="flex flex-col ml-4">
+      <div className="flex flex-col ml-4 min-w-0 flex-1">
         <div className="flex flex-row mb-1.5 items-center">
           <p className="font-bold text-lg ">r/{subreddit?.name}</p>
         </div>
         <div className="mb-1.5">
-          <p className="font-normal text-sm">{subreddit?.description}</p>
+          <p className="font-normal text-sm break-words">
+            {subreddit?.description}
+          </p>
         </div>
         <div>
-          <p className="font-extralight text-sm">100 members · 123 online</p>
+          <p className="font-extralight text-sm">
+            {subreddit?.memberCount} members · 123 online
+          </p>
         </div>
       </div>
     </Link>

@@ -105,7 +105,7 @@ const SubredditInfo = ({ style = {}, isOnPostPage }) => {
           onClick={() => navigate(`/r/${currentSubreddit?.name}`)}
           className=" font-bold flex space-x-5 items-center self-start cursor-pointer"
         >
-          <div className="rounded-full overflow-hidden h-[3rem] w-[3rem]">
+          <div className="rounded-full flex justify-center items-center overflow-hidden h-[3rem] w-[3rem]">
             {currentSubreddit.iconUrl ? (
               <img src={currentSubreddit.iconUrl} />
             ) : (

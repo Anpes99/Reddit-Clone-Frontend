@@ -86,7 +86,7 @@ const SubredditPage = ({ orderType = "new" }) => {
       >
         <div>
           <div
-            className="relative bg-blue-500 h-20"
+            className="relative bg-white border-b-2 h-20"
             style={{
               backgroundImage: currentSubreddit?.subredditPageBackgroundImageUrl
                 ? `url(${currentSubreddit.subredditPageBackgroundImageUrl})`
@@ -108,7 +108,7 @@ const SubredditPage = ({ orderType = "new" }) => {
             <div className="max-w-screen-lg m-auto flex space-x-4">
               <div className={`-translate-y-5 `}>
                 {currentSubreddit?.iconUrl ? (
-                  <div className="rounded-full overflow-hidden h-20 w-20 border-4 border-white bg-gray-300">
+                  <div className="rounded-full flex justify-center items-center overflow-hidden h-20 w-20 border-4 border-white bg-white">
                     <img src={currentSubreddit?.iconUrl} alt="" />
                   </div>
                 ) : (
