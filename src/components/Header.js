@@ -119,7 +119,7 @@ const Header = () => {
         </button>
 
         <div
-          onClick={() => navigate("/")}
+          onClick={() => (window.location.href = "/")}
           className=" h-full flex items-center space-x-1 cursor-pointer"
         >
           <RedditIcon />
