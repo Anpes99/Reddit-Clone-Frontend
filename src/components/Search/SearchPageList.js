@@ -66,8 +66,7 @@ const ListItemPost = ({ post }) => {
         </div>
         <div>
           <p className="font-extralight text-sm">
-            {post.upVotes - post.downVotes} votes · {post.commentCount} comments{" "}
-            <img src={"/fake%20data/pizza.svg"} className="h-10" />
+            {post.upVotes - post.downVotes} votes · {post.commentCount} comments
           </p>
         </div>
       </div>

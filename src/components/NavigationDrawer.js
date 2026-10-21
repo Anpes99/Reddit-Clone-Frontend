@@ -40,7 +40,7 @@ const NavigationDrawer = () => {
   const user = useSelector((state) => state.app.user);
 
   const location = useLocation();
-  const isHomePage = location.pathname === "/";
+  const isHomePage = ["/", "/top"].includes(location.pathname);
 
   const ResourcesDropDownList = () => {
     const [isVisibleResources, setIsVisibleResources] = useState(false);
@@ -180,7 +180,7 @@ const NavigationDrawer = () => {
           <div className="pt-5 pl-7 pr-9">
             <div className="flex flex-col   pb-2 border-b-2">
               <Link
-                to={"/"}
+                to={isHomePage ? location.pathname : "/"}
                 className={`flex space-x-2  cursor-pointer py-3 pl-4 rounded-lg ${isHomePage ? "bg-gray-200" : "hover:bg-gray-100"}`}
               >
                 <HouseOutlined />
