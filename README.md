@@ -97,10 +97,7 @@
 
 
 ### Homepage mobile view
-<img width="233" height="411" alt="frontpage_mobile2" src="https://github.com/user-attachments/assets/360b5a1e-873f-48cb-9969-6d11b370b8f3" />
-
-
-
+<img width="233" height="411" alt="frontpage_mobile2" src="https://github.com/user-attachments/assets/7f728e5e-8803-4f76-b9ce-496e487c5552" />
 
 
 
@@ -118,9 +115,7 @@
 
 
 ### Responsive web design
-<img width="785" height="330" alt="frontpage_responsive3" src="https://github.com/user-attachments/assets/6689ff6a-a3c5-455d-9384-1e616a492f7a" />
-
-
+<img width="785" height="330" alt="frontpage_responsive3" src="https://github.com/user-attachments/assets/9fd5ece3-a52b-4f4c-8bdc-a2afb2ba1f64" />
 
 
 
@@ -138,10 +133,7 @@
 
 
 ### Subreddit creation and customization
-<img width="800" height="450" alt="subreddit_creation2" src="https://github.com/user-attachments/assets/837949cd-273e-4a1a-883f-705953fc97e6" />
-
-
-
+<img width="800" height="450" alt="subreddit_creation2" src="https://github.com/user-attachments/assets/5fd1dd6f-9c13-4a38-92a8-f03cf249b2b6" />
 
 
 
@@ -165,7 +157,8 @@
 
 
 ### User creation and customization
-<img width="800" height="450" alt="user_creation1" src="https://github.com/user-attachments/assets/508b7b24-83a9-4c8e-a9b2-c4a1f72e5eea" />
+<img width="800" height="450" alt="user_creation1" src="https://github.com/user-attachments/assets/749dd3d1-ea17-4520-9940-814085efffa4" />
+
 
 
 
@@ -183,7 +176,7 @@
 
 
 ### Post creation
-<img width="578" height="328" alt="post_creation6" src="https://github.com/user-attachments/assets/23d0d029-3d53-47fb-88c6-99acde14eaee" />
+<img width="578" height="328" alt="post_creation6" src="https://github.com/user-attachments/assets/307c3f9e-54c6-40a2-9e34-fe61532adaf5" />
 
 
 
@@ -202,7 +195,8 @@
 
 
 ### Post page and nested comments
-<img width="800" height="450" alt="postpage3" src="https://github.com/user-attachments/assets/0bee79a0-81ec-42a5-ae66-05f3f380cf09" />
+<img width="800" height="450" alt="postpage3" src="https://github.com/user-attachments/assets/3b9a49a1-2830-4b1b-aa2d-4cb6d0a58437" />
+
 
 
 
