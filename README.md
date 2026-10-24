@@ -6,9 +6,10 @@
 
 # Tech Stack
  - Frontend: React, Redux, JavaScript, Tailwind CSS, CSS, HTML
- - Backend: Node.js, Express.js, PostgreSQL, Sequelize ORM    (https://github.com/Anpes99/Reddit-Clone-Backend)
+ - Backend: Node.js, Express.js, PostgreSQL, Sequelize ORM
  - Authentication & Validation: JWT, refresh-token rotation, Joi
  - Storage: AWS S3
+ - AI & Search: Voyage AI embeddings, semantic search
  - Deployment: Heroku
 
 
@@ -75,9 +76,9 @@
 
 ## Search
 
-- ✅ Search for posts and subreddits
+- ✅ **Semantic post search** using Voyage AI embeddings to find relevant posts based on meaning, not just keywords
+- ✅ Typo-tolerant subreddit search
 - ✅ Search bar with subreddit suggestions
-
 
 
 
@@ -207,6 +208,9 @@
 
 
 
+
+### Search page and semantic search
+<img width="355" height="638" alt="searchpage_mobile8" src="https://github.com/user-attachments/assets/3648dd38-47c8-468d-97e5-6bbac0beabae" />
 
 
 
