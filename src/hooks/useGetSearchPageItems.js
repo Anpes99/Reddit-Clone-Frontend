@@ -8,9 +8,10 @@ const useGetSearchPageItems = ({
   searchQuery,
 }) => {
   const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [totalItemsCount, setTotalItemsCount] = useState(true);
   const [error, setError] = useState(false);
+  const [searchWordEmbedding, setSearchWordEmbedding] = useState("");
 
   let orderType;
 
@@ -25,7 +26,8 @@ const useGetSearchPageItems = ({
   //////////////////   GET INITIAL POSTS/SUBREDDITS  /////////////////////////////////////////////////////////////////////////////////////
   useEffect(() => {
     const runUseEffectFunction = async () => {
-      setLoading(true);
+      if (loading) return;
+
       if (itemsType === "posts") {
         if (
           orderType === null ||
@@ -37,7 +39,7 @@ const useGetSearchPageItems = ({
           const result = await Axios.post(`/api/search/posts`, {
             searchQuery,
             offset: 0,
-            limit: 5,
+            limit: 20,
 
             orderType,
           });
@@ -50,9 +52,10 @@ const useGetSearchPageItems = ({
           const result = await Axios.post(`/api/search/posts`, {
             searchQuery,
             offset: 0,
-            limit: 5,
+            limit: 20,
             orderType,
           });
+          setSearchWordEmbedding(result.data.searchWordEmbedding);
           setLoading(false);
           setItems(result.data.posts);
           setTotalItemsCount(result.data.totalCount);
@@ -64,7 +67,7 @@ const useGetSearchPageItems = ({
         const result = await Axios.post(`/api/search/subreddits`, {
           searchQuery,
           offset: 0,
-          limit: 10,
+          limit: 20,
         });
         setItems(result.data.subreddits);
         setTotalItemsCount(result.data.totalCount);
@@ -76,6 +79,8 @@ const useGetSearchPageItems = ({
 
   //////////////////////////////////// GET MORE  POSTS ///////////////////////////////////////////////////
   const fetchMoreItems = async (orderType) => {
+    if (loading) return;
+
     if (totalItemsCount > items.length) {
       if (itemsType === "posts") {
         if (
@@ -87,7 +92,7 @@ const useGetSearchPageItems = ({
           const result = await Axios.post(`/api/search/posts`, {
             searchQuery,
             offset: items.length,
-            limit: 5,
+            limit: 20,
 
             orderType,
           });
@@ -100,8 +105,9 @@ const useGetSearchPageItems = ({
           const result = await Axios.post(`/api/search/posts`, {
             searchQuery,
             offset: items.length,
-            limit: 5,
+            limit: 20,
             orderType,
+            prevSearchWordEmbedding: searchWordEmbedding,
           });
           setLoading(false);
           setItems([...items, ...result.data.posts]);
@@ -115,7 +121,7 @@ const useGetSearchPageItems = ({
         const result = await Axios.post(`/api/search/subreddits`, {
           searchQuery,
           offset: items.length,
-          limit: 5,
+          limit: 20,
         });
         setItems([...items, ...result.data.subreddits]);
         setTotalItemsCount(result.data.totalCount);

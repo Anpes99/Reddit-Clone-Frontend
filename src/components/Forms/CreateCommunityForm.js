@@ -213,7 +213,7 @@ const CreateCommunityForm = ({ isVisible, closeForm }) => {
                 <div className="bg-gray-200 w-full h-[92px]"></div>
                 <div className="flex flex-col p-4">
                   <div className="flex items-center">
-                    <div className="rounded-full overflow-hidden h-[3rem] w-[3rem] mr-3">
+                    <div className="rounded-full flex justify-center items-center overflow-hidden h-[3rem] w-[3rem] mr-3">
                       {values.subredditIconUrl?.previewUrl ? (
                         <img src={values.subredditIconUrl.previewUrl} />
                       ) : (

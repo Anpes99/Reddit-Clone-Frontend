@@ -44,6 +44,7 @@ const NewPostForm = ({}) => {
 
   // receives array of files that are done uploading when submit button is clicked
   const handleSubmit = async () => {
+    setLoading(true);
     let imageUrl = null;
 
     const newPost = {
@@ -77,7 +78,9 @@ const NewPostForm = ({}) => {
           navigate("/");
         }, 2000);
       }
+      setLoading(false);
     } catch (e) {
+      setLoading(false);
       console.log(e);
       setMessage("Failed to submit post");
       setTimeout(() => {

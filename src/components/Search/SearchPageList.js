@@ -50,7 +50,7 @@ const ListItemPost = ({ post }) => {
     >
       <div className="flex flex-col">
         <div className="flex flex-row mb-1.5 items-center">
-          <div className="inline-block rounded-full overflow-hidden h-7 w-7 cursor-pointer flex-shrink-0">
+          <div className="inline-block flex justify-center items-center rounded-full overflow-hidden h-7 w-7 cursor-pointer flex-shrink-0">
             <img src={post.subreddit.iconUrl} alt="user img" />
           </div>
           <p className="font-semibold text-sm mr-1.5 ml-3">
