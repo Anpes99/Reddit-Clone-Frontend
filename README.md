@@ -75,9 +75,9 @@
 
 ## Search
 
-- ✅ Search for posts and subreddits
+- ✅ **Semantic search** to find posts based on meaning, not just keywords
+- ✅ Typo-tolerant subreddit search
 - ✅ Search bar with subreddit suggestions
-
 
 
 
@@ -207,6 +207,9 @@
 
 
 
+
+### Search page and semantic search
+<img width="324" height="576" alt="searchpage_mobile4" src="https://github.com/user-attachments/assets/333efae8-1574-4caa-afa5-99e028f7292b" />
 
 
 
