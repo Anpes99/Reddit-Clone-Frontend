@@ -31,7 +31,7 @@ const CommentFeedItem = ({ comment }) => {
   return (
     <div className=" flex flex-col sm:flex-row w-full    sm:h-min-content bg-white border mb-3  border-gray-300 p-0.5">
       <div className=" hidden sm:flex flex-col items-center bg-gray-50 w-20 p-1.5">
-        <CommentVotingArrows post={comment} />
+        <CommentVotingArrows comment={comment} />
       </div>
       <div
         onClick={() => {

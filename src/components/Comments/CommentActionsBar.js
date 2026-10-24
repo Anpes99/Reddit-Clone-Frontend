@@ -9,11 +9,17 @@ import ReplyToCommentSection from "./ReplyToCommentSection";
 const CommentLikes = ({ comment }) => {
   const [likes, setLikes] = useState(comment.upVotes - comment.downVotes);
   useEffect(() => {
-    socket.on("comment_likes_changed", ({ commentId, ratingToPlusOrMinus }) => {
+    const handleCommentLikesChanged = ({ commentId, ratingToPlusOrMinus }) => {
       if (commentId === comment.id) {
         setLikes((currentValue) => currentValue + ratingToPlusOrMinus);
       }
-    });
+    };
+
+    socket.on("comment_likes_changed", handleCommentLikesChanged);
+
+    return () => {
+      socket.off("comment_likes_changed", handleCommentLikesChanged);
+    };
   }, []);
 
   return <p className=" font-bold">{likes}</p>;

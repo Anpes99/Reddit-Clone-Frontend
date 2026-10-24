@@ -14,12 +14,18 @@ const PostLikes = ({ post, className }) => {
   }, [post]);
 
   useEffect(() => {
-    socket.on("post_likes_changed", ({ postId, pointsToAddOrMinus }) => {
+    const handleLikesChanged = ({ postId, pointsToAddOrMinus }) => {
       if (postId === post.id) {
         setLikes((currentLikes) => currentLikes + pointsToAddOrMinus);
       }
-    });
-  }, []);
+    };
+
+    socket.on("post_likes_changed", handleLikesChanged);
+
+    return () => {
+      socket.off("post_likes_changed", handleLikesChanged);
+    };
+  }, [post.id]);
 
   return (
     <p className={className}>

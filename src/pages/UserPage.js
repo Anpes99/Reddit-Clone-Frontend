@@ -188,7 +188,9 @@ const UserPage = ({ orderType = "new" }) => {
       <div className="flex justify-between ">
         <div className="w-full">
           <div>
-            <p className="font-semibold text-[15px]">100,550</p>{" "}
+            <p className="font-semibold text-[15px]">
+              {viewedUserDetails.karma}
+            </p>{" "}
             <p className="text-[13px] text-gray-700 translate-y-[-3px] font-light">
               Karma
             </p>

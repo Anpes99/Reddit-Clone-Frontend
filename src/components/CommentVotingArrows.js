@@ -6,19 +6,25 @@ import { ArrowSmUpIcon } from "@heroicons/react/outline";
 import { ArrowSmDownIcon } from "@heroicons/react/outline";
 import socket from "../websockets/posts";
 
-const PostLikes = ({ post, className }) => {
+const CommentLikes = ({ comment, className }) => {
   const [likes, setLikes] = useState(0);
 
   useEffect(() => {
-    setLikes(post.upVotes - post.downVotes);
-  }, [post]);
+    setLikes(comment.upVotes - comment.downVotes);
+  }, [comment]);
 
   useEffect(() => {
-    socket.on("comment_likes_changed", ({ commentId, ratingToPlusOrMinus }) => {
-      if (commentId === post.id) {
+    const handleCommentLikesChanged = ({ commentId, ratingToPlusOrMinus }) => {
+      if (commentId === comment.id) {
         setLikes((currentValue) => currentValue + ratingToPlusOrMinus);
       }
-    });
+    };
+
+    socket.on("comment_likes_changed", handleCommentLikesChanged);
+
+    return () => {
+      socket.off("comment_likes_changed", handleCommentLikesChanged);
+    };
   }, []);
 
   return (
@@ -28,7 +34,7 @@ const PostLikes = ({ post, className }) => {
   );
 };
 
-const CommentVotingArrows = ({ post, numberColor }) => {
+const CommentVotingArrows = ({ comment, numberColor }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.app.user);
 
@@ -37,23 +43,23 @@ const CommentVotingArrows = ({ post, numberColor }) => {
       <ArrowSmUpIcon
         onClick={() => {
           if (user) {
-            handleLikeComment(post.id, user.id);
+            handleLikeComment(comment.id, user.id);
           } else {
             dispatch(setLoginVisible(true));
           }
         }}
         className={`h-7  "text-gray-450" hover:text-red-500 cursor-pointer`}
       />
-      <PostLikes
+      <CommentLikes
         className={`px-1 font-bold text-sm ${
           numberColor ? numberColor : "text-black"
         }`}
-        post={post}
+        comment={comment}
       />
       <ArrowSmDownIcon
         onClick={() => {
           if (user) {
-            handleDislikeComment(post.id, user.id);
+            handleDislikeComment(comment.id, user.id);
           } else {
             dispatch(setLoginVisible(true));
           }
