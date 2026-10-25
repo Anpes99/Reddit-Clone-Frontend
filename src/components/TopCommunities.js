@@ -1,10 +1,10 @@
-import { ChevronUpIcon } from "@heroicons/react/solid";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/solid";
 import { useEffect, useState } from "react";
 import JoinSubredditButton from "./Buttons/JoinSubredditButton";
-import { SUBREDDIT_ORDER_BY_TYPES } from "../constants/subreddits";
 import Axios from "../utils/axios";
 import { useNavigate } from "react-router";
 import DefaultSubredditIcon from "../icons/DefaultSubredditIcon";
+import { HorizontalRule } from "@mui/icons-material";
 
 const TopCommunities = () => {
   const [subreddits, setSubreddits] = useState(null);
@@ -12,18 +12,24 @@ const TopCommunities = () => {
 
   useEffect(() => {
     const runUseEffectFunction = async () => {
-      const res = await Axios.get("/api/subreddits", {
-        params: {
-          limit: 10,
-          sortBy: SUBREDDIT_ORDER_BY_TYPES.MEMBER_COUNT,
-          order: "DESC",
-        },
-      });
+      const res = await Axios.get(
+        "/api/subreddits/leaderboards/top-subreddits",
+      );
 
       setSubreddits(res.data);
     };
     runUseEffectFunction();
   }, []);
+
+  const RankChangedIcon = ({ subreddit }) => {
+    if (subreddit.rankChange < 0) {
+      return <ChevronDownIcon className="h-6 text-red-400" />;
+    } else if (subreddit.rankChange > 0) {
+      return <ChevronUpIcon className="h-6 text-green-400" />;
+    }
+
+    return <HorizontalRule className="text-gray-450" />;
+  };
 
   return (
     <div className=" bg-white rounded-t-sm relative border border-gray-300">
@@ -34,7 +40,7 @@ const TopCommunities = () => {
         <div className="absolute top-0 left-0 z-10 h-20 w-full bg-gradient-to-t from-black to-white opacity-50 rounded-t-sm"></div>
       </div>
       <div>
-        {subreddits?.map((subreddit, i) => {
+        {subreddits?.slice(0, 10).map((subreddit, i) => {
           return (
             <div
               key={subreddit.name}
@@ -42,7 +48,8 @@ const TopCommunities = () => {
             >
               <div className="flex items-center space-x-3 ml-5 ">
                 <p className="w-3">{i + 1}</p>
-                <ChevronUpIcon className="h-6 text-green-400" />
+
+                <RankChangedIcon subreddit={subreddit} />
                 <div
                   onClick={() => {
                     navigate(`/r/${subreddit.name}`);
