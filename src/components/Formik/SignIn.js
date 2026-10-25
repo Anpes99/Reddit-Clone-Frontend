@@ -25,7 +25,7 @@ export const SignInContainer = ({ onSubmit, setSignUpVisible, newError }) => {
       onSubmit={onSubmit}
     >
       {({ handleSubmit }) => (
-        <div className="space-y-4">
+        <div className="space-y-4 flex flex-col items-center">
           <FormikTextInput
             name="username"
             placeholder="Username"
@@ -72,6 +72,9 @@ const SignIn = ({ setSignUpVisible, setLoginVisible }) => {
     } catch (e) {
       if (e.response.status === 401) {
         setNewError("Incorrect username or password");
+      }
+      if (e.response.status === 429) {
+        setNewError("Too many login attempts. Try again later");
       }
     }
   };

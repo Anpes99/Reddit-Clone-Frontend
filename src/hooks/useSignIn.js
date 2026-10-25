@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser, setLoginVisible } from "../slices/appSlice";
-import Axios from "../utils/axios";
+import axios from "axios";
 
 const useSignIn = () => {
   const [success, setSuccess] = useState(false);
@@ -10,10 +10,13 @@ const useSignIn = () => {
 
   const signIn = async ({ username, password }) => {
     try {
-      const response = await Axios.post("/api/auth/login", {
-        username,
-        password,
-      });
+      const response = await axios.post(
+        window.location.origin + "/api/auth/login",
+        {
+          username,
+          password,
+        },
+      );
 
       if (response.status === 200 && response.data.token) {
         setSuccess(true);
