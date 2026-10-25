@@ -27,7 +27,7 @@ const PostPageMainInfoSection = ({ post }) => {
               onClick={() => {
                 navigate(`/r/${post.subreddit.name}`);
               }}
-              className="inline-block rounded-full overflow-hidden h-7 w-7 cursor-pointer flex-shrink-0"
+              className="inline-block flex justify-center items-center rounded-full overflow-hidden h-7 w-7 cursor-pointer flex-shrink-0"
             >
               {post.subreddit?.iconUrl ? (
                 <img src={post.subreddit?.iconUrl} alt="subreddit img" />

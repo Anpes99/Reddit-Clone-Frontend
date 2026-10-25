@@ -12,7 +12,7 @@ const ListItemSubreddit = ({ subreddit }) => {
       to={`/r/${subreddit?.name}`}
       className="border-b py-5  flex flex-row  items-center hover:bg-gray-100 rounded-md px-4"
     >
-      <div className="inline-block rounded-full overflow-hidden h-[48px] w-[48px] cursor-pointer flex-shrink-0">
+      <div className="inline-block flex justify-center items-center rounded-full overflow-hidden h-[48px] w-[48px] cursor-pointer flex-shrink-0">
         {subreddit?.iconUrl ? (
           <img src={subreddit?.iconUrl} alt="subreddit img" />
         ) : (
@@ -30,7 +30,8 @@ const ListItemSubreddit = ({ subreddit }) => {
         </div>
         <div>
           <p className="font-extralight text-sm">
-            {subreddit?.memberCount} members · 123 online
+            {subreddit?.memberCount} members · {subreddit.onlineUserCount}{" "}
+            online
           </p>
         </div>
       </div>

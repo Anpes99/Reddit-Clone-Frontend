@@ -56,7 +56,7 @@ const PostFeedItem = ({ post }) => {
       >
         <div className="flex flex-col p-2">
           <div className="flex items-center space-x-2 ">
-            <div className="inline-block rounded-full overflow-hidden h-7 w-7">
+            <div className="inline-block flex justify-center items-center rounded-full overflow-hidden h-7 w-7">
               {post?.subreddit?.iconUrl ? (
                 <img src={post?.subreddit?.iconUrl} alt="subreddit img" />
               ) : (
