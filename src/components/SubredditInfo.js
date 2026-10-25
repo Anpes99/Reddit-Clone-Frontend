@@ -9,6 +9,8 @@ import DefaultSubredditIcon from "../icons/DefaultSubredditIcon";
 import { TextareaAutosize } from "@mui/material";
 import { EditSharp } from "@mui/icons-material";
 import moment from "moment";
+import useSubredditPresence from "../hooks/useSubredditPresence";
+import socket from "../websockets/posts";
 
 const SubredditInfo = ({ style = {}, isOnPostPage }) => {
   const dispatch = useDispatch();
@@ -17,6 +19,9 @@ const SubredditInfo = ({ style = {}, isOnPostPage }) => {
   const subredditName = useParams().subredditName;
 
   const editedIntroductionRef = useRef("");
+  const user = useSelector((state) => state.app.user);
+
+  const onlineCount = useSubredditPresence(socket, subredditName, user?.id);
 
   useEffect(() => {
     const runUseEffectFunction = async () => {
@@ -123,7 +128,7 @@ const SubredditInfo = ({ style = {}, isOnPostPage }) => {
             <p className="font-medium text-xs text-gray-800">Members</p>
           </div>
           <div className="">
-            <p className="font-bold">0</p>
+            <p className="font-bold">{onlineCount}</p>
             <p className="font-medium text-xs text-gray-800">Online</p>
           </div>
         </div>
