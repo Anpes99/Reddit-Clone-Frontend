@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Axios from "../utils/axios";
+import Axios from "../shared/lib/axios";
 
 const useGetUserPageFeedItems = ({ username, contentType, sortByType }) => {
   const [items, setItems] = useState([]);

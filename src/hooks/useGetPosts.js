@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import socket from "../websockets/posts";
+import socket from "../shared/lib/socket";
 
 const useGetPosts = ({ queryParamSort, subredditId, username }) => {
   const [posts, setPosts] = useState([]);

@@ -1,0 +1,39 @@
+import PostFeed from "../../components/Feeds/PostFeed/PostFeed";
+import TrendingFeed from "./components/TrendingFeed/TrendingFeed";
+
+import { useDispatch } from "react-redux";
+import {
+  setHeaderDropDownVisible,
+  setCurrentSubreddit,
+} from "../../app/slices/appSlice";
+
+const HomePage = ({ orderType = "new" }) => {
+  const dispatch = useDispatch();
+
+  dispatch(setCurrentSubreddit(null));
+
+  return (
+    <>
+      <div
+        onClick={() => {
+          dispatch(setHeaderDropDownVisible(false));
+        }}
+        className="flex"
+      >
+        <div className="flex-grow flex-shrink"></div>
+        <main
+          className="max-w-screen-lg mx-auto md:p-5
+    pt-3"
+        >
+          <TrendingFeed />
+          <div>
+            <PostFeed orderType={orderType} />
+          </div>
+        </main>
+        <div className="flex-grow flex-shrink"></div>
+      </div>
+    </>
+  );
+};
+
+export default HomePage;

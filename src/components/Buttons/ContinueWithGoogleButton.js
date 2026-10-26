@@ -1,4 +1,4 @@
-import GoogleIcon from "../../icons/GoogleIcon";
+import GoogleIcon from "../../assets/icons/GoogleIcon";
 
 const ContinueWithGoogleButton = () => (
   <button

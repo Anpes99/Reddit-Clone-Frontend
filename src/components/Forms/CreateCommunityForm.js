@@ -2,12 +2,12 @@ import { Close } from "@mui/icons-material";
 import { Formik, useFormikContext } from "formik";
 import FormikTextInput from "../Formik/FormikTextInput";
 import * as yup from "yup";
-import Axios from "../../utils/axios";
+import Axios from "../../shared/lib/axios";
 import { useState } from "react";
 import { InputAdornment } from "@mui/material";
-import DefaultSubredditIcon from "../../icons/DefaultSubredditIcon";
+import DefaultSubredditIcon from "../../assets/icons/DefaultSubredditIcon";
 import axios from "axios";
-import ImageUpload from "../ImageUpload";
+import ImageUpload from "../Shared/ImageUpload";
 const initialValues = {
   communityName: "",
   description: "",

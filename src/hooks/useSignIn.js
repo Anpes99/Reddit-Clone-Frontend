@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setUser, setLoginVisible } from "../slices/appSlice";
+import { setUser, setLoginVisible } from "../app/slices/appSlice";
 import axios from "axios";
 
 const useSignIn = () => {

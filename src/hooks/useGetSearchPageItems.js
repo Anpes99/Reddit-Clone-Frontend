@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Axios from "../utils/axios";
+import Axios from "../shared/lib/axios";
 
 const useGetSearchPageItems = ({
   queryParamSort,

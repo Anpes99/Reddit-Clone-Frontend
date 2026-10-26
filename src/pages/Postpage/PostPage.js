@@ -1,0 +1,100 @@
+import { XIcon, PhotographIcon } from "@heroicons/react/outline";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import PostPageMainInfoSection from "./components/PostPageItem";
+import { useDispatch } from "react-redux";
+import { setHeaderDropDownVisible } from "../../app/slices/appSlice";
+import { useSearchParams } from "react-router-dom";
+import SubredditInfo from "../SubredditPage/components/SubredditInfo";
+import { useSelector } from "react-redux";
+import TopCommunities from "../../components/Subreddits/TopCommunities";
+import CreateNewDirectPostComment from "./components/Comments/CreateNewDirectPostComment";
+import PostPageCommentsSortingSection from "./components/Comments/PostPageCommentsSortingSection";
+import PostCommentsSection from "./components/Comments/PostCommentsSection";
+import PostVotingArrows from "../../components/Feeds/PostFeed/PostVotingArrows";
+import Axios from "../../shared/lib/axios";
+
+const PostPage = () => {
+  const navigate = useNavigate();
+  const [commentPostMessageError, setCommentPostMessageError] = useState(false);
+  const postId = useParams().postId;
+  const [post, setPost] = useState({ id: Number(postId) });
+  const [commentPostMessage, setCommentPostMessage] = useState(null);
+  const [searchParams] = useSearchParams();
+  const sortBy = searchParams.get("sortBy");
+  const order = searchParams.get("order");
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.app.user);
+
+  useEffect(() => {
+    const runUseEffectFunction = async () => {
+      let queryString = "";
+      queryString = sortBy ? queryString + "&sortBy=" + sortBy : queryString;
+      queryString = order ? queryString + "&order=" + order : queryString;
+      const result = await Axios.get(`/api/posts/${postId}?${queryString}`);
+      setPost(result.data.post);
+    };
+
+    runUseEffectFunction();
+  }, []);
+
+  return (
+    <div className="flex flex-col min-h-[100dvh]">
+      <div
+        onClick={() => {
+          dispatch(setHeaderDropDownVisible(false));
+        }}
+        className="bg-gray-600"
+      >
+        <main className=" max-w-screen-xl mx-auto bg-white min-h-[100dvh]">
+          <div className="h-10 bg-black flex items-center justify-between sticky top-0 z-40">
+            <div className="flex items-center">
+              <div className="flex text-gray-400 items-center border-l border-r border-gray-600 mr-3 ml-1 sm:ml-10">
+                <PostVotingArrows post={post} numberColor="text-white" />
+              </div>
+              <PhotographIcon className="hidden sm:inline-block h-6 w-6 text-gray-200 mr-1" />
+              <p className="line-clamp-1 text-gray-200 flex-shrink flex-grow">
+                {post.title}
+              </p>
+            </div>
+            <div
+              onClick={() => {
+                navigate("/");
+              }}
+              className=" text-gray-300 flex pr-5 items-center cursor-pointer"
+            >
+              <XIcon className="h-5 w-5 " />
+              <p className="hidden sm:inline-block">Close</p>
+            </div>
+          </div>
+          <section className="flex space-x-5 p-5 justify-center text-sm">
+            <section className="flex flex-col">
+              <PostPageMainInfoSection post={post} />
+              <div className="mb-5">
+                <CreateNewDirectPostComment user={user} post={post} />
+              </div>
+
+              <div className={`relative my-5 w-full border-b p-1`}>
+                <PostPageCommentsSortingSection post={post} />
+              </div>
+
+              <PostCommentsSection post={post} />
+            </section>
+
+            <section className="hidden lg:block ">
+              <SubredditInfo
+                style={{ marginBottom: "20px" }}
+                isOnPostPage={true}
+              />
+
+              <TopCommunities />
+            </section>
+          </section>
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default PostPage;
