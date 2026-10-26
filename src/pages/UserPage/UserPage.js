@@ -327,7 +327,7 @@ const UserPage = ({ orderType = "new" }) => {
         <div
           className="w-full bg-[#f6f8f9] rounded-3xl mb-4  overflow-hidden transition-all duration-200"
           style={{
-            height: dropDownExpanded ? "300px" : "50px",
+            height: dropDownExpanded ? "170px" : "50px",
           }}
         >
           <div
@@ -348,7 +348,7 @@ const UserPage = ({ orderType = "new" }) => {
               pointerEvents: dropDownExpanded ? "auto" : "none",
             }}
           >
-            <div className="py-2 border-b">
+            <div className="py-2">
               <UserInfoSectionDetails />
             </div>
           </div>
