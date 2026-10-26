@@ -13,10 +13,11 @@ import {
   setSignUpVisible,
   setNavigationDrawerVisible,
   setNavigationDrawerOpenedFromHeader,
+  removeGlobalNotification,
 } from "../../../app/slices/appSlice";
 import LoginForm from "../../Forms/Login/LoginForm";
 import SignUpForm from "../../Forms/SignUp/SignUpForm";
-import { Tooltip } from "@mui/material";
+import { Alert, AlertTitle, Tooltip } from "@mui/material";
 
 import _ from "lodash";
 import RedditTextIcon from "../../../assets/icons/RedditTextIcon";
@@ -41,6 +42,10 @@ const Header = () => {
   const signUpVisible = useSelector((state) => state.app.signUpVisible);
 
   const user = useSelector((state) => state.app.user);
+
+  const globalNotifications = useSelector(
+    (state) => state.app.globalNotifications,
+  );
 
   const [searchParams] = useSearchParams();
 
@@ -128,6 +133,26 @@ const Header = () => {
         ref={headerRef}
         className=" relative  lg:fixed lg:top-0 lg:left-0 w-full  sm:pb-0 flex sm:flex-row min-h-12 bg-white  items-center justify-between z-[150] pl-0 sm:pl-2 sm:space-x-2 border-b-[3px] "
       >
+        {globalNotifications.length ? (
+          <div className="fixed right-4 top-[calc(var(--header-height)+12px)] z-[2000] flex w-[min(24rem,calc(100vw-2rem))] flex-col gap-3">
+            {globalNotifications.map((notification, i) => (
+              <Alert
+                key={notification.id}
+                onClose={() => {
+                  dispatch(removeGlobalNotification({ id: notification.id }));
+                }}
+                severity={notification.type}
+                variant="filled"
+                className="mt-3"
+              >
+                <AlertTitle>Something went wrong</AlertTitle>
+                {notification.message}
+              </Alert>
+            ))}
+          </div>
+        ) : (
+          <></>
+        )}
         <button
           onClick={() => {
             dispatch(

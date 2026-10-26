@@ -1,6 +1,6 @@
 import axios from "axios";
 import { store } from "../../app/store";
-import { setUser } from "../../app/slices/appSlice";
+import { addGlobalNotification, setUser } from "../../app/slices/appSlice";
 
 const Axios = axios.create({
   baseURL: `${window.location.origin}`,
@@ -47,6 +47,14 @@ Axios.interceptors.response.use(
         window.location.href = "/";
         return Promise.reject(refreshError);
       }
+    }
+    if (error.response?.status === 429) {
+      store.dispatch(
+        addGlobalNotification({
+          type: "error",
+          message: "Too many requests. Please try again later.",
+        }),
+      );
     }
 
     return Promise.reject(error);

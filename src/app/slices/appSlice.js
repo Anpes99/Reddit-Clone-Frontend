@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, nanoid } from "@reduxjs/toolkit";
 
 const initialState = {
   user: null,
@@ -8,6 +8,7 @@ const initialState = {
   currentSubreddit: null,
   navigationDrawerVisible: false,
   navigationDrawerOpenedFromHeader: false,
+  globalNotifications: [],
 };
 
 export const appSlice = createSlice({
@@ -35,6 +36,24 @@ export const appSlice = createSlice({
     setNavigationDrawerOpenedFromHeader: (state, action) => {
       state.navigationDrawerOpenedFromHeader = action.payload;
     },
+    addGlobalNotification: (state, action) => {
+      if (
+        state.globalNotifications.find(
+          (notification) => notification.message === action.payload.message,
+        )
+      ) {
+        return;
+      }
+      if (state.globalNotifications.length === 5) {
+        state.globalNotifications.shift();
+      }
+      state.globalNotifications.push({ ...action.payload, id: nanoid() });
+    },
+    removeGlobalNotification: (state, action) => {
+      state.globalNotifications = state.globalNotifications.filter(
+        (notification) => notification.id !== action.payload.id,
+      );
+    },
   },
 });
 
@@ -46,6 +65,8 @@ export const {
   setCurrentSubreddit,
   setNavigationDrawerVisible,
   setNavigationDrawerOpenedFromHeader,
+  addGlobalNotification,
+  removeGlobalNotification,
 } = appSlice.actions;
 
 export default appSlice.reducer;
