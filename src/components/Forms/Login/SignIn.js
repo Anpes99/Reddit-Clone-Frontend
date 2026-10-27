@@ -66,9 +66,6 @@ const SignIn = ({ setSignUpVisible, setLoginVisible }) => {
     const { username, password } = values;
     try {
       await signIn({ username, password });
-
-      dispatch(setLoginVisible(false));
-      navigate("/");
     } catch (e) {
       if (e.response.status === 401) {
         setNewError("Incorrect username or password");

@@ -12,6 +12,7 @@ import Header from "../components/Navigation/Header/Header";
 import NavigationDrawer from "../components/Navigation/NavigationDrawer/NavigationDrawer";
 import Axios from "../shared/lib/axios";
 import { useLocation } from "react-router-dom";
+import VerifyEmailPage from "../pages/VerifyEmailPage/VerifyEmailPage";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -92,6 +93,7 @@ const App = () => {
                 <Route path="/top" element={<HomePage orderType={"top"} />} />
                 <Route path="/user/:username" element={<UserPage />} />
                 <Route path="/search/" element={<SearchPage />} />
+                <Route path="/verify-email" element={<VerifyEmailPage />} />
                 <Route path="/" element={<HomePage />} />
               </Routes>
             </div>

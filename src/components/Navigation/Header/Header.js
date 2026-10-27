@@ -27,6 +27,7 @@ import UserSubredditsDropDownList from "./UserSubredditsDropDown";
 import { useSearchParams } from "react-router-dom";
 import Axios from "../../../shared/lib/axios";
 import UserAvatarImg from "../../Users/UserAvatarImg";
+import EmailVerificationModal from "../../Forms/EmailVerification/EmailVerificationModal";
 
 const Header = () => {
   const dropDownVisible = useSelector(
@@ -40,6 +41,9 @@ const Header = () => {
 
   const loginVisible = useSelector((state) => state.app.loginVisible);
   const signUpVisible = useSelector((state) => state.app.signUpVisible);
+  const emailVerificationModal = useSelector(
+    (state) => state.app.emailVerificationModal,
+  );
 
   const user = useSelector((state) => state.app.user);
 
@@ -145,7 +149,9 @@ const Header = () => {
                 variant="filled"
                 className="mt-3"
               >
-                <AlertTitle>Something went wrong</AlertTitle>
+                {notification.type === "error" && (
+                  <AlertTitle>Something went wrong</AlertTitle>
+                )}
                 {notification.message}
               </Alert>
             ))}
@@ -312,6 +318,15 @@ const Header = () => {
           }  fixed top-0 left-0 w-full h-full m-0 p-0 z-[1000]`}
         >
           <SignUpForm />
+        </div>
+      )}
+      {emailVerificationModal?.isVisible && (
+        <div
+          className={`${
+            emailVerificationModal.isVisible ? "block" : "hidden"
+          }  fixed top-0 left-0 w-full h-full m-0 p-0 z-[1000]`}
+        >
+          <EmailVerificationModal email={emailVerificationModal.email} />
         </div>
       )}
     </>

@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setUser, setLoginVisible } from "../app/slices/appSlice";
+import {
+  setUser,
+  setLoginVisible,
+  setEmailVerificationModal,
+} from "../app/slices/appSlice";
 import axios from "axios";
 
 const useSignIn = () => {
@@ -20,12 +24,26 @@ const useSignIn = () => {
 
       if (response.status === 200 && response.data.token) {
         setSuccess(true);
-
-        dispatch(setUser(response.data));
+        const { email, ...userData } = response.data;
+        dispatch(setUser(userData));
         dispatch(setLoginVisible(false));
       }
       return response;
     } catch (error) {
+      if (
+        error.response.status === 403 &&
+        error.response.data.email &&
+        error.response.data.error.status === "EMAIL_NOT_VERIFIED"
+      ) {
+        dispatch(setLoginVisible(false));
+        dispatch(
+          setEmailVerificationModal({
+            email: error.response.data.email,
+            username,
+            isVisible: true,
+          }),
+        );
+      }
       console.log(error);
 
       throw error;

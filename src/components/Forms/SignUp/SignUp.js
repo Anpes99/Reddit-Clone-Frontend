@@ -1,33 +1,72 @@
-import React, { useContext, useState } from "react";
+import { useState } from "react";
 import { Formik } from "formik";
 import FormikTextInput from "../../Formik/FormikTextInput";
-import * as yup from "yup";
 import useSignIn from "../../../hooks/useSignIn";
 import { useNavigate } from "react-router-dom";
-import axios, { AxiosResponse } from "axios";
 import {
-  setLoginVisible,
+  setEmailVerificationModal,
   setSignUpVisible,
 } from "../../../app/slices/appSlice";
 import { useDispatch } from "react-redux";
 import Axios from "../../../shared/lib/axios";
+import Joi from "joi";
 
 const initialValues = {
   username: "",
   password: "",
 };
 
-const validationSchema = yup.object().shape({
-  username: yup.string().min(2).required("Username is required"),
-  password: yup.string().min(4).required("Password is required"),
-  // email: yup.string().required("Email is required"),
-  //name: yup.string().required("Name is required"),
+export const validationSchema = Joi.object({
+  username: Joi.string()
+    .min(2)
+    .max(25)
+    .pattern(/^[A-Za-z0-9_-]+$/)
+    .required()
+    .messages({
+      "string.empty": "Username is required",
+      "string.min": "Username must be at least 2 characters",
+      "string.max": "Username must be at most 25 characters",
+      "string.pattern.base":
+        "Username may contain letters, numbers, underscores and hyphens only",
+      "any.required": "Username is required",
+    }),
+
+  email: Joi.string().email().required().messages({
+    "string.empty": "Email is required",
+    "string.email": "Please enter a valid email address",
+    "any.required": "Email is required",
+  }),
+
+  password: Joi.string().min(4).max(128).required().messages({
+    "string.empty": "Password is required",
+    "string.min": "Password must be at least 4 characters",
+    "string.max": "Password must be at most 128 characters",
+    "any.required": "Password is required",
+  }),
 });
+
+export const validateWithJoi = (schema) => (values) => {
+  const { error } = schema.validate(values, {
+    abortEarly: false,
+  });
+
+  if (!error) return {};
+
+  return error.details.reduce((errors, detail) => {
+    const field = detail.path.join(".");
+
+    if (!errors[field]) {
+      errors[field] = detail.message;
+    }
+
+    return errors;
+  }, {});
+};
 
 export const SignUpContainer = ({ onSubmit, setSignUpVisible, newError }) => {
   return (
     <Formik
-      validationSchema={validationSchema}
+      validate={validateWithJoi(validationSchema)}
       initialValues={initialValues}
       onSubmit={onSubmit}
     >
@@ -38,7 +77,12 @@ export const SignUpContainer = ({ onSubmit, setSignUpVisible, newError }) => {
             placeholder="Username"
             inputProps={{ maxLength: 25 }}
           />
-
+          <FormikTextInput
+            type="email"
+            name="email"
+            placeholder="Email"
+            inputProps={{ maxLength: 254 }}
+          />
           <FormikTextInput
             type="password"
             name="password"
@@ -73,9 +117,14 @@ const SignUp = () => {
   const onSubmit = async (values) => {
     try {
       await Axios.post("/api/users", values);
-      await signIn({ username: values.username, password: values.password });
       dispatch(setSignUpVisible(false));
-      navigate("/");
+      dispatch(
+        setEmailVerificationModal({
+          email: values.email,
+          username: values.username,
+          isVisible: true,
+        }),
+      );
     } catch (e) {
       if (e.response.data.error === "username already taken")
         setNewError("This username is already taken.");

@@ -9,6 +9,7 @@ const initialState = {
   navigationDrawerVisible: false,
   navigationDrawerOpenedFromHeader: false,
   globalNotifications: [],
+  emailVerificationModal: { email: "anpesipp99@gmail.com", isVisible: false },
 };
 
 export const appSlice = createSlice({
@@ -26,6 +27,9 @@ export const appSlice = createSlice({
     },
     setSignUpVisible: (state, action) => {
       state.signUpVisible = action.payload;
+    },
+    setEmailVerificationModal: (state, action) => {
+      state.emailVerificationModal = action.payload;
     },
     setCurrentSubreddit: (state, action) => {
       state.currentSubreddit = action.payload;
@@ -67,6 +71,7 @@ export const {
   setNavigationDrawerOpenedFromHeader,
   addGlobalNotification,
   removeGlobalNotification,
+  setEmailVerificationModal,
 } = appSlice.actions;
 
 export default appSlice.reducer;
