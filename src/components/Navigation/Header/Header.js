@@ -28,6 +28,7 @@ import { useSearchParams } from "react-router-dom";
 import Axios from "../../../shared/lib/axios";
 import UserAvatarImg from "../../Users/UserAvatarImg";
 import EmailVerificationModal from "../../Forms/EmailVerification/EmailVerificationModal";
+import ForgottenPasswordModal from "../../Forms/ForgottenPassword/ForgottenPasswordModal";
 
 const Header = () => {
   const dropDownVisible = useSelector(
@@ -41,6 +42,9 @@ const Header = () => {
 
   const loginVisible = useSelector((state) => state.app.loginVisible);
   const signUpVisible = useSelector((state) => state.app.signUpVisible);
+  const forgottenPasswordModalVisible = useSelector(
+    (state) => state.app.forgottenPasswordModalVisible,
+  );
   const emailVerificationModal = useSelector(
     (state) => state.app.emailVerificationModal,
   );
@@ -329,6 +333,7 @@ const Header = () => {
           <EmailVerificationModal email={emailVerificationModal.email} />
         </div>
       )}
+      {forgottenPasswordModalVisible && <ForgottenPasswordModal />}
     </>
   );
 };

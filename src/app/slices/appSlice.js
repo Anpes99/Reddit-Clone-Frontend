@@ -10,6 +10,7 @@ const initialState = {
   navigationDrawerOpenedFromHeader: false,
   globalNotifications: [],
   emailVerificationModal: { email: "anpesipp99@gmail.com", isVisible: false },
+  forgottenPasswordModalVisible: false,
 };
 
 export const appSlice = createSlice({
@@ -58,6 +59,9 @@ export const appSlice = createSlice({
         (notification) => notification.id !== action.payload.id,
       );
     },
+    setForgottenPasswordModalVisible: (state, action) => {
+      state.forgottenPasswordModalVisible = action.payload;
+    },
   },
 });
 
@@ -72,6 +76,7 @@ export const {
   addGlobalNotification,
   removeGlobalNotification,
   setEmailVerificationModal,
+  setForgottenPasswordModalVisible,
 } = appSlice.actions;
 
 export default appSlice.reducer;

@@ -13,6 +13,7 @@ import NavigationDrawer from "../components/Navigation/NavigationDrawer/Navigati
 import Axios from "../shared/lib/axios";
 import { useLocation } from "react-router-dom";
 import VerifyEmailPage from "../pages/VerifyEmailPage/VerifyEmailPage";
+import ResetPasswordPage from "../pages/resetPassword/ResetPasswordPage";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -94,6 +95,7 @@ const App = () => {
                 <Route path="/user/:username" element={<UserPage />} />
                 <Route path="/search/" element={<SearchPage />} />
                 <Route path="/verify-email" element={<VerifyEmailPage />} />
+                <Route path="/reset-password" element={<ResetPasswordPage />} />
                 <Route path="/" element={<HomePage />} />
               </Routes>
             </div>

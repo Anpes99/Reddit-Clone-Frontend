@@ -54,7 +54,7 @@ const TopCommunities = () => {
                   onClick={() => {
                     navigate(`/r/${subreddit.name}`);
                   }}
-                  className="rounded-full overflow-hidden h-8 w-8 cursor-pointer"
+                  className="rounded-full flex justify-center items-center overflow-hidden h-8 w-8 cursor-pointer"
                 >
                   {subreddit.iconUrl ? (
                     <img src={subreddit.iconUrl} />

@@ -6,6 +6,10 @@ import useSignIn from "../../../hooks/useSignIn";
 
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
+import {
+  setForgottenPasswordModalVisible,
+  setLoginVisible,
+} from "../../../app/slices/appSlice";
 
 const initialValues = {
   username: "",
@@ -18,6 +22,7 @@ const validationSchema = yup.object().shape({
 });
 
 export const SignInContainer = ({ onSubmit, setSignUpVisible, newError }) => {
+  const dispatch = useDispatch();
   return (
     <Formik
       validationSchema={validationSchema}
@@ -49,6 +54,14 @@ export const SignInContainer = ({ onSubmit, setSignUpVisible, newError }) => {
             className="focus:ring-2 focus:ring-offset-2 focus:bg-blue-500 text-sm font-semibold leading-none text-white focus:outline-none bg-blue-500 border rounded hover:bg-blue-400 py-4 w-full transition-all"
           >
             Log In
+          </button>
+          <button
+            onClick={() => {
+              dispatch(setLoginVisible(false));
+              dispatch(setForgottenPasswordModalVisible(true));
+            }}
+          >
+            Forgot password?
           </button>
         </div>
       )}
