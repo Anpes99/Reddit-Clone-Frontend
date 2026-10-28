@@ -6,8 +6,9 @@
 
 # Tech Stack
  - Frontend: React, Redux, JavaScript, Tailwind CSS, CSS, HTML
- - Backend: Node.js, Express.js, PostgreSQL, Sequelize ORM
- - Authentication & Validation: JWT, refresh-token rotation, email verification (Brevo, Nodemailer), Redis-backed API rate limiting, Joi
+ - Backend: Node.js, Express.js, PostgreSQL, Sequelize ORM, Redis
+ - Authentication & Validation: JWT, refresh-token rotation and revocation, email verification, Redis-backed API rate limiting, Joi
+ - Email Services: Brevo, Nodemailer
  - Real-time Communication: Socket.IO
  - Storage: AWS S3
  - AI & Search: Voyage AI embeddings, semantic search
@@ -19,6 +20,7 @@
 ### Authentication & Security
 - ✅ Password hashing
 - ✅ JWT authentication and refresh-token rotation
+- ✅ Refresh-token revocation using Redis to invalidate old or revoked refresh tokens, preventing their reuse and strengthening session security.
 - ✅ Mandatory email verification for all accounts, with hashed expiring database-stored tokens, resend functionality, and email delivery using Brevo and Nodemailer
 - ✅ Secure email-based password recovery with a dedicated password reset page and hashed, database-stored reset tokens that expire after 30 minutes.
 - ✅ Authentication and role-based authorization
