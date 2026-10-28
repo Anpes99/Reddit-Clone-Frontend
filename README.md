@@ -20,9 +20,9 @@
 ### Authentication & Security
 - ✅ Password hashing
 - ✅ JWT authentication and refresh-token rotation
-- ✅ Refresh-token revocation using Redis to invalidate old or revoked refresh tokens, preventing their reuse and strengthening session security.
+- ✅ Refresh-token revocation using Redis to invalidate old or revoked refresh tokens, preventing their reuse and strengthening session security
 - ✅ Mandatory email verification for all accounts, with hashed expiring database-stored tokens, resend functionality, and email delivery using Brevo and Nodemailer
-- ✅ Secure email-based password recovery with a dedicated password reset page and hashed, database-stored reset tokens that expire after 30 minutes.
+- ✅ Secure email-based password recovery with a dedicated password reset page and hashed, database-stored reset tokens that expire after 30 minutes
 - ✅ Authentication and role-based authorization
 - ✅ Redis-backed rate limiting for login, signup, post and comment creation, and general API requests
 
@@ -62,7 +62,7 @@
 - ✅ Search for subreddits
 - ✅ Subreddit page with post feed
 - ✅ Real-time count of authenticated users currently viewing each subreddit using Socket.IO
-- ✅ Subreddit member count leaderboard: Automatically updates daily using a scheduled cron job, with rank-change indicators showing each subreddit's movement compared to the previous day's leaderboard.
+- ✅ Subreddit member count leaderboard: Automatically updates daily using a scheduled cron job, with rank-change indicators showing each subreddit's movement compared to the previous day's leaderboard
 
 
 ## Post
