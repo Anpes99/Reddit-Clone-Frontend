@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import HomePage from "../pages/HomePage/HomePage";
 import PostPage from "../pages/Postpage/PostPage";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { setUser } from "./slices/appSlice";
 import SubmitNewPostPage from "../pages/SubmitNewPostPage/SubmitNewPostPage";
 import SubredditPage from "../pages/SubredditPage/SubredditPage";
@@ -31,13 +31,18 @@ const App = () => {
 
   const [authInitialized, setAuthInitialized] = useState(false);
 
+  const refreshLoading = useRef();
+
   useEffect(() => {
     const runUseEffectFunction = async () => {
+      if (refreshLoading.current) return;
       if (user) return;
       let result;
       try {
+        refreshLoading.current = true;
         result = await Axios.post("/api/auth/refresh");
       } catch (e) {
+        refreshLoading.current = false;
         setAuthInitialized(true);
         return;
       }
@@ -52,6 +57,7 @@ const App = () => {
         dispatch(setUser({ ...userResult.data, token: accessToken }));
 
       setAuthInitialized(true);
+      refreshLoading.current = false;
     };
 
     runUseEffectFunction();
