@@ -231,4 +231,28 @@
 
 
 
+## Database Diagram
+<img width="1698" height="870" alt="db-diagram" src="https://github.com/user-attachments/assets/d13ce64f-3024-46b6-9591-d0e4c180a85f" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
