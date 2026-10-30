@@ -286,9 +286,8 @@ npm test
 
 
 
-
-
-
+## Application Architecture
+<img width="1206" height="816" alt="Screenshot From 2026-10-30 16-14-14" src="https://github.com/user-attachments/assets/e578c4bc-9e9e-47da-b689-eb6017ad610c" />
 
 
 
