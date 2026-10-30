@@ -45,6 +45,22 @@ The frontend runs at `http://localhost:3000` and proxies API requests to the bac
 For backend tests, set `TEST_DATABASE_URI` in the backend `.env` to a separate PostgreSQL test database. From `Reddit-Clone-Backend`, run `npm test`; it checks that the test database is separate, applies migrations, and runs the Jest suite. Never point `TEST_DATABASE_URI` at your development or production database.
 
 
+
+
+## Try the Live Demo
+
+Explore the application without creating an account using the demo credentials below.
+
+| Credential | Value |
+|---|---|
+| **Username** | `demo_user` |
+| **Password** | `password` |
+
+[**Open Live Demo →**](https://reddit-clone-app-1234512345-fecf0e20e036.herokuapp.com/)
+
+
+
+
 # Tech Stack
  - Frontend: React, Redux, JavaScript, Tailwind CSS, CSS, HTML
  - Backend: Node.js, Express.js, PostgreSQL, Sequelize ORM, Redis
