@@ -6,8 +6,8 @@ import Axios from "../../shared/lib/axios";
 import { useState } from "react";
 import { InputAdornment } from "@mui/material";
 import DefaultSubredditIcon from "../../assets/icons/DefaultSubredditIcon";
-import axios from "axios";
 import ImageUpload from "../Shared/ImageUpload";
+import { uploadImageToS3 } from "../../shared/utils/utils";
 const initialValues = {
   communityName: "",
   description: "",
@@ -114,18 +114,11 @@ const CreateCommunityForm = ({ isVisible, closeForm }) => {
   const [newError, setNewError] = useState(null);
 
   const onSubmit = async (values) => {
-    const uploadImageToS3 = async () => {
-      const res = await Axios.get("/api/utils/s3Url");
-      await axios.put(res.data.url, values.subredditIconUrl.file);
-      const imageUrl = res.data.url.split("?")[0];
-      return imageUrl;
-    };
-
     const { communityName } = values;
     try {
       const ímageUrl =
         values.subredditIconUrl.source === "uploaded"
-          ? await uploadImageToS3()
+          ? await uploadImageToS3(values.subredditIconUrl.file)
           : values.subredditIconUrl.url;
 
       await Axios.post("/api/subreddits", {

@@ -32,7 +32,7 @@ const PostFeed = ({ subredditId, orderType }) => {
   });
 
   const NoPostsYet = () =>
-    currentSubreddit.name ? (
+    currentSubreddit?.name ? (
       <div className="flex flex-col items-center space-y-2 py-40 px-5 bg-white ">
         <p className="text-2xl font-bold text-gray-700">
           This community doesnt have any posts yet
@@ -42,7 +42,7 @@ const PostFeed = ({ subredditId, orderType }) => {
           onClick={
             user
               ? () =>
-                  (window.location.href = `/r/${currentSubreddit.name}/submit`)
+                  (window.location.href = `/r/${currentSubreddit?.name}/submit`)
               : () => dispatch(setLoginVisible(true))
           }
           className="btn2 w-max"

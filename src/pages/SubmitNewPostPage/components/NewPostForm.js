@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
-import axios from "axios";
 import { TextareaAutosize } from "@mui/material";
-import Dropzone from "react-dropzone-uploader";
+import Dropzone, { Preview } from "react-dropzone-uploader";
 import Axios from "../../../shared/lib/axios";
+import { uploadImageToS3 } from "../../../shared/utils/utils";
+
+const ImagePreview = (props) => <Preview {...props} isUpload />;
 
 const NewPostForm = ({}) => {
   const [text, setText] = useState("");
@@ -18,12 +20,6 @@ const NewPostForm = ({}) => {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
 
-  // specify upload params and url for your files
-  const getUploadParams = ({ meta }) => {
-    return { url: "https://httpbin.org/post" };
-  };
-
-  // called every time a file's `status` changes
   const handleChangeStatus = ({ meta, file }, status) => {
     if (status === "done") {
       setImg(file);
@@ -42,10 +38,8 @@ const NewPostForm = ({}) => {
     }
   };
 
-  // receives array of files that are done uploading when submit button is clicked
   const handleSubmit = async () => {
     setLoading(true);
-    let imageUrl = null;
 
     const newPost = {
       text,
@@ -55,15 +49,7 @@ const NewPostForm = ({}) => {
 
     try {
       if (img) {
-        const res = await Axios.get(
-          "/api/utils/s3Url",
-          // get aws s3 put url // expires in 1min
-        );
-
-        await axios.put(res.data.url, img); //  put request to save img in aws s3 storage
-
-        imageUrl = res.data.url.split("?")[0];
-        newPost.imageUrl = imageUrl;
+        newPost.imageUrl = await uploadImageToS3(img);
       }
 
       const response = await Axios.post("/api/posts", newPost);
@@ -89,6 +75,8 @@ const NewPostForm = ({}) => {
       }, 10000);
     }
   };
+
+  const submitDisabled = loading || text === "" || title === "";
 
   return (
     <div className="flex flex-col space-y-3 bg-white min-h-[30rem] rounded-lg ">
@@ -147,8 +135,8 @@ const NewPostForm = ({}) => {
             <Dropzone
               accept="image/*"
               maxFiles={1}
-              getUploadParams={getUploadParams}
               onChangeStatus={handleChangeStatus}
+              PreviewComponent={ImagePreview}
               inputContent={(files, extra) =>
                 extra.reject
                   ? "Image files only"
@@ -173,12 +161,10 @@ const NewPostForm = ({}) => {
       <div className="px-1 pb-5 pt-3 flex justify-end border-t ">
         <button
           id="newPostSubmit"
-          disabled={loading || text === "" || title === ""}
+          disabled={submitDisabled}
           onClick={user ? () => handleSubmit() : null}
           className={`py-2 px-6 rounded-2xl font-semibold bg-blue-500 text-white  ${
-            loading || text === "" || title === ""
-              ? "bg-gray-300 text-gray-200"
-              : ""
+            submitDisabled ? "bg-gray-300 text-gray-200" : ""
           }`}
         >
           Post

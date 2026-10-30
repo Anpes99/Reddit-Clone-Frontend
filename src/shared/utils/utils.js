@@ -1,4 +1,6 @@
+import axios from "axios";
 import { setUser } from "../../app/slices/appSlice";
+import Axios from "../lib/axios";
 import socket from "../lib/socket";
 
 export const createOrUpdateObjInListById = (arr, obj) => {
@@ -134,4 +136,47 @@ export const makeStringSafeForURL = (input, { maxLen = 140 } = {}) => {
 
   // Enforce max length
   return s.slice(0, maxLen);
+};
+
+export const uploadImageToS3 = async (imgFile) => {
+  const getRegion = (url) => {
+    try {
+      const hostname = new URL(url).hostname;
+
+      const match = hostname.match(
+        /^s3[.-]([a-z0-9-]+)\.amazonaws\.com(?:\.cn)?$/,
+      );
+
+      if (match) return match[1];
+
+      return null;
+    } catch {
+      return null;
+    }
+  };
+
+  const res = await Axios.get("/api/utils/s3Url");
+  const s3Data = res.data.url;
+
+  const formData = new FormData();
+
+  Object.entries(s3Data.fields || {}).forEach(([key, value]) => {
+    formData.append(key, value);
+  });
+
+  if (!s3Data.fields?.key) {
+    formData.append("key", s3Data.key);
+  }
+
+  formData.append("file", imgFile);
+
+  await axios.post(s3Data.url, formData);
+
+  const region = getRegion(s3Data.url);
+
+  if (!region) {
+    throw new Error("Could not determine S3 region");
+  }
+
+  return `https://${s3Data.fields.bucket}.s3.${region}.amazonaws.com/${s3Data.key}`;
 };

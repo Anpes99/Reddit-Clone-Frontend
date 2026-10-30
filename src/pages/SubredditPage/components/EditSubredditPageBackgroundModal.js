@@ -3,9 +3,9 @@ import { Formik } from "formik";
 import Axios from "../../../shared/lib/axios";
 import { useState } from "react";
 import { Close } from "@mui/icons-material";
-import axios from "axios";
 import ImageUpload from "../../../components/Shared/ImageUpload";
 import { useSelector } from "react-redux";
+import { uploadImageToS3 } from "../../../shared/utils/utils";
 
 const initialValues = { userAvatarImageUrl: "" };
 
@@ -13,18 +13,14 @@ const EditSubredditPageBackgroundModal = ({ isVisible, closeForm }) => {
   const [newError, setNewError] = useState(null);
   const [message, setMessage] = useState("");
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
-  const uploadImageToS3 = async ({ values }) => {
-    const res = await Axios.get("/api/utils/s3Url");
-    await axios.put(res.data.url, values.subredditPageBackgroundImageUrl.file);
-    const imageUrl = res.data.url.split("?")[0];
-    return imageUrl;
-  };
 
   const [loading, setLoading] = useState(false);
   const onSubmit = async (values) => {
     setLoading(true);
     try {
-      const imageUrl = await uploadImageToS3({ values });
+      const imageUrl = await uploadImageToS3(
+        values.subredditPageBackgroundImageUrl.file,
+      );
       await Axios.patch(`api/subreddits/${currentSubreddit.id}/settings`, {
         subredditPageBackgroundImageUrl: imageUrl,
       });

@@ -4,8 +4,8 @@ import Axios from "../../../shared/lib/axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import ImageUpload from "../../../components/Shared/ImageUpload";
-import axios from "axios";
 import { Close } from "@mui/icons-material";
+import { uploadImageToS3 } from "../../../shared/utils/utils";
 
 const initialValues = { subredditIconUrl: "" };
 
@@ -114,17 +114,11 @@ const EditSubredditIconModal = ({ isVisible, closeForm }) => {
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
   const onSubmit = async (values) => {
     setLoading(true);
-    const uploadImageToS3 = async () => {
-      const res = await Axios.get("/api/utils/s3Url");
-      await axios.put(res.data.url, values.subredditIconUrl.file);
-      const imageUrl = res.data.url.split("?")[0];
-      return imageUrl;
-    };
 
     try {
       const ímageUrl =
         values.subredditIconUrl.source === "uploaded"
-          ? await uploadImageToS3()
+          ? await uploadImageToS3(values.subredditIconUrl.file)
           : values.subredditIconUrl.url;
 
       await Axios.patch(`api/subreddits/${currentSubreddit.id}/settings`, {

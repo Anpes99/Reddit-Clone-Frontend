@@ -6,6 +6,44 @@
 
 ## [Live demo](https://reddit-clone-app-1234512345-fecf0e20e036.herokuapp.com/) · [Backend Repository](https://github.com/Anpes99/Reddit-Clone-Backend)
 
+## Local development
+
+### Prerequisites
+
+- Node.js and npm
+- PostgreSQL with the `vector` and `pg_trgm` extensions available
+- Redis
+
+Clone this repository and the [backend repository](https://github.com/Anpes99/Reddit-Clone-Backend) into the same parent directory. From that parent directory, create a local PostgreSQL database, then configure the backend:
+
+```bash
+cd Reddit-Clone-Backend
+cp .env.example .env
+```
+
+In `Reddit-Clone-Backend/.env`, set `DATABASE_URI` to your local PostgreSQL connection string (for example, `postgres://USER:PASSWORD@localhost:5432/DB_NAME`), `REDIS_URI` to your Redis URL, and provide local values for `SECRET` and `REFRESH_SECRET`. Keep `.env` private; do not commit credentials. `TEST_DATABASE_URI` is only needed for backend tests and must point to a separately created test database. The backend example file lists optional credentials for email, S3 uploads, news, and search integrations; those features require their respective services and credentials.
+
+Install dependencies, migrate the development database, and start the API:
+
+```bash
+cd Reddit-Clone-Backend
+npm ci
+npm run db:migrate:dev
+npm run dev
+```
+
+In a second terminal, start this frontend:
+
+```bash
+cd Reddit-Clone-Frontend
+npm ci
+npm start
+```
+
+The frontend runs at `http://localhost:3000` and proxies API requests to the backend at `http://localhost:3001`.
+
+For backend tests, set `TEST_DATABASE_URI` in the backend `.env` to a separate PostgreSQL test database. From `Reddit-Clone-Backend`, run `npm test`; it checks that the test database is separate, applies migrations, and runs the Jest suite. Never point `TEST_DATABASE_URI` at your development or production database.
+
 
 # Tech Stack
  - Frontend: React, Redux, JavaScript, Tailwind CSS, CSS, HTML
@@ -288,8 +326,6 @@ npm test
 
 ## Application Architecture
 <img width="1206" height="816" alt="Screenshot From 2026-10-30 16-14-14" src="https://github.com/user-attachments/assets/e578c4bc-9e9e-47da-b689-eb6017ad610c" />
-
-
 
 
 
