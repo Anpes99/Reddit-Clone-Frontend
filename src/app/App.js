@@ -49,7 +49,6 @@ const App = () => {
       const { accessToken, username } = result.data;
 
       const userResult = await Axios.get("/api/loggedInUser", {
-        params: { username },
         headers: { Authorization: `bearer ${accessToken}` },
       });
 
