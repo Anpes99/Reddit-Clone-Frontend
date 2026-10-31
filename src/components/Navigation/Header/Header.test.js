@@ -67,4 +67,24 @@ describe.each([
     expect(socket.connect).toHaveBeenCalled();
     expect(window.location.href).toBe("/");
   });
+
+  it("keeps the user logged in and shows an error when the request fails", async () => {
+    Axios.post.mockRejectedValueOnce(new Error("Network Error"));
+    const user = userEvent.setup();
+    const { store } = renderWithProviders(renderUi(), {
+      appState: { user: loggedInUser },
+    });
+
+    await user.click(getLogOutButton());
+
+    expect(store.getState().app.user).toEqual(loggedInUser);
+    expect(socket.disconnect).not.toHaveBeenCalled();
+    expect(window.location.href).toBe("http://localhost/");
+    expect(store.getState().app.globalNotifications).toEqual([
+      expect.objectContaining({
+        type: "error",
+        message: "Couldn't log you out",
+      }),
+    ]);
+  });
 });

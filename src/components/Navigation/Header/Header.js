@@ -8,7 +8,6 @@ import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import {
   setHeaderDropDownVisible,
-  setUser,
   setLoginVisible,
   setSignUpVisible,
   setNavigationDrawerVisible,
@@ -29,6 +28,7 @@ import Axios from "../../../shared/lib/axios";
 import UserAvatarImg from "../../Users/UserAvatarImg";
 import EmailVerificationModal from "../../Forms/EmailVerification/EmailVerificationModal";
 import ForgottenPasswordModal from "../../Forms/ForgottenPassword/ForgottenPasswordModal";
+import useLogout from "../../../hooks/useLogout";
 
 const Header = () => {
   const dropDownVisible = useSelector(
@@ -50,6 +50,8 @@ const Header = () => {
   );
 
   const user = useSelector((state) => state.app.user);
+
+  const [logout] = useLogout();
 
   const globalNotifications = useSelector(
     (state) => state.app.globalNotifications,
@@ -253,7 +255,9 @@ const Header = () => {
           {
             <button
               onClick={() => {
-                if (signUpVisible) dispatch(setSignUpVisible(false));
+                if (signUpVisible) {
+                  dispatch(setSignUpVisible(false));
+                }
                 dispatch(setLoginVisible(true));
               }}
               className={`hidden  ${
@@ -265,13 +269,7 @@ const Header = () => {
           }
           {
             <button
-              onClick={async () => {
-                await Axios.post("/api/auth/logout");
-
-                dispatch(setUser(null));
-
-                window.location.href = "/";
-              }}
+              onClick={logout}
               className={`hidden  ${
                 user ? "sm:inline-block" : ""
               } btn hover:bg-blue-50 text-blue-500 border-blue-500 flex-shrink-0`}
@@ -281,7 +279,9 @@ const Header = () => {
           }
           <button
             onClick={() => {
-              if (loginVisible) dispatch(setLoginVisible(true));
+              if (loginVisible) {
+                dispatch(setLoginVisible(false));
+              }
               dispatch(setSignUpVisible(true));
             }}
             className={` ${
