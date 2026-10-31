@@ -32,9 +32,9 @@ const useSignIn = () => {
       return response;
     } catch (error) {
       if (
-        error.response.status === 403 &&
-        error.response.data.email &&
-        error.response.data.error.status === "EMAIL_NOT_VERIFIED"
+        error.response?.status === 403 &&
+        error.response.data?.email &&
+        error.response.data.error?.status === "EMAIL_NOT_VERIFIED"
       ) {
         dispatch(setLoginVisible(false));
         dispatch(

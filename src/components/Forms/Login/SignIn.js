@@ -80,11 +80,13 @@ const SignIn = ({ setSignUpVisible, setLoginVisible }) => {
     try {
       await signIn({ username, password });
     } catch (e) {
-      if (e.response.status === 401) {
+      const status = e.response?.status;
+      if (status === 401) {
         setNewError("Incorrect username or password");
-      }
-      if (e.response.status === 429) {
+      } else if (status === 429) {
         setNewError("Too many login attempts. Try again later");
+      } else if (status !== 403) {
+        setNewError("Something went wrong. Please try again");
       }
     }
   };
