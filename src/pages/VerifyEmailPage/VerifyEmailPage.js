@@ -12,7 +12,6 @@ import { WarningAmber } from "@mui/icons-material";
 
 const VerifyEmailPage = () => {
   const [searchParams] = useSearchParams();
-  console.log(searchParams.get("token"));
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [error, setError] = useState(false);

@@ -35,12 +35,6 @@ const CommentFeedItem = ({ comment }) => {
       </div>
       <div
         onClick={() => {
-          console.log(comment);
-          console.log(
-            `/r/${comment?.subreddit?.name || "noName"}/comments/${comment.post.id}/${
-              makeStringSafeForURL(comment?.post?.title) || "noTitle"
-            }`,
-          );
           navigate(
             `/r/${comment?.subreddit?.name || "noName"}/comments/${comment.post.id}/${
               makeStringSafeForURL(comment?.post?.title) || "noTitle"
