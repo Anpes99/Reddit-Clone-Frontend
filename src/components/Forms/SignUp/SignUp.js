@@ -13,6 +13,7 @@ import Joi from "joi";
 
 const initialValues = {
   username: "",
+  email: "",
   password: "",
 };
 

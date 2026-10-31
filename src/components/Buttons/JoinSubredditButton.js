@@ -36,6 +36,7 @@ const JoinSubredditButton = ({ size, subreddit }) => {
 
   return (
     <button
+      aria-label={`Leave r/${subreddit.name}`}
       onClick={() => {
         if (user) {
           handleLeaveSubreddit(user, subreddit, dispatch);

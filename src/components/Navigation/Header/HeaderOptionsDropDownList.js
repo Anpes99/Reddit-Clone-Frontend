@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLoginVisible, setUser } from "../../../app/slices/appSlice";
 import UserAvatarImg from "../../Users/UserAvatarImg";
 import Axios from "../../../shared/lib/axios";
-import socket from "../../../shared/lib/socket";
 
 const HeaderOptionsDropDownList = ({ isVisible }) => {
   const dispatch = useDispatch();
@@ -54,11 +53,6 @@ const HeaderOptionsDropDownList = ({ isVisible }) => {
             await Axios.post("/api/auth/logout");
 
             dispatch(setUser(null));
-
-            socket.auth = {};
-            // Reconnect with the new token
-            socket.disconnect();
-            socket.connect();
 
             window.location.href = "/";
           }}

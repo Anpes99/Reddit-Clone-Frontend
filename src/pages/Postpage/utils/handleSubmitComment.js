@@ -22,7 +22,11 @@ const handleSubmitComment = async (
     subredditId: subredditId, // localstorage.getItem("...")
     postId: postId,
   };
-  const result = commentSchema.isValid(data).then(async () => {
+  const result = commentSchema.isValid(data).then(async (isValid) => {
+    if (!isValid) {
+      return { success: false };
+    }
+
     if (commentId && !directReplyToPost) {
       data.commentId = commentId;
     }

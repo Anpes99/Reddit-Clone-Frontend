@@ -54,6 +54,10 @@ const PostVotingArrows = ({ post, numberColor }) => {
   return (
     <>
       <ArrowSmUpIcon
+        role="button"
+        aria-hidden={false}
+        aria-label="Upvote"
+        aria-pressed={userRating === 1}
         onClick={async () => {
           if (user) {
             if (loading) {
@@ -77,6 +81,10 @@ const PostVotingArrows = ({ post, numberColor }) => {
         post={post}
       />
       <ArrowSmDownIcon
+        role="button"
+        aria-hidden={false}
+        aria-label="Downvote"
+        aria-pressed={userRating === -1}
         onClick={async () => {
           if (user) {
             if (loading) {

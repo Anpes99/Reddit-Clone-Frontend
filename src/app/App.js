@@ -14,7 +14,6 @@ import Axios from "../shared/lib/axios";
 import { useLocation } from "react-router-dom";
 import VerifyEmailPage from "../pages/VerifyEmailPage/VerifyEmailPage";
 import ResetPasswordPage from "../pages/resetPassword/ResetPasswordPage";
-import socket from "../shared/lib/socket";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -55,13 +54,6 @@ const App = () => {
 
       if (userResult.data) {
         dispatch(setUser({ ...userResult.data, token: accessToken }));
-        socket.auth = {
-          token: accessToken,
-        };
-
-        // Reconnect with the new token
-        socket.disconnect();
-        socket.connect();
       }
 
       setAuthInitialized(true);

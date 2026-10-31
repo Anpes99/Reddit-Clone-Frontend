@@ -1,64 +1,55 @@
-const {
-  handleJoinSubreddit,
-  handleLeaveSubreddit,
-} = require("./subredditActions.js");
-const { setUser } = require("../../app/slices/appSlice.js");
-import axios from "axios";
-import configureStore from "redux-mock-store";
+import Axios from "../lib/axios";
+import { setUser } from "../../app/slices/appSlice";
+import { handleJoinSubreddit, handleLeaveSubreddit } from "./subredditActions";
 
-const mockStore = configureStore([]);
+jest.mock("../lib/axios", () => ({
+  __esModule: true,
+  default: { post: jest.fn(), delete: jest.fn() },
+}));
 
-jest.mock("axios");
+beforeEach(() => {
+  jest.spyOn(console, "log").mockImplementation(() => {});
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
+});
 
 describe("handleJoinSubreddit", () => {
-  test("should add new subreddit to list of joined subreddits", async () => {
-    const mockUser = { id: 1, subreddits: [{ id: 1 }] };
-    const mockNewJoinedSubreddit = { id: 2 };
+  it("adds the subreddit to the user's joined subreddits", async () => {
+    const user = { id: 1, subreddits: [{ id: 1 }] };
+    const dispatch = jest.fn();
+    Axios.post.mockResolvedValue({ status: 200 });
 
-    const expectedNewUser = {
-      ...mockUser,
-      subreddits: [...mockUser.subreddits, mockNewJoinedSubreddit],
-    };
-    const store = mockStore({});
+    await handleJoinSubreddit(user, { id: 2 }, dispatch);
 
-    axios.post.mockResolvedValue({ status: 200 });
-    await handleJoinSubreddit(mockUser, mockNewJoinedSubreddit, store.dispatch);
+    expect(Axios.post).toHaveBeenCalledWith("/api/subreddits/2/user");
+    expect(dispatch).toHaveBeenCalledWith(
+      setUser({ id: 1, subreddits: [{ id: 1 }, { id: 2 }] }),
+    );
+  });
 
-    const actions = store.getActions();
-    expect(actions).toEqual([
-      {
-        type: "app/setUser",
-        payload: expectedNewUser,
-      },
-    ]);
+  it("leaves the user unchanged when the request fails", async () => {
+    const dispatch = jest.fn();
+    Axios.post.mockRejectedValue({ response: { status: 500 } });
+
+    await handleJoinSubreddit({ id: 1, subreddits: [] }, { id: 2 }, dispatch);
+
+    expect(dispatch).not.toHaveBeenCalled();
   });
 });
 
 describe("handleLeaveSubreddit", () => {
-  test("should remove the subreddit from list of joined subreddits", async () => {
-    const mockUser = { id: 1, subreddits: [{ id: 1 }, { id: 2 }] };
-    const mockSubredditUserLeftFrom = { id: 2 };
+  it("removes the subreddit from the user's joined subreddits", async () => {
+    const user = { id: 1, subreddits: [{ id: 1 }, { id: 2 }] };
+    const dispatch = jest.fn();
+    Axios.delete.mockResolvedValue({ status: 204 });
 
-    const expectedNewUser = {
-      ...mockUser,
-      subreddits: mockUser.subreddits.filter(
-        (subreddit) => subreddit.id !== mockSubredditUserLeftFrom.id,
-      ),
-    };
-    const store = mockStore({});
-    axios.delete.mockResolvedValue({ status: 204 });
-    await handleLeaveSubreddit(
-      mockUser,
-      mockSubredditUserLeftFrom,
-      store.dispatch,
+    await handleLeaveSubreddit(user, { id: 2 }, dispatch);
+
+    expect(Axios.delete).toHaveBeenCalledWith("/api/subreddits/2/user");
+    expect(dispatch).toHaveBeenCalledWith(
+      setUser({ id: 1, subreddits: [{ id: 1 }] }),
     );
-
-    const actions = store.getActions();
-    expect(actions).toEqual([
-      {
-        type: "app/setUser",
-        payload: expectedNewUser,
-      },
-    ]);
   });
 });

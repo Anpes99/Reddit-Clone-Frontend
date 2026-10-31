@@ -36,6 +36,9 @@ const CommentActionsBar = ({ post, comment, user, dispatch }) => {
     <div className="flex flex-col">
       <div className="flex  sm:p-2 items-center space-x-1 text-gray-400 font-semibold text-xs">
         <ArrowSmUpIcon
+          role="button"
+          aria-hidden={false}
+          aria-label="Upvote comment"
           onClick={async () => {
             if (loading) return;
             if (user) {
@@ -50,6 +53,9 @@ const CommentActionsBar = ({ post, comment, user, dispatch }) => {
         />
         <CommentLikes comment={comment} />
         <ArrowSmDownIcon
+          role="button"
+          aria-hidden={false}
+          aria-label="Downvote comment"
           onClick={async () => {
             if (loading) return;
             if (user) {

@@ -1,7 +1,12 @@
 module.exports = {
+  testEnvironment: "jsdom",
+  roots: ["<rootDir>/src"],
   transform: {
-    "^.+\\.jsx?$": "babel-jest", // for JavaScript files
+    "^.+\\.jsx?$": "babel-jest",
+  },
+  moduleNameMapper: {
+    "\\.css$": "<rootDir>/src/test/styleMock.js",
   },
   setupFiles: ["<rootDir>/jest.setup.js"],
-  // other configurations...
+  setupFilesAfterEnv: ["<rootDir>/src/setupTests.js"],
 };
