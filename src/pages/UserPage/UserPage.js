@@ -45,7 +45,7 @@ const UserPage = ({ orderType = "new" }) => {
       editedIntroductionRef.current = result.data.introduction;
     };
     runUseEffectFunction();
-  }, []);
+  }, [username]);
 
   const handleUpdateIntroduction = async () => {
     setLoading(true);

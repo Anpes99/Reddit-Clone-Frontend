@@ -1,6 +1,7 @@
 import axios from "axios";
 import { store } from "../../app/store";
 import { addGlobalNotification, setUser } from "../../app/slices/appSlice";
+import socket from "./socket";
 
 const Axios = axios.create({
   baseURL: `${window.location.origin}`,
@@ -41,6 +42,13 @@ Axios.interceptors.response.use(
         const { accessToken } = response.data;
 
         store.dispatch(setUser({ ...userData, token: accessToken }));
+
+        socket.auth = {
+          token: accessToken,
+        };
+        // Reconnect with the new token
+        socket.disconnect();
+        socket.connect();
 
         return Axios(originalRequest);
       } catch (refreshError) {
