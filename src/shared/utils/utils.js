@@ -20,11 +20,21 @@ export const createOrUpdateObjInListById = (arr, obj) => {
   return newArr;
 };
 
-export const handleLikeComment = async (commentId, userId) => {
-  socket.emit("likeComment", { commentId, userId });
+export const handleLikeComment = async (commentId) => {
+  socket.emit("likeComment", { commentId });
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve();
+    }, 3000);
+  });
 };
-export const handleDislikeComment = async (commentId, userId) => {
-  socket.emit("dislikeComment", { commentId, userId });
+export const handleDislikeComment = async (commentId) => {
+  socket.emit("dislikeComment", { commentId });
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve();
+    }, 3000);
+  });
 };
 
 export const handleLikePost = async (post, user, dispatch) => {
@@ -33,7 +43,6 @@ export const handleLikePost = async (post, user, dispatch) => {
     "likePost",
     {
       postId: post.id,
-      userId: user.id,
     },
     async (data) => {
       a = data;
@@ -63,7 +72,6 @@ export const handleDislikePost = async (post, user, dispatch) => {
     "dislikePost",
     {
       postId: post.id,
-      userId: user.id,
     },
     async (data) => {
       a = data;

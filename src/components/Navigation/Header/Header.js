@@ -29,6 +29,7 @@ import Axios from "../../../shared/lib/axios";
 import UserAvatarImg from "../../Users/UserAvatarImg";
 import EmailVerificationModal from "../../Forms/EmailVerification/EmailVerificationModal";
 import ForgottenPasswordModal from "../../Forms/ForgottenPassword/ForgottenPasswordModal";
+import socket from "../../../shared/lib/socket";
 
 const Header = () => {
   const dropDownVisible = useSelector(
@@ -267,7 +268,15 @@ const Header = () => {
             <button
               onClick={async () => {
                 await Axios.post("/api/auth/logout");
+
                 dispatch(setUser(null));
+
+                socket.auth = {};
+                // Reconnect with the new token
+                socket.disconnect();
+                socket.connect();
+
+                window.location.href = "/";
               }}
               className={`hidden  ${
                 user ? "sm:inline-block" : ""

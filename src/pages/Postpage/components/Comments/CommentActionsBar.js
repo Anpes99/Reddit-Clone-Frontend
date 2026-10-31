@@ -31,14 +31,17 @@ const CommentLikes = ({ comment }) => {
 const CommentActionsBar = ({ post, comment, user, dispatch }) => {
   const [newComment, setNewComment] = useState("");
   const [createCommentVisible, setCreateCommentVisible] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   return (
     <div className="flex flex-col">
       <div className="flex  sm:p-2 items-center space-x-1 text-gray-400 font-semibold text-xs">
         <ArrowSmUpIcon
-          onClick={() => {
+          onClick={async () => {
+            if (loading) return;
             if (user) {
-              handleLikeComment(comment.id, user.id);
+              setLoading(true);
+              await handleLikeComment(comment.id, user.id);
+              setLoading(false);
             } else {
               dispatch(setLoginVisible(true));
             }
@@ -47,9 +50,12 @@ const CommentActionsBar = ({ post, comment, user, dispatch }) => {
         />
         <CommentLikes comment={comment} />
         <ArrowSmDownIcon
-          onClick={() => {
+          onClick={async () => {
+            if (loading) return;
             if (user) {
-              handleDislikeComment(comment.id, user.id);
+              setLoading(true);
+              await handleDislikeComment(comment.id, user.id);
+              setLoading(false);
             } else {
               dispatch(setLoginVisible(true));
             }

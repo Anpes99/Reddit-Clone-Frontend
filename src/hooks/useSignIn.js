@@ -6,6 +6,7 @@ import {
   setEmailVerificationModal,
 } from "../app/slices/appSlice";
 import axios from "axios";
+import socket from "../shared/lib/socket";
 
 const useSignIn = () => {
   const [success, setSuccess] = useState(false);
@@ -26,6 +27,14 @@ const useSignIn = () => {
         setSuccess(true);
         const { email, ...userData } = response.data;
         dispatch(setUser(userData));
+
+        socket.auth = {
+          token: response.data.token,
+        };
+        // Reconnect with the new token
+        socket.disconnect();
+        socket.connect();
+
         dispatch(setLoginVisible(false));
       }
       return response;

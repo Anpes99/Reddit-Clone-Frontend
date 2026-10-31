@@ -1,14 +1,6 @@
 import { useEffect, useState } from "react";
-const useSubredditPresence = (socket, subredditName, userId) => {
+const useSubredditPresence = (socket, subredditName) => {
   const [onlineCount, setOnlineCount] = useState(0);
-
-  useEffect(() => {
-    if (!socket) return;
-
-    socket.auth = { userId };
-    socket.disconnect();
-    socket.connect();
-  }, [socket, userId]);
 
   useEffect(() => {
     if (!socket || !subredditName) return;

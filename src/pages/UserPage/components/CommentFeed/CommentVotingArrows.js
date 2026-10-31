@@ -40,13 +40,16 @@ const CommentLikes = ({ comment, className }) => {
 const CommentVotingArrows = ({ comment, numberColor }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.app.user);
-
+  const [loading, setLoading] = useState(false);
   return (
     <>
       <ArrowSmUpIcon
-        onClick={() => {
+        onClick={async () => {
+          if (loading) return;
           if (user) {
-            handleLikeComment(comment.id, user.id);
+            setLoading(true);
+            await handleLikeComment(comment.id, user.id);
+            setLoading(false);
           } else {
             dispatch(setLoginVisible(true));
           }
@@ -60,9 +63,12 @@ const CommentVotingArrows = ({ comment, numberColor }) => {
         comment={comment}
       />
       <ArrowSmDownIcon
-        onClick={() => {
+        onClick={async () => {
+          if (loading) return;
           if (user) {
-            handleDislikeComment(comment.id, user.id);
+            setLoading(true);
+            await handleDislikeComment(comment.id, user.id);
+            setLoading(false);
           } else {
             dispatch(setLoginVisible(true));
           }
