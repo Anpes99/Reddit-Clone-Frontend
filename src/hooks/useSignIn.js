@@ -33,19 +33,18 @@ const useSignIn = () => {
     } catch (error) {
       if (
         error.response?.status === 403 &&
-        error.response.data?.email &&
-        error.response.data.error?.status === "EMAIL_NOT_VERIFIED"
+        error.response.data?.details?.email &&
+        error.response.data?.code === "EMAIL_NOT_VERIFIED"
       ) {
         dispatch(setLoginVisible(false));
         dispatch(
           setEmailVerificationModal({
-            email: error.response.data.email,
+            email: error.response.data.details.email,
             username,
             isVisible: true,
           }),
         );
       }
-      console.log(error);
 
       throw error;
     }
