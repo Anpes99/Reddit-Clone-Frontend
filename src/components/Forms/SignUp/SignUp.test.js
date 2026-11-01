@@ -118,7 +118,14 @@ describe("SignUp", () => {
   it("tells the user when the username is already taken", async () => {
     const user = userEvent.setup();
     Axios.post.mockRejectedValue({
-      response: { status: 400, data: { error: "username already taken" } },
+      response: {
+        status: 400,
+        data: {
+          code: "USERNAME_ALREADY_TAKEN",
+          message: "username already taken",
+          details: {},
+        },
+      },
     });
     const { store } = renderWithProviders(<SignUp />, {
       appState: { signUpVisible: true },

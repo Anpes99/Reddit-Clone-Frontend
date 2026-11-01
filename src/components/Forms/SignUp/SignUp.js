@@ -127,7 +127,7 @@ const SignUp = () => {
         }),
       );
     } catch (e) {
-      if (e.response.data.error === "username already taken")
+      if (e.response?.data?.code === "USERNAME_ALREADY_TAKEN")
         setNewError("This username is already taken.");
     }
   };

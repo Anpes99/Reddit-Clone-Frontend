@@ -99,8 +99,9 @@ it("asks the user to verify their email when it is not verified yet", async () =
   const user = userEvent.setup();
   jest.spyOn(axios, "post").mockRejectedValue(
     httpError(403, {
-      email: "test_user1@example.com",
-      error: { status: "EMAIL_NOT_VERIFIED" },
+      code: "EMAIL_NOT_VERIFIED",
+      message: "email not verified",
+      details: { email: "test_user1@example.com" },
     }),
   );
   const { store } = renderWithProviders(<SignIn />, {
