@@ -67,7 +67,7 @@ const NewPostForm = ({}) => {
       setLoading(false);
     } catch (e) {
       setLoading(false);
-      console.log(e);
+      setError(true);
       setMessage("Failed to submit post");
       setTimeout(() => {
         setMessage(null);
