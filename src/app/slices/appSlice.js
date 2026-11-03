@@ -52,7 +52,7 @@ export const appSlice = createSlice({
       ) {
         return;
       }
-      if (state.globalNotifications.length === 10) {
+      if (state.globalNotifications.length >= 10) {
         state.globalNotifications.shift();
       }
       state.globalNotifications.push({ ...action.payload, id: nanoid() });

@@ -42,9 +42,9 @@ describe("appSlice", () => {
     expect(state.globalNotifications).toHaveLength(1);
   });
 
-  it("keeps at most five notifications, dropping the oldest", () => {
+  it("keeps at most ten notifications, dropping the oldest", () => {
     let state = initialState;
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 1; i <= 11; i++) {
       state = appReducer(
         state,
         addGlobalNotification({ type: "info", message: `Message ${i}` }),
@@ -57,6 +57,11 @@ describe("appSlice", () => {
       "Message 4",
       "Message 5",
       "Message 6",
+      "Message 7",
+      "Message 8",
+      "Message 9",
+      "Message 10",
+      "Message 11",
     ]);
   });
 
