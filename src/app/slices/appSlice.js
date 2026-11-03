@@ -44,12 +44,15 @@ export const appSlice = createSlice({
     addGlobalNotification: (state, action) => {
       if (
         state.globalNotifications.find(
-          (notification) => notification.message === action.payload.message,
-        )
+          (notification) =>
+            notification.message === action.payload.message &&
+            notification.title === action.payload.title,
+        ) &&
+        !action.payload.isServerNotification
       ) {
         return;
       }
-      if (state.globalNotifications.length === 5) {
+      if (state.globalNotifications.length === 10) {
         state.globalNotifications.shift();
       }
       state.globalNotifications.push({ ...action.payload, id: nanoid() });

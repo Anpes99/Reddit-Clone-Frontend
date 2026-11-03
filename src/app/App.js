@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import HomePage from "../pages/HomePage/HomePage";
 import PostPage from "../pages/Postpage/PostPage";
 import { useEffect, useRef, useState } from "react";
-import { setUser } from "./slices/appSlice";
+import { addGlobalNotification, setUser } from "./slices/appSlice";
 import SubmitNewPostPage from "../pages/SubmitNewPostPage/SubmitNewPostPage";
 import SubredditPage from "../pages/SubredditPage/SubredditPage";
 import UserPage from "../pages/UserPage/UserPage";
@@ -14,6 +14,7 @@ import Axios from "../shared/lib/axios";
 import { useLocation } from "react-router-dom";
 import VerifyEmailPage from "../pages/VerifyEmailPage/VerifyEmailPage";
 import ResetPasswordPage from "../pages/resetPassword/ResetPasswordPage";
+import { getNotificationSeverity } from "../constants/notification";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -54,6 +55,22 @@ const App = () => {
 
       if (userResult.data) {
         dispatch(setUser({ ...userResult.data, token: accessToken }));
+
+        if (userResult.data.notifications?.length) {
+          userResult.data.notifications.forEach((notification) => {
+            dispatch(
+              addGlobalNotification({
+                type: getNotificationSeverity(notification.type),
+                title: notification.title,
+                message: notification.message,
+                isServerNotification: true,
+              }),
+            );
+            Axios.patch(
+              `/api/notifications/${notification.id}/confirm-delivery`,
+            ).catch(() => {});
+          });
+        }
       }
 
       setAuthInitialized(true);

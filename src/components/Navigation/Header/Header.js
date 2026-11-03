@@ -155,8 +155,12 @@ const Header = () => {
                 variant="filled"
                 className="mt-3"
               >
-                {notification.type === "error" && (
-                  <AlertTitle>Something went wrong</AlertTitle>
+                {notification.title ? (
+                  <AlertTitle>{notification.title}</AlertTitle>
+                ) : (
+                  notification.type === "error" && (
+                    <AlertTitle>Something went wrong</AlertTitle>
+                  )
                 )}
                 {notification.message}
               </Alert>
