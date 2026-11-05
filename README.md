@@ -2,22 +2,22 @@
 
 ![Backend tests](https://github.com/Anpes99/Reddit-Clone-Backend/actions/workflows/test.yml/badge.svg) ![Frontend tests](https://github.com/Anpes99/Reddit-Clone-Frontend/actions/workflows/test.yml/badge.svg)
 
-A Reddit-style community platform built end to end with **React, Redux Toolkit, Node.js/Express, PostgreSQL and Redis**. It has semantic post search with vector embeddings, asynchronous image moderation through a background job queue with persistent user notifications of the outcome, AI moderation of third-party news content, real-time voting and presence over authenticated WebSockets, JWT auth with refresh-token rotation, and **250+ automated tests** that run in CI on both the frontend and the backend.
+A Reddit-style community platform built end to end with **React, Redux Toolkit, TypeScript, Node.js/Express, PostgreSQL and Redis**. It has semantic post search with vector embeddings, asynchronous image moderation through a background job queue with persistent user notifications of the outcome, AI moderation of third-party news content, real-time voting and presence over authenticated WebSockets, JWT auth with refresh-token rotation, and **250+ automated tests** that run in CI on both the frontend and the backend.
 
 **[Live demo](https://reddit-clone-app-1234512345-fecf0e20e036.herokuapp.com/)** · [Frontend repository](https://github.com/Anpes99/Reddit-Clone-Frontend) · [Backend repository](https://github.com/Anpes99/Reddit-Clone-Backend)
 
-| Demo login | |
-|---|---|
+| Demo login   |             |
+| ------------ | ----------- |
 | **Username** | `demo_user` |
-| **Password** | `password` |
+| **Password** | `password`  |
 
 ## Tech Stack
 
 - **Frontend:** React 18, Redux Toolkit, React Router, Tailwind CSS, Material UI, Formik + Yup, Socket.IO client
-- **Backend:** Node.js, Express, PostgreSQL (pgvector, pg_trgm), Sequelize ORM + migrations, Redis, BullMQ, Socket.IO, Joi, Pino
+- **Backend:** TypeScript (strict mode), Node.js, Express, PostgreSQL (pgvector, pg_trgm), Sequelize ORM + migrations, Redis, BullMQ, Socket.IO, Joi, Pino
 - **Auth & security:** JWT access tokens, rotating refresh tokens revoked in Redis, email verification, Helmet, CSRF origin checks, Redis-backed rate limiting
 - **Integrations:** Voyage AI embeddings, Sightengine image moderation, OpenAI Moderation API, NewsAPI, AWS S3, Brevo + Nodemailer
-- **Testing & tooling:** Jest, React Testing Library, PostgreSQL integration tests, GitHub Actions CI, Docker Compose, ESLint, Prettier
+- **Testing & tooling:** Jest (ts-jest), React Testing Library, PostgreSQL integration tests, GitHub Actions CI, Docker Compose, ESLint, Prettier
 - **Deployment:** Heroku
 
 ## Engineering Highlights
@@ -75,22 +75,25 @@ Images are uploaded straight from the browser to S3 with presigned POST fields, 
 ### Quality
 
 **250+ tests in CI**
-177 backend tests (unit tests plus integration tests against a real PostgreSQL database) and 84 frontend tests (React Testing Library) run on every push with GitHub Actions, and the backend pipeline also enforces ESLint and Prettier checks. The schema is built entirely from versioned migrations, with foreign keys and cascade rules that keep data consistent when users, posts or subreddits are deleted.
+177 backend tests (unit tests plus integration tests against a real PostgreSQL database) and 84 frontend tests (React Testing Library) run on every push with GitHub Actions. The backend pipeline also fails on ESLint errors, Prettier formatting, strict TypeScript type errors or a broken production build before running the tests against a pgvector PostgreSQL service container. The schema is built entirely from versioned migrations, with foreign keys and cascade rules that keep data consistent when users, posts or subreddits are deleted.
 
 ## Features
 
 **Users**
+
 - Sign-up with mandatory email verification (hashed, expiring tokens, with resend)
 - Login and logout, plus password recovery by email with 30-minute reset links
 - Profile page with overview, posts and comments tabs, and an editable avatar, background image and introduction
 
 **Communities**
+
 - Create, join, leave and search subreddits
 - Owners and moderators can edit the icon, background image and description
 - Live count of signed-in users viewing each subreddit
 - Top communities leaderboard with week-over-week rank-change indicators
 
 **Posts & comments**
+
 - Create posts with images, then upvote and downvote them, with scores updating live for every viewer
 - Uploaded images are moderated in the background, and posts only appear once their image passes
 - Notifications when a post is approved or rejected, delivered on the next visit if the user is offline
@@ -98,44 +101,53 @@ Images are uploaded straight from the browser to S3 with presigned POST fields, 
 - Nested comment threads with voting, replies and on-demand loading of deeper replies
 
 **Search**
+
 - Semantic post search that matches meaning, not just keywords
 - Typo-tolerant subreddit search, with subreddit suggestions in the search bar
 
 **News**
+
 - Trending headlines on the home page, automatically filtered for unsafe text and images
 
 **Responsive UI** for mobile and desktop.
 
 ## Testing
 
-| | Tests | What's covered |
-|---|---|---|
-| **Backend** | 177 | API routes, auth middleware, JWT handling, CSRF protection, Joi validation, the central error handler and error response format, logout when the token can't be revoked, image moderation jobs queued on post creation and unmoderated posts hidden from post pages and profiles, community-created notifications (and subreddit creation still succeeding when the notification can't be saved), socket auth and vote rate limiting, plus integration tests against PostgreSQL for vector search, trigram search, voting and karma, and trigger-maintained counters |
-| **Frontend** | 84 | Sign-in, sign-up and password-reset forms, logout failure handling, the Axios token-refresh interceptor, socket reconnection on token change, post and comment voting, nested comment threads, post and comment creation, joining subreddits, Redux state and S3 uploads |
+|              | Tests | What's covered                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ------------ | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Backend**  | 177   | API routes, auth middleware, JWT handling, CSRF protection, Joi validation, the central error handler and error response format, logout when the token can't be revoked, image moderation jobs queued on post creation and unmoderated posts hidden from post pages and profiles, community-created notifications (and subreddit creation still succeeding when the notification can't be saved), socket auth and vote rate limiting, plus integration tests against PostgreSQL for vector search, trigram search, voting and karma, and trigger-maintained counters |
+| **Frontend** | 84    | Sign-in, sign-up and password-reset forms, logout failure handling, the Axios token-refresh interceptor, socket reconnection on token change, post and comment voting, nested comment threads, post and comment creation, joining subreddits, Redux state and S3 uploads                                                                                                                                                                                                                                                                                             |
 
 Backend tests use a separate test database and refuse to run if it points at the main database.
 
 ## Screenshots
 
 ### Homepage (mobile)
+
 <img width="233" height="411" alt="Homepage on mobile" src="https://github.com/user-attachments/assets/7f728e5e-8803-4f76-b9ce-496e487c5552" />
 
 ### Responsive layout
+
 <img width="785" height="330" alt="Responsive homepage" src="https://github.com/user-attachments/assets/9fd5ece3-a52b-4f4c-8bdc-a2afb2ba1f64" />
 
 ### Subreddit creation and customization
+
 <img width="800" height="450" alt="Subreddit creation" src="https://github.com/user-attachments/assets/5fd1dd6f-9c13-4a38-92a8-f03cf249b2b6" />
 
 ### User creation and customization
+
 <img width="800" height="450" alt="User creation" src="https://github.com/user-attachments/assets/749dd3d1-ea17-4520-9940-814085efffa4" />
 
 ### Post creation
+
 <img width="578" height="328" alt="Post creation" src="https://github.com/user-attachments/assets/307c3f9e-54c6-40a2-9e34-fe61532adaf5" />
 
 ### Post page and nested comments
+
 <img width="800" height="450" alt="Post page" src="https://github.com/user-attachments/assets/3b9a49a1-2830-4b1b-aa2d-4cb6d0a58437" />
 
 ### Search page and semantic search
+
 <img width="355" height="638" alt="Search page" src="https://github.com/user-attachments/assets/3648dd38-47c8-468d-97e5-6bbac0beabae" />
 
 ## Architecture
