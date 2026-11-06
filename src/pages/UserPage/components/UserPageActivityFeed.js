@@ -1,7 +1,7 @@
 import PostFeedItem from "../../../components/Feeds/PostFeed/PostFeedItem";
 import { SunIcon } from "@heroicons/react/outline";
 import { TrendingUpIcon } from "@heroicons/react/outline";
-import { useCallback, useRef } from "react";
+import { memo, useCallback, useRef } from "react";
 
 import { useParams } from "react-router";
 import { useSearchParams } from "react-router-dom";
@@ -9,7 +9,7 @@ import useGetUserPageFeedItems from "../../../hooks/useGetUserPageFeedItems";
 import CommentFeedItem from "./CommentFeed/CommentFeedItem";
 import FeedItemSkeleton from "../../../components/Feeds/FeedItemSkeleton";
 
-const UserPagePostFeed = ({ subredditId, contentType }) => {
+const UserPageActivityFeed = ({ subredditId, contentType }) => {
   const username = useParams().username;
   const [searchParams, setSearchParams] = useSearchParams();
   const orderType = searchParams.get("sort") || "new";
@@ -21,16 +21,19 @@ const UserPagePostFeed = ({ subredditId, contentType }) => {
   });
 
   const observer = useRef();
-  const lastPostRef = useCallback((node) => {
-    if (loading) return;
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        fetchMorePosts(orderType);
-      }
-    });
-    if (node) observer.current.observe(node);
-  });
+  const lastPostRef = useCallback(
+    (node) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          fetchMorePosts(orderType);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [loading, fetchMorePosts, orderType],
+  );
 
   const NoPostsYet = () => (
     <div className="flex flex-col items-center py-40 md:min-w-[500px] ">
@@ -108,4 +111,4 @@ const UserPagePostFeed = ({ subredditId, contentType }) => {
   );
 };
 
-export default UserPagePostFeed;
+export default memo(UserPageActivityFeed);

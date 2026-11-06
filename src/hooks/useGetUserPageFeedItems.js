@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Axios from "../shared/lib/axios";
 
 const useGetUserPageFeedItems = ({ username, contentType, sortByType }) => {
@@ -27,7 +27,7 @@ const useGetUserPageFeedItems = ({ username, contentType, sortByType }) => {
   }, []);
 
   //////////////////////////////////// GET MORE  ITEMS ///////////////////////////////////////////////////
-  const fetchMoreItems = async () => {
+  const fetchMoreItems = useCallback(async () => {
     if (totalItemsCount > items.length) {
       setLoading(true);
       Axios.get(`api/users/${username}/feed`, {
@@ -37,7 +37,7 @@ const useGetUserPageFeedItems = ({ username, contentType, sortByType }) => {
         setLoading(false);
       });
     }
-  };
+  }, [totalItemsCount, items.length, username, contentType, sortByType]);
 
   return [fetchMoreItems, loading, items, error];
 };
