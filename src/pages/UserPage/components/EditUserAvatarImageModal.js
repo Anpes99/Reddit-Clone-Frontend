@@ -41,27 +41,25 @@ const AvatarOptions = ({ iconsToShow = 16 }) => {
         altSrc={user.avatarImageUrl}
       />
       <div className="grid grid-cols-4">
-        {Array(16)
-          .fill(null)
-          .map((_, i) => {
-            return (
-              <button
-                key={"user_avatar_image_option" + i}
-                onClick={() => {
-                  onChooseUserAvatarImage(getImageUrl(seeds[i]));
-                }}
-                style={{
-                  border:
-                    values.userAvatarImageUrl === getImageUrl(seeds[i])
-                      ? "solid blue 4px"
-                      : "solid white 4px",
-                  borderRadius: "50%",
-                }}
-              >
-                <UserAvatarImg url={getImageUrl(seeds[i])} size={"50px"} />
-              </button>
-            );
-          })}
+        {seeds.map((seed) => {
+          return (
+            <button
+              key={seed}
+              onClick={() => {
+                onChooseUserAvatarImage(getImageUrl(seed));
+              }}
+              style={{
+                border:
+                  values.userAvatarImageUrl === getImageUrl(seed)
+                    ? "solid blue 4px"
+                    : "solid white 4px",
+                borderRadius: "50%",
+              }}
+            >
+              <UserAvatarImg url={getImageUrl(seed)} size={"50px"} />
+            </button>
+          );
+        })}
       </div>
 
       <button

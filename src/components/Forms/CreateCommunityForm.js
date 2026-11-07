@@ -76,20 +76,18 @@ const AvatarOptions = () => {
     <div className="mr-3 mb-5 flex flex-col items-center">
       <p className="font-semibold mb-1">Choose subreddit icon:</p>
       <div className="grid grid-cols-4 gap-1">
-        {Array(8)
-          .fill(null)
-          .map((_, i) => {
-            return (
-              <button
-                key={"subreddit_icon_option" + i}
-                onClick={() => {
-                  onChooseSubredditIcon(getIconUrl(seeds[i]));
-                }}
-              >
-                <SubredditIcon seed={seeds[i]} size={"50px"} />
-              </button>
-            );
-          })}
+        {seeds.map((seed) => {
+          return (
+            <button
+              key={seed}
+              onClick={() => {
+                onChooseSubredditIcon(getIconUrl(seed));
+              }}
+            >
+              <SubredditIcon seed={seed} size={"50px"} />
+            </button>
+          );
+        })}
       </div>
 
       <button

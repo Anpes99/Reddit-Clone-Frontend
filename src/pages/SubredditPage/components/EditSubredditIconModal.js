@@ -68,27 +68,25 @@ const AvatarOptions = ({ iconsToShow = 16 }) => {
         />
       </div>
       <div className="grid grid-cols-4">
-        {Array(16)
-          .fill(null)
-          .map((_, i) => {
-            return (
-              <button
-                key={"subreddit_icon_option" + i}
-                onClick={() => {
-                  onChooseSubredditIcon(getIconUrl(seeds[i]));
-                }}
-                style={{
-                  border:
-                    values.subredditIconUrl.url === getIconUrl(seeds[i])
-                      ? "solid blue 4px"
-                      : "solid white 4px",
-                  borderRadius: "50%",
-                }}
-              >
-                <SubredditIcon seed={seeds[i]} size={"50px"} />
-              </button>
-            );
-          })}
+        {seeds.map((seed) => {
+          return (
+            <button
+              key={seed}
+              onClick={() => {
+                onChooseSubredditIcon(getIconUrl(seed));
+              }}
+              style={{
+                border:
+                  values.subredditIconUrl.url === getIconUrl(seed)
+                    ? "solid blue 4px"
+                    : "solid white 4px",
+                borderRadius: "50%",
+              }}
+            >
+              <SubredditIcon seed={seed} size={"50px"} />
+            </button>
+          );
+        })}
       </div>
       <button
         className="btn2 mt-3 border-gray-600"

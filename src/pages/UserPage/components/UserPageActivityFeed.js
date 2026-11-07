@@ -78,22 +78,22 @@ const UserPageActivityFeed = ({ subredditId, contentType }) => {
         feedItems.map((item, i) => {
           if (i + 1 === feedItems.length) {
             return (
-              <div key={item.data.id} ref={lastPostRef}>
+              <div key={item.type + item.data.id} ref={lastPostRef}>
                 {item.type === "comment" ? (
-                  <CommentFeedItem
-                    key={"userFeedItem" + i}
-                    comment={item.data}
-                  />
+                  <CommentFeedItem comment={item.data} />
                 ) : (
-                  <PostFeedItem key={"userFeedItem" + i} post={item.data} />
+                  <PostFeedItem post={item.data} />
                 )}
               </div>
             );
           } else {
             return item.type === "comment" ? (
-              <CommentFeedItem key={"userFeedItem" + i} comment={item.data} />
+              <CommentFeedItem
+                key={"comment-" + item.data.id}
+                comment={item.data}
+              />
             ) : (
-              <PostFeedItem key={"userFeedItem" + i} post={item.data} />
+              <PostFeedItem key={"post-" + item.data.id} post={item.data} />
             );
           }
         })
@@ -101,7 +101,11 @@ const UserPageActivityFeed = ({ subredditId, contentType }) => {
         Array(5)
           .fill(null)
           .map((_, i) => (
-            <FeedItemSkeleton key={"feed-item-skeleton" + i} loading={true} />
+            <FeedItemSkeleton
+              // eslint-disable-next-line @eslint-react/no-array-index-key -- static placeholders
+              key={"feed-item-skeleton" + i}
+              loading={true}
+            />
           ))
       ) : (
         <NoPostsYet username={username} />

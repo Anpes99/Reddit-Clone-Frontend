@@ -113,6 +113,7 @@ const PostFeed = ({ subredditId, orderType }) => {
               .fill(null)
               .map((_, i) => (
                 <FeedItemSkeleton
+                  // eslint-disable-next-line @eslint-react/no-array-index-key -- static placeholders
                   key={"feed-item-skeleton" + i}
                   loading={true}
                 />
