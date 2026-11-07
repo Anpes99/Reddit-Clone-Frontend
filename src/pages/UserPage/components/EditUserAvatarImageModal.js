@@ -12,7 +12,7 @@ const initialValues = { userAvatarImageUrl: "" };
 const AvatarOptions = ({ iconsToShow = 16 }) => {
   const user = useSelector((state) => state.app.user);
   const { setFieldValue, values } = useFormikContext();
-  const [seeds, setSeeds] = useState(
+  const [seeds, setSeeds] = useState(() =>
     Array(iconsToShow)
       .fill("reddit-user")
       .map((text) => text + Math.random()),

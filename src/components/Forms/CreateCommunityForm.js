@@ -24,7 +24,7 @@ const validationSchema = yup.object().shape({
 
 const AvatarOptions = () => {
   const { setFieldValue } = useFormikContext();
-  const [seeds, setSeeds] = useState(
+  const [seeds, setSeeds] = useState(() =>
     Array(8)
       .fill("reddit-subreddit")
       .map((text) => text + Math.random()),

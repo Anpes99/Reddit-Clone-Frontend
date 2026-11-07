@@ -13,7 +13,7 @@ const initialValues = { subredditIconUrl: "" };
 const AvatarOptions = ({ iconsToShow = 16 }) => {
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
   const { setFieldValue, values } = useFormikContext();
-  const [seeds, setSeeds] = useState(
+  const [seeds, setSeeds] = useState(() =>
     Array(iconsToShow)
       .fill("reddit-subreddit")
       .map((text) => text + Math.random()),
