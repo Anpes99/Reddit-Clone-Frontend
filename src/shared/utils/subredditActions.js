@@ -1,37 +1,54 @@
-import { setUser } from "../../app/slices/appSlice";
+import { addGlobalNotification, setUser } from "../../app/slices/appSlice";
 import Axios from "../lib/axios";
 
 export const handleJoinSubreddit = async (user, subreddit, dispatch) => {
+  let res;
   try {
-    const res = await Axios.post(`/api/subreddits/${subreddit.id}/user`);
-
-    if (res.status === 200) {
-      const updatedUser = {
-        ...user,
-        subreddits: [...user.subreddits, subreddit],
-      };
-
-      dispatch(setUser(updatedUser));
-    }
+    res = await Axios.post(`/api/subreddits/${subreddit.id}/user`);
   } catch (e) {
-    console.log(e.response);
+    if (e.response?.status !== 429) {
+      dispatch(
+        addGlobalNotification({
+          type: "error",
+          message: "Couldn't join the community. Please try again.",
+        }),
+      );
+    }
+    return;
+  }
+  if (res.status === 200) {
+    const updatedUser = {
+      ...user,
+      subreddits: [...user.subreddits, subreddit],
+    };
+
+    dispatch(setUser(updatedUser));
   }
 };
 
 export const handleLeaveSubreddit = async (user, subreddit, dispatch) => {
+  let res;
   try {
-    const res = await Axios.delete(`/api/subreddits/${subreddit.id}/user`);
-    if (res.status === 204) {
-      const updatedUser = {
-        ...user,
-        subreddits: user.subreddits.filter(
-          (userJoinedSubreddit) => userJoinedSubreddit.id !== subreddit.id,
-        ),
-      };
-
-      dispatch(setUser(updatedUser));
-    }
+    res = await Axios.delete(`/api/subreddits/${subreddit.id}/user`);
   } catch (e) {
-    console.log(e);
+    if (e.response?.status !== 429) {
+      dispatch(
+        addGlobalNotification({
+          type: "error",
+          message: "Couldn't leave the community. Please try again.",
+        }),
+      );
+    }
+    return;
+  }
+  if (res.status === 204) {
+    const updatedUser = {
+      ...user,
+      subreddits: user.subreddits.filter(
+        (userJoinedSubreddit) => userJoinedSubreddit.id !== subreddit.id,
+      ),
+    };
+
+    dispatch(setUser(updatedUser));
   }
 };

@@ -2,7 +2,8 @@ import { Formik, useFormikContext } from "formik";
 
 import Axios from "../../../shared/lib/axios";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addGlobalNotification } from "../../../app/slices/appSlice";
 import ImageUpload from "../../../components/Shared/ImageUpload";
 import { Close } from "@mui/icons-material";
 import { uploadImageToS3 } from "../../../shared/utils/utils";
@@ -111,6 +112,7 @@ const AvatarOptions = ({ iconsToShow = 16 }) => {
 const EditSubredditIconModal = ({ isVisible, closeForm }) => {
   const [loading, setLoading] = useState(false);
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
+  const dispatch = useDispatch();
   const onSubmit = async (values) => {
     setLoading(true);
 
@@ -128,6 +130,14 @@ const EditSubredditIconModal = ({ isVisible, closeForm }) => {
       window.location.href = "/r/" + currentSubreddit.name;
     } catch (e) {
       setLoading(false);
+      if (e.response?.status !== 429) {
+        dispatch(
+          addGlobalNotification({
+            type: "error",
+            message: "Couldn't update the community icon. Please try again.",
+          }),
+        );
+      }
     }
   };
 

@@ -1,6 +1,9 @@
 import { useParams, useSearchParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { setHeaderDropDownVisible } from "../../app/slices/appSlice";
+import {
+  addGlobalNotification,
+  setHeaderDropDownVisible,
+} from "../../app/slices/appSlice";
 
 import { PlusCircleIcon } from "@heroicons/react/outline";
 
@@ -399,15 +402,27 @@ const UserPage = ({ orderType = "new" }) => {
 
   const handleUpdateIntroduction = async () => {
     setLoading(true);
-    await Axios.patch("/api/loggedInUser", {
-      introduction: introductionDraft,
-    });
-    setViewedUserDetails({
-      ...viewedUserDetails,
-      introduction: introductionDraft,
-    });
-    setIsVisibleEditIntroduction(false);
-    setLoading(false);
+    try {
+      await Axios.patch("/api/loggedInUser", {
+        introduction: introductionDraft,
+      });
+      setViewedUserDetails({
+        ...viewedUserDetails,
+        introduction: introductionDraft,
+      });
+      setIsVisibleEditIntroduction(false);
+    } catch (e) {
+      if (e.response?.status !== 429) {
+        dispatch(
+          addGlobalNotification({
+            type: "error",
+            message: "Couldn't update your introduction. Please try again.",
+          }),
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const isOwnPage = () => user?.username === viewedUserDetails.username;

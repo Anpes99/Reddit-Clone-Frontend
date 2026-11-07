@@ -2,7 +2,8 @@ import { Formik, useFormikContext } from "formik";
 
 import Axios from "../../../shared/lib/axios";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addGlobalNotification } from "../../../app/slices/appSlice";
 import UserAvatarImg from "../../../components/Users/UserAvatarImg";
 import { Close } from "@mui/icons-material";
 
@@ -77,13 +78,21 @@ const AvatarOptions = ({ iconsToShow = 16 }) => {
 };
 
 const EditUserAvatarImageModal = ({ isVisible, closeForm }) => {
+  const dispatch = useDispatch();
   const onSubmit = async (values) => {
     try {
       await Axios.patch(`api/loggedInUser`, values);
       closeForm();
       window.location.reload();
     } catch (e) {
-      console.log(e);
+      if (e.response?.status !== 429) {
+        dispatch(
+          addGlobalNotification({
+            type: "error",
+            message: "Couldn't update your avatar. Please try again.",
+          }),
+        );
+      }
     }
   };
 

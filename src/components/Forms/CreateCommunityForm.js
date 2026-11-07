@@ -128,7 +128,7 @@ const CreateCommunityForm = ({ isVisible, closeForm }) => {
       closeForm();
       window.location.href = "/r/" + communityName;
     } catch (e) {
-      if (e.response.status === 409) {
+      if (e?.response?.status === 409) {
         setNewError("A subreddit with this name already exists.");
       } else {
         setNewError("Something went wrong while creating new subreddit.");

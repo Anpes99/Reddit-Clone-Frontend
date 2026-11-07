@@ -7,16 +7,20 @@ import { ArrowSmDownIcon } from "@heroicons/react/outline";
 import socket from "../../../shared/lib/socket";
 
 const PostLikes = ({ post, className }) => {
-  const [likes, setLikes] = useState(0);
-
-  useEffect(() => {
-    setLikes(post.upVotes - post.downVotes);
-  }, [post]);
+  const [liveVotesChanged, setLiveVotesChanged] = useState(0);
+  const [prevPost, setPrevPost] = useState(post);
+  if (post !== prevPost) {
+    setPrevPost(post);
+    setLiveVotesChanged(0);
+  }
+  const likes = post.upVotes - post.downVotes + liveVotesChanged;
 
   useEffect(() => {
     const handleLikesChanged = ({ postId, pointsToAddOrMinus }) => {
       if (postId === post.id) {
-        setLikes((currentLikes) => currentLikes + pointsToAddOrMinus);
+        setLiveVotesChanged(
+          (curLiveVotesChanged) => curLiveVotesChanged + pointsToAddOrMinus,
+        );
       }
     };
 
@@ -38,19 +42,9 @@ const PostVotingArrows = ({ post, numberColor }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.app.user);
   const [loading, setLoading] = useState(false);
-  const [userRating, setUserRating] = useState(null);
+  const userRating =
+    user?.ratedPosts?.find((p) => p.id === post?.id)?.rating ?? null;
 
-  useEffect(() => {
-    const index = user?.ratedPosts?.findIndex((p) => p.id === post?.id);
-
-    if (index === -1) {
-      setUserRating(null);
-    } else {
-      if (user) {
-        setUserRating(user?.ratedPosts?.[index]?.rating);
-      }
-    }
-  }, [user, post]);
   return (
     <>
       <ArrowSmUpIcon

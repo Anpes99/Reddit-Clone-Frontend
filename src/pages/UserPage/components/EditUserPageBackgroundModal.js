@@ -4,7 +4,8 @@ import Axios from "../../../shared/lib/axios";
 import { useState } from "react";
 import { Close } from "@mui/icons-material";
 import ImageUpload from "../../../components/Shared/ImageUpload";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addGlobalNotification } from "../../../app/slices/appSlice";
 import { uploadImageToS3 } from "../../../shared/utils/utils";
 
 const initialValues = { userAvatarImageUrl: "" };
@@ -12,6 +13,7 @@ const initialValues = { userAvatarImageUrl: "" };
 const EditUserPageBackgroundModal = ({ isVisible, closeForm }) => {
   const [message, setMessage] = useState("");
   const user = useSelector((state) => state.app.user);
+  const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
   const onSubmit = async (values) => {
@@ -28,7 +30,15 @@ const EditUserPageBackgroundModal = ({ isVisible, closeForm }) => {
       window.location.reload();
     } catch (e) {
       setLoading(false);
-      console.log(e);
+      if (e.response?.status !== 429) {
+        dispatch(
+          addGlobalNotification({
+            type: "error",
+            message:
+              "Couldn't update your profile background. Please try again.",
+          }),
+        );
+      }
     }
   };
   const onUploadImage = async ({ file, setFieldValue }) => {

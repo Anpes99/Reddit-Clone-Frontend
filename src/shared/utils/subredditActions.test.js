@@ -1,5 +1,5 @@
 import Axios from "../lib/axios";
-import { setUser } from "../../app/slices/appSlice";
+import { addGlobalNotification, setUser } from "../../app/slices/appSlice";
 import { handleJoinSubreddit, handleLeaveSubreddit } from "./subredditActions";
 
 jest.mock("../lib/axios", () => ({
@@ -29,9 +29,38 @@ describe("handleJoinSubreddit", () => {
     );
   });
 
-  it("leaves the user unchanged when the request fails", async () => {
+  it("leaves the user unchanged and shows an error when the request fails", async () => {
     const dispatch = jest.fn();
     Axios.post.mockRejectedValue({ response: { status: 500 } });
+
+    await handleJoinSubreddit({ id: 1, subreddits: [] }, { id: 2 }, dispatch);
+
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenCalledWith(
+      addGlobalNotification({
+        type: "error",
+        message: "Couldn't join the community. Please try again.",
+      }),
+    );
+  });
+
+  it("shows an error when the connection is lost", async () => {
+    const dispatch = jest.fn();
+    Axios.post.mockRejectedValue({ code: "ERR_NETWORK" });
+
+    await handleJoinSubreddit({ id: 1, subreddits: [] }, { id: 2 }, dispatch);
+
+    expect(dispatch).toHaveBeenCalledWith(
+      addGlobalNotification({
+        type: "error",
+        message: "Couldn't join the community. Please try again.",
+      }),
+    );
+  });
+
+  it("does not add a second notification when rate limited", async () => {
+    const dispatch = jest.fn();
+    Axios.post.mockRejectedValue({ response: { status: 429 } });
 
     await handleJoinSubreddit({ id: 1, subreddits: [] }, { id: 2 }, dispatch);
 
@@ -50,6 +79,22 @@ describe("handleLeaveSubreddit", () => {
     expect(Axios.delete).toHaveBeenCalledWith("/api/subreddits/2/user");
     expect(dispatch).toHaveBeenCalledWith(
       setUser({ id: 1, subreddits: [{ id: 1 }] }),
+    );
+  });
+
+  it("leaves the user unchanged and shows an error when the request fails", async () => {
+    const user = { id: 1, subreddits: [{ id: 2 }] };
+    const dispatch = jest.fn();
+    Axios.delete.mockRejectedValue({ response: { status: 500 } });
+
+    await handleLeaveSubreddit(user, { id: 2 }, dispatch);
+
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenCalledWith(
+      addGlobalNotification({
+        type: "error",
+        message: "Couldn't leave the community. Please try again.",
+      }),
     );
   });
 });

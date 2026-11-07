@@ -132,6 +132,32 @@ const Header = () => {
 
   return (
     <>
+      {globalNotifications.length ? (
+        <div className="fixed right-4 top-[calc(var(--header-height)+12px)] z-[2000] flex w-[min(24rem,calc(100vw-2rem))] flex-col gap-3">
+          {globalNotifications.map((notification) => (
+            <Alert
+              key={notification.id}
+              onClose={() => {
+                dispatch(removeGlobalNotification({ id: notification.id }));
+              }}
+              severity={notification.type}
+              variant="filled"
+              className="mt-3"
+            >
+              {notification.title ? (
+                <AlertTitle>{notification.title}</AlertTitle>
+              ) : (
+                notification.type === "error" && (
+                  <AlertTitle>Something went wrong</AlertTitle>
+                )
+              )}
+              {notification.message}
+            </Alert>
+          ))}
+        </div>
+      ) : (
+        <></>
+      )}
       <div
         onClick={() => {
           if (dropDownVisible) {
@@ -141,32 +167,6 @@ const Header = () => {
         ref={headerRef}
         className=" relative  lg:fixed lg:top-0 lg:left-0 w-full  sm:pb-0 flex sm:flex-row min-h-12 bg-white  items-center justify-between z-[150] pl-0 sm:pl-2 sm:space-x-2 border-b-[3px] "
       >
-        {globalNotifications.length ? (
-          <div className="fixed right-4 top-[calc(var(--header-height)+12px)] z-[2000] flex w-[min(24rem,calc(100vw-2rem))] flex-col gap-3">
-            {globalNotifications.map((notification) => (
-              <Alert
-                key={notification.id}
-                onClose={() => {
-                  dispatch(removeGlobalNotification({ id: notification.id }));
-                }}
-                severity={notification.type}
-                variant="filled"
-                className="mt-3"
-              >
-                {notification.title ? (
-                  <AlertTitle>{notification.title}</AlertTitle>
-                ) : (
-                  notification.type === "error" && (
-                    <AlertTitle>Something went wrong</AlertTitle>
-                  )
-                )}
-                {notification.message}
-              </Alert>
-            ))}
-          </div>
-        ) : (
-          <></>
-        )}
         <button
           onClick={() => {
             dispatch(
