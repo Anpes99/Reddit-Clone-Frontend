@@ -18,13 +18,12 @@
 }
 
 .text-gray-450 {
- --tw-text-opacity: 1;
- color: rgb(133, 135, 142);
+  --tw-text-opacity: 1;
+  color: rgb(133, 135, 142);
 }
 
 :root {
   --header-height: 68px;
-
 }
 
 @media (max-width: 640px) {

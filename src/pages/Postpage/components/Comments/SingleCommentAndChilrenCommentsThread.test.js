@@ -50,7 +50,11 @@ it("loads and shows nested replies on demand", async () => {
         user: { username: "test_user2" },
         descendantCount: 1,
       }),
-      makeComment({ id: 3, text: "Second reply", user: { username: "test_user3" } }),
+      makeComment({
+        id: 3,
+        text: "Second reply",
+        user: { username: "test_user3" },
+      }),
     ],
   });
   renderWithProviders(

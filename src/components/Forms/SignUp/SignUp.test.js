@@ -56,7 +56,11 @@ describe("sign-up validation", () => {
 
   it("rejects an invalid email and a short password", () => {
     expect(
-      validate({ username: "test_user1", email: "not-an-email", password: "123" }),
+      validate({
+        username: "test_user1",
+        email: "not-an-email",
+        password: "123",
+      }),
     ).toEqual({
       email: "Please enter a valid email address",
       password: "Password must be at least 4 characters",

@@ -1,36 +1,24 @@
-.moreRepliesTextContainer{
-width: fit-content;
-margin-left:10px;
+.moreRepliesTextContainer {
+  width: fit-content;
+  margin-left: 10px;
 
-       .moreRepliesText::after{
-
-    content:"";
-     width: 100%;
-     height: 1px;
+  .moreRepliesText::after {
+    content: "";
+    width: 100%;
+    height: 1px;
     display: block;
     transform: translateY(-2px);
-     
-        }
+  }
 
-
-    &:hover{
-
-        .moreRepliesText::after{
-
-    background-color: black;
-
-        }
-
-
+  &:hover {
+    .moreRepliesText::after {
+      background-color: black;
     }
-
-
+  }
 }
 
-
-.SingleCommentAndCommentCommentsThreadContainer:has(> .commentThreadLeftBorder:hover){
-
-    border-color: black;
-
+.SingleCommentAndCommentCommentsThreadContainer:has(
+  > .commentThreadLeftBorder:hover
+) {
+  border-color: black;
 }
-
