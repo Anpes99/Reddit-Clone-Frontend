@@ -30,6 +30,83 @@ import {
   setNavigationDrawerVisible,
 } from "../../../app/slices/appSlice";
 
+const ResourcesDropDownList = () => {
+  const [isVisibleResources, setIsVisibleResources] = useState(false);
+
+  return (
+    <div className="border-b-2 pt-5 pb-2">
+      <button
+        onClick={() => {
+          setIsVisibleResources(!isVisibleResources);
+        }}
+        className=" font font-semibold flex items-center justify-between w-full hover:bg-gray-100 p-2 rounded-lg"
+      >
+        <p className="text-gray-400">RESOURCES</p>
+        {isVisibleResources && <ChevronUpIcon className="h-4 -ml-1" />}
+        {!isVisibleResources && <ChevronDownIcon className="h-4 -ml-1" />}
+      </button>
+      <div style={{ display: isVisibleResources ? "block" : "none" }}>
+        <Link
+          to={""}
+          className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
+        >
+          <Reddit />
+          <p>About Reddit</p>
+        </Link>
+        <Link
+          to={""}
+          className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
+        >
+          <Campaign />
+          <p>Advertise</p>
+        </Link>
+        <Link
+          to={""}
+          className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
+        >
+          <Code />
+          <p>Developer Platform</p>
+        </Link>
+        <Link
+          to={""}
+          className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
+        >
+          <WorkspacePremium />
+          <p>Reddit Pro</p>
+        </Link>
+        <Link
+          to={""}
+          className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
+        >
+          <Help />
+          <p>Help</p>
+        </Link>
+        <Link
+          to={""}
+          className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
+        >
+          <Book />
+          <p>Blog</p>
+        </Link>
+        <Link
+          to={""}
+          className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
+        >
+          <Work />
+          <p>Careers</p>
+        </Link>
+        <Link
+          to={""}
+          className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
+        >
+          <Article />
+          <p>Press</p>
+        </Link>
+      </div>
+    </div>
+  );
+};
+
 const NavigationDrawer = () => {
   const dispatch = useDispatch();
   const isVisible = useSelector((state) => state.app.navigationDrawerVisible);
@@ -39,83 +116,6 @@ const NavigationDrawer = () => {
 
   const location = useLocation();
   const isHomePage = ["/", "/top"].includes(location.pathname);
-
-  const ResourcesDropDownList = () => {
-    const [isVisibleResources, setIsVisibleResources] = useState(false);
-
-    return (
-      <div className="border-b-2 pt-5 pb-2">
-        <button
-          onClick={() => {
-            setIsVisibleResources(!isVisibleResources);
-          }}
-          className=" font font-semibold flex items-center justify-between w-full hover:bg-gray-100 p-2 rounded-lg"
-        >
-          <p className="text-gray-400">RESOURCES</p>
-          {isVisibleResources && <ChevronUpIcon className="h-4 -ml-1" />}
-          {!isVisibleResources && <ChevronDownIcon className="h-4 -ml-1" />}
-        </button>
-        <div style={{ display: isVisibleResources ? "block" : "none" }}>
-          <Link
-            to={""}
-            className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-          >
-            <Reddit />
-            <p>About Reddit</p>
-          </Link>
-          <Link
-            to={""}
-            className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-          >
-            <Campaign />
-            <p>Advertise</p>
-          </Link>
-          <Link
-            to={""}
-            className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-          >
-            <Code />
-            <p>Developer Platform</p>
-          </Link>
-          <Link
-            to={""}
-            className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-          >
-            <WorkspacePremium />
-            <p>Reddit Pro</p>
-          </Link>
-          <Link
-            to={""}
-            className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-          >
-            <Help />
-            <p>Help</p>
-          </Link>
-          <Link
-            to={""}
-            className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-          >
-            <Book />
-            <p>Blog</p>
-          </Link>
-          <Link
-            to={""}
-            className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-          >
-            <Work />
-            <p>Careers</p>
-          </Link>
-          <Link
-            to={""}
-            className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-          >
-            <Article />
-            <p>Press</p>
-          </Link>
-        </div>
-      </div>
-    );
-  };
 
   const [isMobile, setIsMobile] = useState("not-initialized");
   const navigationDrawerOpenedFromHeader = useSelector(

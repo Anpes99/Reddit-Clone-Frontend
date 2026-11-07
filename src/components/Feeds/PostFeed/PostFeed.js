@@ -9,10 +9,36 @@ import SubredditInfo from "../../../pages/SubredditPage/components/SubredditInfo
 import FeedItemSkeleton from "../FeedItemSkeleton";
 import { setLoginVisible } from "../../../app/slices/appSlice";
 
-const PostFeed = ({ subredditId, orderType }) => {
+const NoPostsYet = () => {
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
   const user = useSelector((state) => state.app.user);
   const dispatch = useDispatch();
+
+  return currentSubreddit?.name ? (
+    <div className="flex flex-col items-center space-y-2 py-40 px-5 bg-white ">
+      <p className="text-2xl font-bold text-gray-700">
+        This community doesnt have any posts yet
+      </p>
+      <p className="text-gray-500">Make one and get this feed started.</p>
+      <button
+        onClick={
+          user
+            ? () =>
+                (window.location.href = `/r/${currentSubreddit?.name}/submit`)
+            : () => dispatch(setLoginVisible(true))
+        }
+        className="btn2 w-max"
+      >
+        Create post
+      </button>
+    </div>
+  ) : (
+    <div></div>
+  );
+};
+
+const PostFeed = ({ subredditId, orderType }) => {
+  const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
 
   const [fetchMorePosts, loading, posts] = useGetPosts({
     queryParamSort: orderType,
@@ -30,29 +56,6 @@ const PostFeed = ({ subredditId, orderType }) => {
     });
     if (node) observer.current.observe(node);
   });
-
-  const NoPostsYet = () =>
-    currentSubreddit?.name ? (
-      <div className="flex flex-col items-center space-y-2 py-40 px-5 bg-white ">
-        <p className="text-2xl font-bold text-gray-700">
-          This community doesnt have any posts yet
-        </p>
-        <p className="text-gray-500">Make one and get this feed started.</p>
-        <button
-          onClick={
-            user
-              ? () =>
-                  (window.location.href = `/r/${currentSubreddit?.name}/submit`)
-              : () => dispatch(setLoginVisible(true))
-          }
-          className="btn2 w-max"
-        >
-          Create post
-        </button>
-      </div>
-    ) : (
-      <div></div>
-    );
 
   return (
     <div className="flex flex-col  w-full">
