@@ -7,8 +7,7 @@ import {
 } from "@heroicons/react/outline";
 import moment from "moment";
 import PostVotingArrows from "../../../components/Feeds/PostFeed/PostVotingArrows";
-import { useNavigate } from "react-router";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router";
 import DefaultSubredditIcon from "../../../assets/icons/DefaultSubredditIcon";
 
 const PostPageMainInfoSection = ({ post }) => {

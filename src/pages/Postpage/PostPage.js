@@ -1,10 +1,9 @@
 import { XIcon, PhotographIcon } from "@heroicons/react/outline";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import PostPageMainInfoSection from "./components/PostPageItem";
 import { useDispatch } from "react-redux";
 import { setHeaderDropDownVisible } from "../../app/slices/appSlice";
-import { useSearchParams } from "react-router-dom";
 import SubredditInfo from "../SubredditPage/components/SubredditInfo";
 import { useSelector } from "react-redux";
 import TopCommunities from "../../components/Subreddits/TopCommunities";

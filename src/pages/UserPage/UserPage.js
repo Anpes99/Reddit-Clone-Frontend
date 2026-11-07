@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { setHeaderDropDownVisible } from "../../app/slices/appSlice";
 
@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import { ArrowSmUpIcon } from "@heroicons/react/outline";
 import { ArrowSmDownIcon } from "@heroicons/react/outline";
 import UserAvatarImg from "../../components/Users/UserAvatarImg";
-import { useSearchParams } from "react-router-dom";
 import Axios from "../../shared/lib/axios";
 import { EditSharp, ImageOutlined } from "@mui/icons-material";
 import { TextareaAutosize, useMediaQuery } from "@mui/material";

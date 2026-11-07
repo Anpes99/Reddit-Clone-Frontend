@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
 import useGetSearchPageItems from "../../../hooks/useGetSearchPageItems";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router";
 import { MenuItem, Select } from "@mui/material";
 import { makeStringSafeForURL } from "../../../shared/utils/utils";
 import moment from "moment";

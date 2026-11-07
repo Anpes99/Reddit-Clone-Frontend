@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router";
-
 const TrendingFeedItem = (props) => {
   const navigate = useNavigate();
 

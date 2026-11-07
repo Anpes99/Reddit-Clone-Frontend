@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import HomePage from "../pages/HomePage/HomePage";
 import PostPage from "../pages/Postpage/PostPage";
@@ -11,7 +11,6 @@ import SearchPage from "../pages/SearchPage/SearchPage";
 import Header from "../components/Navigation/Header/Header";
 import NavigationDrawer from "../components/Navigation/NavigationDrawer/NavigationDrawer";
 import Axios from "../shared/lib/axios";
-import { useLocation } from "react-router-dom";
 import VerifyEmailPage from "../pages/VerifyEmailPage/VerifyEmailPage";
 import ResetPasswordPage from "../pages/resetPassword/ResetPasswordPage";
 import { getNotificationSeverity } from "../constants/notification";

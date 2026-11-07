@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Formik } from "formik";
 import FormikTextInput from "../../Formik/FormikTextInput";
 import useSignIn from "../../../hooks/useSignIn";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import {
   setEmailVerificationModal,
   setSignUpVisible,

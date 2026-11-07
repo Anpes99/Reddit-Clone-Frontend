@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router";
 import axios from "axios";
 import { addGlobalNotification } from "../../app/slices/appSlice";
 import { useDispatch } from "react-redux";

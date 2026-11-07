@@ -3,8 +3,7 @@ import { SunIcon } from "@heroicons/react/outline";
 import { TrendingUpIcon } from "@heroicons/react/outline";
 import { memo, useCallback, useRef } from "react";
 
-import { useParams } from "react-router";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router";
 import useGetUserPageFeedItems from "../../../hooks/useGetUserPageFeedItems";
 import CommentFeedItem from "./CommentFeed/CommentFeedItem";
 import FeedItemSkeleton from "../../../components/Feeds/FeedItemSkeleton";

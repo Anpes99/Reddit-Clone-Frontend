@@ -3,8 +3,7 @@ import { UserIcon } from "@heroicons/react/outline";
 import { ChevronDownIcon, MenuIcon } from "@heroicons/react/solid";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router";
-
+import { useNavigate, useSearchParams } from "react-router";
 import { useDispatch } from "react-redux";
 import {
   setHeaderDropDownVisible,
@@ -23,7 +22,6 @@ import RedditTextIcon from "../../../assets/icons/RedditTextIcon";
 import RedditIcon from "../../../assets/icons/RedditIcon";
 import HeaderOptionsDropDownList from "./HeaderOptionsDropDownList";
 import UserSubredditsDropDownList from "./UserSubredditsDropDown";
-import { useSearchParams } from "react-router-dom";
 import Axios from "../../../shared/lib/axios";
 import UserAvatarImg from "../../Users/UserAvatarImg";
 import EmailVerificationModal from "../../Forms/EmailVerification/EmailVerificationModal";

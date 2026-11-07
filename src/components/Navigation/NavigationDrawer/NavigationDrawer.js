@@ -22,8 +22,7 @@ import {
   WorkspacePremium,
   Workspaces,
 } from "@mui/icons-material";
-import { useLocation } from "react-router";
-import { Link } from "react-router-dom";
+import { useLocation, Link } from "react-router";
 import { PlusIcon } from "@heroicons/react/solid";
 import CreateCommunityForm from "../../Forms/CreateCommunityForm";
 import { useDispatch, useSelector } from "react-redux";

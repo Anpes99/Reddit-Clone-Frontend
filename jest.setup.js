@@ -18,3 +18,7 @@ const localStorageMock = (() => {
 })();
 
 global.localStorage = localStorageMock;
+
+// react-router v7 needs TextEncoder/TextDecoder, which Jest 27's jsdom lacks
+const { TextEncoder, TextDecoder } = require("util");
+Object.assign(global, { TextEncoder, TextDecoder });
