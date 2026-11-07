@@ -45,16 +45,16 @@ const PostFeed = ({ subredditId, orderType }) => {
     subredditId,
   });
 
-  const observer = useRef();
+  const observerRef = useRef();
   const lastPostRef = useCallback((node) => {
     if (loading) return;
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver((entries) => {
+    if (observerRef.current) observerRef.current.disconnect();
+    observerRef.current = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
         fetchMorePosts(orderType);
       }
     });
-    if (node) observer.current.observe(node);
+    if (node) observerRef.current.observe(node);
   });
 
   return (

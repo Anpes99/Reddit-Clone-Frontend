@@ -36,18 +36,18 @@ const App = () => {
 
   const [authInitialized, setAuthInitialized] = useState(false);
 
-  const refreshLoading = useRef();
+  const refreshLoadingRef = useRef();
 
   useEffect(() => {
     const runUseEffectFunction = async () => {
-      if (refreshLoading.current) return;
+      if (refreshLoadingRef.current) return;
       if (user) return;
       let result;
       try {
-        refreshLoading.current = true;
+        refreshLoadingRef.current = true;
         result = await Axios.post("/api/auth/refresh");
       } catch (e) {
-        refreshLoading.current = false;
+        refreshLoadingRef.current = false;
         setAuthInitialized(true);
         return;
       }
@@ -78,7 +78,7 @@ const App = () => {
       }
 
       setAuthInitialized(true);
-      refreshLoading.current = false;
+      refreshLoadingRef.current = false;
     };
 
     runUseEffectFunction();

@@ -144,7 +144,7 @@ const NavigationDrawer = () => {
       dispatch(setNavigationDrawerOpenedFromHeader(false));
       document.body.style.overflow = "";
     }
-  }, [isMobile]);
+  }, [isMobile, dispatch]);
 
   return (
     <>

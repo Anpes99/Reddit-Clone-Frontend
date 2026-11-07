@@ -420,11 +420,11 @@ const UserPage = ({ orderType = "new" }) => {
 
   const isOwnPage = () => user?.username === viewedUserDetails.username;
 
-  const [isVisibleEditBackgroundModal, setisVisibleEditBackgroundModal] =
+  const [isVisibleEditBackgroundModal, setIsVisibleEditBackgroundModal] =
     useState(false);
 
   const openEditUserPageBackgroundModal = () => {
-    setisVisibleEditBackgroundModal(true);
+    setIsVisibleEditBackgroundModal(true);
   };
 
   return (
@@ -441,7 +441,7 @@ const UserPage = ({ orderType = "new" }) => {
         <EditUserPageBackgroundModal
           isVisible={isVisibleEditBackgroundModal}
           closeForm={() => {
-            setisVisibleEditBackgroundModal(false);
+            setIsVisibleEditBackgroundModal(false);
           }}
         />
       )}
