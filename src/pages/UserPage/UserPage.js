@@ -202,13 +202,6 @@ const UserIntroductionAndEditSection = ({
   viewedUserUsername,
 }) => {
   const isSmallScreen = useMediaQuery("(max-width: 1024px)");
-  const [resetKey, setResetKey] = useState(0);
-
-  useEffect(() => {
-    // this is for making the textarea auto size use defaultValue everytime
-    //  that it becomes visible when screen width changes
-    setResetKey((k) => k + 1);
-  }, [isSmallScreen]);
 
   return (
     <div className="text-sm  flex flex-col mb-4 text-gray-700 border-b break-words">
@@ -216,7 +209,7 @@ const UserIntroductionAndEditSection = ({
       {isVisibleEditIntroduction && (
         <TextareaAutosize
           maxLength={500}
-          key={resetKey}
+          key={`text-area-${String(isSmallScreen)}`}
           onChange={(e) => {
             setIntroductionDraft(e.target.value);
           }}

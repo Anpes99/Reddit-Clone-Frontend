@@ -10,16 +10,18 @@ import { ArrowSmDownIcon } from "@heroicons/react/outline";
 import socket from "../../../../shared/lib/socket";
 
 const CommentLikes = ({ comment, className }) => {
-  const [likes, setLikes] = useState(0);
-
-  useEffect(() => {
-    setLikes(comment.upVotes - comment.downVotes);
-  }, [comment]);
+  const [liveVotesChanged, setLiveVotesChanged] = useState(0);
+  const [prevComment, setPrevComment] = useState(comment);
+  if (comment !== prevComment) {
+    setPrevComment(comment);
+    setLiveVotesChanged(0);
+  }
+  const likes = comment.upVotes - comment.downVotes + liveVotesChanged;
 
   useEffect(() => {
     const handleCommentLikesChanged = ({ commentId, ratingToPlusOrMinus }) => {
       if (commentId === comment.id) {
-        setLikes((currentValue) => currentValue + ratingToPlusOrMinus);
+        setLiveVotesChanged((change) => change + ratingToPlusOrMinus);
       }
     };
 
@@ -28,7 +30,7 @@ const CommentLikes = ({ comment, className }) => {
     return () => {
       socket.off("comment_likes_changed", handleCommentLikesChanged);
     };
-  }, []);
+  }, [comment?.id]);
 
   return (
     <p className={className}>
