@@ -6,28 +6,29 @@ import { BookmarkAdd, MoreHoriz, Reply } from "@mui/icons-material";
 import DefaultSubredditIcon from "../../../../assets/icons/DefaultSubredditIcon";
 import CommentVotingArrows from "./CommentVotingArrows";
 
+const ActionsSection = () => {
+  return (
+    <div className="flex space-x-4 text-gray-450 font-bold pl-2 w-fit">
+      <div className="flex  hover:bg-gray-300">
+        <Reply className="scale-x-[-1]" />
+        <p className="hidden sm:inline-block">Share</p>
+      </div>
+      <div className="flex hover:bg-gray-300">
+        <BookmarkAdd className="mr-1" />
+        <p className="hidden sm:inline-block">Save</p>
+      </div>
+      <div className="flex items-center hover:bg-gray-300">
+        <MoreHoriz />
+      </div>
+    </div>
+  );
+};
+
 const CommentFeedItem = ({ comment }) => {
   const date = new Date(comment.createdAt);
 
   const navigate = useNavigate();
 
-  const ActionsSection = () => {
-    return (
-      <div className="flex space-x-4 text-gray-450 font-bold pl-2 w-fit">
-        <div className="flex  hover:bg-gray-300">
-          <Reply className="scale-x-[-1]" />
-          <p className="hidden sm:inline-block">Share</p>
-        </div>
-        <div className="flex hover:bg-gray-300">
-          <BookmarkAdd className="mr-1" />
-          <p className="hidden sm:inline-block">Save</p>
-        </div>
-        <div className="flex items-center hover:bg-gray-300">
-          <MoreHoriz />
-        </div>
-      </div>
-    );
-  };
   return (
     <div className=" flex flex-col sm:flex-row w-full    sm:h-min-content bg-white border mb-3  border-gray-300 p-0.5">
       <div className=" hidden sm:flex flex-col items-center bg-gray-50 w-20 p-1.5">

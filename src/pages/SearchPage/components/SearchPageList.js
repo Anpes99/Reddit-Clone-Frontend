@@ -113,7 +113,7 @@ const SearchPageList = () => {
           <Select
             value={orderType}
             onChange={(e) => {
-              window.location.href = `/search?type=${itemsType}&sort=${e.target.value}&searchquery=${searchQuery}`;
+              window.location.href = `/search?type=${itemsType}&sort=${e.target.value}&searchquery=${encodeURIComponent(searchQuery ?? "")}`;
             }}
           >
             <MenuItem value={"NEW"}>New</MenuItem>

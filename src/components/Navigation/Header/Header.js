@@ -210,7 +210,7 @@ const Header = () => {
             maxLength={500}
             onKeyDown={(e) => {
               if (e.key === "Enter" && searchWord.length) {
-                window.location.href = `/search?type=posts&sort=TOP&searchquery=${searchWord}`;
+                window.location.href = `/search?type=posts&sort=TOP&searchquery=${encodeURIComponent(searchWord)}`;
               }
             }}
           />

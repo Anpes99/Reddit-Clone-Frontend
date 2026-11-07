@@ -3,6 +3,33 @@ import { setHeaderDropDownVisible } from "../../app/slices/appSlice";
 
 import SearchPageList from "./components/SearchPageList";
 import { useSearchParams } from "react-router";
+const SearchPageContentSelectionButtons = ({
+  itemsType,
+  orderType,
+  searchQuery,
+}) => {
+  return (
+    <div className="flex pl-3">
+      <a
+        href={`/search?type=posts&sort=${orderType}&searchquery=${encodeURIComponent(searchQuery ?? "")}`}
+        className={`${
+          itemsType === "posts" ? "bg-gray-300" : ""
+        } pl-4 pr-4 py-2 rounded-3xl font-semibold mr-4 hover:underline`}
+      >
+        Posts
+      </a>
+      <a
+        href={`/search?type=communities&searchquery=${encodeURIComponent(searchQuery ?? "")}`}
+        className={`${
+          itemsType === "communities" ? "bg-gray-300" : ""
+        } pl-4 pr-4 py-2  rounded-3xl font-semibold hover:underline "`}
+      >
+        Communities
+      </a>
+    </div>
+  );
+};
+
 const SearchPage = () => {
   const dispatch = useDispatch();
 
@@ -11,29 +38,6 @@ const SearchPage = () => {
   const itemsType = searchParams.get("type") || "posts";
   const orderType = searchParams.get("sort") || "NEW";
   const searchQuery = searchParams.get("searchquery");
-
-  const SearchPageContentSelectionButtons = () => {
-    return (
-      <div className="flex pl-3">
-        <a
-          href={`/search?type=posts&sort=${orderType}&searchquery=${searchQuery}`}
-          className={`${
-            itemsType === "posts" ? "bg-gray-300" : ""
-          } pl-4 pr-4 py-2 rounded-3xl font-semibold mr-4 hover:underline`}
-        >
-          Posts
-        </a>
-        <a
-          href={`/search?type=communities&searchquery=${searchQuery}`}
-          className={`${
-            itemsType === "communities" ? "bg-gray-300" : ""
-          } pl-4 pr-4 py-2  rounded-3xl font-semibold hover:underline "`}
-        >
-          Communities
-        </a>
-      </div>
-    );
-  };
 
   return (
     <>
@@ -46,7 +50,11 @@ const SearchPage = () => {
         <div className=""></div>
 
         <div className="w-full  md:px-5 lg:pt-6 max-w-screen-lg">
-          <SearchPageContentSelectionButtons />
+          <SearchPageContentSelectionButtons
+            itemsType={itemsType}
+            orderType={orderType}
+            searchQuery={searchQuery}
+          />
 
           <div className="flex flex-col  w-full">
             <div className="flex justify-center lg:justify-between w-full mt-4">

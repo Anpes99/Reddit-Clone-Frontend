@@ -10,33 +10,33 @@ import {
 } from "@mui/icons-material";
 import DefaultSubredditIcon from "../../../assets/icons/DefaultSubredditIcon";
 
+const ActionsSection = ({ post }) => {
+  return (
+    <div className="flex space-x-4 text-gray-450 font-bold pl-2 w-fit">
+      <div className="flex  hover:bg-gray-300">
+        <ChatBubbleRounded className=" mr-1" style={{ width: "20px" }} />
+        <p>{post.commentCount}</p>
+        <p className="hidden sm:inline-block ml-1">Comments</p>
+      </div>
+      <div className="flex  hover:bg-gray-300">
+        <Reply className="scale-x-[-1]" />
+        <p className="hidden sm:inline-block">Share</p>
+      </div>
+      <div className="flex hover:bg-gray-300">
+        <BookmarkAdd className="mr-1" />
+        <p className="hidden sm:inline-block">Save</p>
+      </div>
+      <div className="flex items-center hover:bg-gray-300">
+        <MoreHoriz />
+      </div>
+    </div>
+  );
+};
+
 const PostFeedItem = ({ post }) => {
   const date = new Date(post.createdAt);
 
   const navigate = useNavigate();
-
-  const ActionsSection = () => {
-    return (
-      <div className="flex space-x-4 text-gray-450 font-bold pl-2 w-fit">
-        <div className="flex  hover:bg-gray-300">
-          <ChatBubbleRounded className=" mr-1" style={{ width: "20px" }} />
-          <p>{post.commentCount}</p>
-          <p className="hidden sm:inline-block ml-1">Comments</p>
-        </div>
-        <div className="flex  hover:bg-gray-300">
-          <Reply className="scale-x-[-1]" />
-          <p className="hidden sm:inline-block">Share</p>
-        </div>
-        <div className="flex hover:bg-gray-300">
-          <BookmarkAdd className="mr-1" />
-          <p className="hidden sm:inline-block">Save</p>
-        </div>
-        <div className="flex items-center hover:bg-gray-300">
-          <MoreHoriz />
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div className=" flex flex-col sm:flex-row w-full    sm:h-min-content bg-white border mb-3  border-gray-300 p-0.5">
@@ -80,12 +80,12 @@ const PostFeedItem = ({ post }) => {
           src={post?.imageUrl || null}
         />
         <div className=" hidden sm:block  pt-2  pb-1  w-fit pr-2">
-          <ActionsSection />
+          <ActionsSection post={post} />
         </div>
       </div>
 
       <div className="flex sm:hidden p-2 items-center">
-        <PostVotingArrows post={post} /> <ActionsSection />
+        <PostVotingArrows post={post} /> <ActionsSection post={post} />
       </div>
     </div>
   );
