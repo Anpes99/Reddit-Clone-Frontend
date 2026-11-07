@@ -19,7 +19,7 @@ const SubmitNewPostPage = () => {
     };
 
     runUseEffectFunction();
-  }, []);
+  }, [subredditName, dispatch]);
 
   return (
     <main className="max-w-screen-lg mx-auto min-h-[100dvh] ">
