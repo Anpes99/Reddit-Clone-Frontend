@@ -56,7 +56,7 @@ const SubredditPage = ({ orderType = "new" }) => {
     };
 
     runUseEffectFunction();
-  }, [subredditName, user]);
+  }, [subredditName, user?.id]);
 
   const openEditSubredditPageBackgroundModal = () =>
     setIsVisibleEditSubredditPageBackgroundModal(true);

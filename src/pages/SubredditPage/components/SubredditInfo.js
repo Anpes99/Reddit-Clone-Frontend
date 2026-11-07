@@ -1,8 +1,11 @@
-import { setCurrentSubreddit } from "../../../app/slices/appSlice";
+import {
+  addGlobalNotification,
+  setCurrentSubreddit,
+} from "../../../app/slices/appSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useNavigate, useParams } from "react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import JoinSubredditButton from "../../../components/Buttons/JoinSubredditButton";
 import Axios from "../../../shared/lib/axios";
 import DefaultSubredditIcon from "../../../assets/icons/DefaultSubredditIcon";
@@ -12,13 +15,84 @@ import moment from "moment";
 import useSubredditPresence from "../../../hooks/useSubredditPresence";
 import socket from "../../../shared/lib/socket";
 
+const SubredditIntroductionAndEditSection = ({
+  description,
+  canManageSettings,
+  onSave,
+}) => {
+  const [descriptionDraft, setDescriptionDraft] = useState(description ?? "");
+  const [isVisibleEditIntroduction, setIsVisibleEditIntroduction] =
+    useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      await onSave(descriptionDraft);
+      setIsVisibleEditIntroduction(false);
+    } catch (error) {
+      if (error.response?.status !== 429) {
+        dispatch(
+          addGlobalNotification({
+            type: "error",
+            message: "Couldn't update the description. Please try again.",
+          }),
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="text-sm max-w-xs  flex flex-col mb-4 text-gray-700 border-b break-words">
+      {!isVisibleEditIntroduction && description}
+      {isVisibleEditIntroduction && (
+        <TextareaAutosize
+          maxLength={500}
+          onChange={(e) => {
+            setDescriptionDraft(e.target.value);
+          }}
+          value={descriptionDraft}
+          className="p-1 w-full border border-gray-600 max-h-[500px]"
+          minRows={5}
+          maxRows={20}
+        />
+      )}
+
+      <div
+        className={`py-2 flex ${isVisibleEditIntroduction ? "justify-between" : "justify-end"}`}
+      >
+        {isVisibleEditIntroduction && (
+          <button
+            disabled={loading}
+            onClick={handleSave}
+            className="btn2 hover:bg-blue-500 disabled:bg-gray-300"
+          >
+            Update description
+          </button>
+        )}
+        {canManageSettings && (
+          <EditSharp
+            onClick={() =>
+              setIsVisibleEditIntroduction(!isVisibleEditIntroduction)
+            }
+            className="cursor-pointer self-end"
+          />
+        )}
+      </div>
+    </div>
+  );
+};
+
 const SubredditInfo = ({ style = {}, isOnPostPage }) => {
   const dispatch = useDispatch();
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
   const navigate = useNavigate();
   const subredditName = useParams().subredditName;
 
-  const editedIntroductionRef = useRef("");
   const user = useSelector((state) => state.app.user);
 
   const onlineCount = useSubredditPresence(socket, subredditName, user?.id);
@@ -32,71 +106,17 @@ const SubredditInfo = ({ style = {}, isOnPostPage }) => {
     runUseEffectFunction();
   }, [subredditName]);
 
-  useEffect(() => {
-    editedIntroductionRef.current = currentSubreddit?.description;
-  }, [subredditName, currentSubreddit]);
-
-  const [isVisibleEditIntroduction, setIsVisibleEditIntroduction] =
-    useState(false);
-  const [loading, setLoading] = useState(false);
-
   if (!currentSubreddit) return <></>;
 
-  const handleUpdateIntroduction = async () => {
-    setLoading(true);
+  const handleUpdateIntroduction = async (description) => {
     await Axios.patch("/api/subreddits/" + currentSubreddit.id + "/settings", {
-      description: editedIntroductionRef.current,
+      description,
     });
     dispatch(
       setCurrentSubreddit({
         ...currentSubreddit,
-        description: editedIntroductionRef.current,
+        description,
       }),
-    );
-
-    setIsVisibleEditIntroduction(false);
-    setLoading(false);
-  };
-
-  const SubredditIntroductionAndEditSection = () => {
-    return (
-      <div className="text-sm max-w-xs  flex flex-col mb-4 text-gray-700 border-b break-words">
-        {!isVisibleEditIntroduction && currentSubreddit.description}
-        {isVisibleEditIntroduction && (
-          <TextareaAutosize
-            maxLength={500}
-            onChange={(e) => {
-              editedIntroductionRef.current = e.target.value;
-            }}
-            defaultValue={editedIntroductionRef.current}
-            className="p-1 w-full border border-gray-600 max-h-[500px]"
-            minRows={5}
-            maxRows={20}
-          />
-        )}
-
-        <div
-          className={`py-2 flex ${isVisibleEditIntroduction ? "justify-between" : "justify-end"}`}
-        >
-          {isVisibleEditIntroduction && (
-            <button
-              disabled={loading}
-              onClick={() => handleUpdateIntroduction()}
-              className="btn2 hover:bg-blue-500 disabled:bg-gray-300"
-            >
-              Update description
-            </button>
-          )}
-          {currentSubreddit?.currentUserCanManageSettings && (
-            <EditSharp
-              onClick={() => {
-                setIsVisibleEditIntroduction(!isVisibleEditIntroduction);
-              }}
-              className="cursor-pointer self-end"
-            />
-          )}
-        </div>
-      </div>
     );
   };
 
@@ -121,7 +141,12 @@ const SubredditInfo = ({ style = {}, isOnPostPage }) => {
             r/{currentSubreddit?.name}
           </p>{" "}
         </div>
-        <SubredditIntroductionAndEditSection />
+        <SubredditIntroductionAndEditSection
+          key={currentSubreddit.id}
+          description={currentSubreddit.description}
+          canManageSettings={currentSubreddit.currentUserCanManageSettings}
+          onSave={handleUpdateIntroduction}
+        />
         <div className="flex space-x-20 border-b pb-5">
           <div className="">
             <p className="font-bold">{currentSubreddit.memberCount || 0}</p>
