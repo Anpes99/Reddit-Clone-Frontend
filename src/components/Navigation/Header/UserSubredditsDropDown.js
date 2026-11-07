@@ -1,7 +1,6 @@
 import { HomeIcon } from "@heroicons/react/solid";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import * as React from "react";
 import ListSubheader from "@mui/material/ListSubheader";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -11,11 +10,10 @@ import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
-import _ from "lodash";
 import { useNavigate } from "react-router";
 import DefaultSubredditIcon from "../../../assets/icons/DefaultSubredditIcon";
 
-const UserSubredditsDropDownList = ({}) => {
+const UserSubredditsDropDownList = () => {
   const [open, setOpen] = useState(false);
   const user = useSelector((state) => state.app.user);
   const navigate = useNavigate();

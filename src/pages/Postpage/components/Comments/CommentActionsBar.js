@@ -89,7 +89,6 @@ const CommentActionsBar = ({ post, comment, user, dispatch }) => {
         setVisible={setCreateCommentVisible}
         subredditId={post.subredditId}
         postId={post.id}
-        user={user}
       />
     </div>
   );

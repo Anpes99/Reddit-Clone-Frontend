@@ -109,7 +109,6 @@ const AvatarOptions = ({ iconsToShow = 16 }) => {
 };
 
 const EditSubredditIconModal = ({ isVisible, closeForm }) => {
-  const [newError, setNewError] = useState(null);
   const [loading, setLoading] = useState(false);
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
   const onSubmit = async (values) => {

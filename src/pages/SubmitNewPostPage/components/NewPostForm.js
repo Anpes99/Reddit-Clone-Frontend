@@ -8,7 +8,7 @@ import { uploadImageToS3 } from "../../../shared/utils/utils";
 
 const ImagePreview = (props) => <Preview {...props} isUpload />;
 
-const NewPostForm = ({}) => {
+const NewPostForm = () => {
   const [text, setText] = useState("");
   const [title, setTitle] = useState("");
   const [currentWindow, setCurrentWindow] = useState(1);
@@ -20,7 +20,7 @@ const NewPostForm = ({}) => {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
 
-  const handleChangeStatus = ({ meta, file }, status) => {
+  const handleChangeStatus = ({ file }, status) => {
     if (status === "done") {
       setImg(file);
       setLoading(false);

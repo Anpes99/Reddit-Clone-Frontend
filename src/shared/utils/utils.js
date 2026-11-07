@@ -22,7 +22,7 @@ export const createOrUpdateObjInListById = (arr, obj) => {
 
 export const handleLikeComment = async (commentId) => {
   socket.emit("likeComment", { commentId });
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve();
     }, 3000);
@@ -30,7 +30,7 @@ export const handleLikeComment = async (commentId) => {
 };
 export const handleDislikeComment = async (commentId) => {
   socket.emit("dislikeComment", { commentId });
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve();
     }, 3000);
@@ -60,7 +60,7 @@ export const handleLikePost = async (post, user, dispatch) => {
     },
   );
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve(a);
     }, 3000);
@@ -86,7 +86,7 @@ export const handleDislikePost = async (post, user, dispatch) => {
     },
   );
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve(a);
     }, 3000);

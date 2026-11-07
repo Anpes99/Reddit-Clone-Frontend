@@ -1,7 +1,4 @@
-import { useNavigate } from "react-router";
 const TrendingFeedItem = (props) => {
-  const navigate = useNavigate();
-
   return (
     <div
       className="relative cursor-pointer rounded-lg"

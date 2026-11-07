@@ -10,7 +10,6 @@ const ReplyToCommentSection = ({
   visible,
   subredditId,
   postId,
-  user,
 }) => {
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(false);
@@ -42,15 +41,18 @@ const ReplyToCommentSection = ({
                 subredditId,
                 postId,
                 commentId,
-                user,
               );
 
               if (res.success) {
+                setError(false);
                 setVisible(false);
                 setMessage("new comment created");
                 setTimeout(() => {
                   setMessage(null);
                 }, 3000);
+              } else {
+                setError(true);
+                setMessage("Could not send your reply. Please try again.");
               }
             }}
             className="join-btn mr-5 "

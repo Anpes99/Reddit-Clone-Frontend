@@ -143,7 +143,7 @@ const Header = () => {
       >
         {globalNotifications.length ? (
           <div className="fixed right-4 top-[calc(var(--header-height)+12px)] z-[2000] flex w-[min(24rem,calc(100vw-2rem))] flex-col gap-3">
-            {globalNotifications.map((notification, i) => (
+            {globalNotifications.map((notification) => (
               <Alert
                 key={notification.id}
                 onClose={() => {
@@ -220,16 +220,15 @@ const Header = () => {
                 <div className="text-sm text-gray-500">Search suggestions:</div>
                 <ul className="mt-1 space-y-1">
                   {searchResults.map((searchResult) => (
-                    <>
-                      <li
-                        onClick={() => {
-                          window.location.href = `/r/${searchResult.name}`;
-                        }}
-                        className="cursor-pointer hover:underline"
-                      >
-                        {searchResult.name}
-                      </li>
-                    </>
+                    <li
+                      key={"search-suggestion-" + searchResult.name}
+                      onClick={() => {
+                        window.location.href = `/r/${searchResult.name}`;
+                      }}
+                      className="cursor-pointer hover:underline"
+                    >
+                      {searchResult.name}
+                    </li>
                   ))}
                 </ul>
               </div>

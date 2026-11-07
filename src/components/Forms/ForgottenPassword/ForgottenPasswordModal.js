@@ -6,7 +6,7 @@ import {
 } from "../../../app/slices/appSlice";
 import axios from "axios";
 
-const ForgottenPasswordModal = ({}) => {
+const ForgottenPasswordModal = () => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");

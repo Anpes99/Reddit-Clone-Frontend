@@ -10,7 +10,6 @@ import { uploadImageToS3 } from "../../../shared/utils/utils";
 const initialValues = { userAvatarImageUrl: "" };
 
 const EditUserPageBackgroundModal = ({ isVisible, closeForm }) => {
-  const [newError, setNewError] = useState(null);
   const [message, setMessage] = useState("");
   const user = useSelector((state) => state.app.user);
 

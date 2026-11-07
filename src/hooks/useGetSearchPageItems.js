@@ -10,7 +10,6 @@ const useGetSearchPageItems = ({
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [totalItemsCount, setTotalItemsCount] = useState(true);
-  const [error, setError] = useState(false);
   const [searchWordEmbedding, setSearchWordEmbedding] = useState("");
 
   let orderType;
@@ -130,7 +129,7 @@ const useGetSearchPageItems = ({
     }
   };
 
-  return [fetchMoreItems, loading, items, error];
+  return [fetchMoreItems, loading, items];
 };
 
 export default useGetSearchPageItems;

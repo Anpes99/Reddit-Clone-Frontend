@@ -5,10 +5,8 @@ const useGetPosts = ({ queryParamSort, subredditId, username }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPostCount, setTotalPostCount] = useState(true);
-  const [error, setError] = useState(false);
   let sortBy = "createdAt";
   let order = "DESC";
-  let sort;
   let orderType;
 
   if (queryParamSort === "new") {
@@ -117,7 +115,7 @@ const useGetPosts = ({ queryParamSort, subredditId, username }) => {
     }
   };
 
-  return [fetchMorePosts, loading, posts, error];
+  return [fetchMorePosts, loading, posts];
 };
 
 export default useGetPosts;

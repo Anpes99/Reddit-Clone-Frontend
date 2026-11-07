@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import TrendingFeedItem from "./TrendingFeedItem";
 
-const TrendingFeed = (props) => {
+const TrendingFeed = () => {
   const [newsArticles, setNewsArticles] = useState(null);
   useEffect(() => {
     axios

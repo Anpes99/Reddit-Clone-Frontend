@@ -77,8 +77,6 @@ const AvatarOptions = ({ iconsToShow = 16 }) => {
 };
 
 const EditUserAvatarImageModal = ({ isVisible, closeForm }) => {
-  const [newError, setNewError] = useState(null);
-
   const onSubmit = async (values) => {
     try {
       await Axios.patch(`api/loggedInUser`, values);

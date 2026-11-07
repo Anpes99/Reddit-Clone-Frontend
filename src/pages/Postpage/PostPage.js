@@ -15,10 +15,8 @@ import Axios from "../../shared/lib/axios";
 
 const PostPage = () => {
   const navigate = useNavigate();
-  const [commentPostMessageError, setCommentPostMessageError] = useState(false);
   const postId = useParams().postId;
   const [post, setPost] = useState({ id: Number(postId) });
-  const [commentPostMessage, setCommentPostMessage] = useState(null);
   const [searchParams] = useSearchParams();
   const sortBy = searchParams.get("sortBy");
   const order = searchParams.get("order");

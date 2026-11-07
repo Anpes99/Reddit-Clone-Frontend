@@ -83,7 +83,7 @@ const ListItemPost = ({ post }) => {
   );
 };
 
-const SearchPageList = ({}) => {
+const SearchPageList = () => {
   const [searchParams] = useSearchParams();
   const orderType = searchParams.get("sort") || "NEW";
   const itemsType = searchParams.get("type") || "posts";

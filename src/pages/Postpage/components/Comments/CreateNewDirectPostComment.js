@@ -36,7 +36,6 @@ const CreateNewDirectPostComment = ({ user, post }) => {
                   post.subredditId,
                   post.id,
                   null,
-                  user,
                 );
                 if (res.success) {
                   setCommentPost("");

@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Formik } from "formik";
 import FormikTextInput from "../../Formik/FormikTextInput";
 import * as yup from "yup";
 import useSignIn from "../../../hooks/useSignIn";
 
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
 import {
   setForgottenPasswordModalVisible,
   setLoginVisible,
@@ -21,7 +20,7 @@ const validationSchema = yup.object().shape({
   password: yup.string().min(4).required("Password is required"),
 });
 
-export const SignInContainer = ({ onSubmit, setSignUpVisible, newError }) => {
+export const SignInContainer = ({ onSubmit, newError }) => {
   const dispatch = useDispatch();
   return (
     <Formik
@@ -69,11 +68,9 @@ export const SignInContainer = ({ onSubmit, setSignUpVisible, newError }) => {
   );
 };
 //type props = Array<{signIn:({ username, password }:Credentials)=>Promise<AxiosResponse<any, any>>, success?:boolean, error?: unknown|null}>
-const SignIn = ({ setSignUpVisible, setLoginVisible }) => {
-  const dispatch = useDispatch();
+const SignIn = () => {
   const [signIn] = useSignIn();
   const [newError, setNewError] = useState(null);
-  const navigate = useNavigate();
 
   const onSubmit = async (values) => {
     const { username, password } = values;

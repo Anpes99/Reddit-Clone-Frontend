@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Formik } from "formik";
 import FormikTextInput from "../../Formik/FormikTextInput";
-import useSignIn from "../../../hooks/useSignIn";
-import { useNavigate } from "react-router";
 import {
   setEmailVerificationModal,
   setSignUpVisible,
@@ -64,7 +62,7 @@ export const validateWithJoi = (schema) => (values) => {
   }, {});
 };
 
-export const SignUpContainer = ({ onSubmit, setSignUpVisible, newError }) => {
+export const SignUpContainer = ({ onSubmit, newError }) => {
   return (
     <Formik
       validate={validateWithJoi(validationSchema)}
@@ -110,10 +108,8 @@ export const SignUpContainer = ({ onSubmit, setSignUpVisible, newError }) => {
 
 //type props = Array<{signIn:({ username, password }:Credentials)=>Promise<AxiosResponse<any, any>>, success?:boolean, error?: unknown|null}>
 const SignUp = () => {
-  const navigate = useNavigate();
   const [newError, setNewError] = useState(null);
   const dispatch = useDispatch();
-  const [signIn] = useSignIn();
 
   const onSubmit = async (values) => {
     try {

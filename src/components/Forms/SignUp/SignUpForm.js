@@ -1,4 +1,3 @@
-import React from "react";
 import { XIcon } from "@heroicons/react/solid";
 import SignUp from "./SignUp";
 import {

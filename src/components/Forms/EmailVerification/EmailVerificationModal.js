@@ -1,5 +1,6 @@
 import { XIcon } from "@heroicons/react/solid";
 import {
+  addGlobalNotification,
   setEmailVerificationModal,
   setLoginVisible,
 } from "../../../app/slices/appSlice";
@@ -8,7 +9,7 @@ import { CheckCircle, Mail } from "@mui/icons-material";
 import axios from "axios";
 import { useState } from "react";
 
-const EmailVerificationModal = ({ onChangeEmail }) => {
+const EmailVerificationModal = () => {
   const dispatch = useDispatch();
   const emailVerificationModalState = useSelector(
     (state) => state.app.emailVerificationModal,
@@ -43,7 +44,14 @@ const EmailVerificationModal = ({ onChangeEmail }) => {
           setSendEmailAgainCountdown(null);
         }, 30000);
       }
-    } catch (e) {}
+    } catch {
+      dispatch(
+        addGlobalNotification({
+          type: "error",
+          message: "Could not resend the verification email. Please try again.",
+        }),
+      );
+    }
     setLoading(false);
   };
 

@@ -40,7 +40,6 @@ const CommentCommentsSection = ({ post, fetchedComments }) => {
 };
 
 const SingleCommentAndCommentCommentsThread = ({ post, comment }) => {
-  const user = useSelector((state) => state.app.user);
   const [showChildCommentsThread, setShowChildCommentsThread] = useState(false);
   const [fetchedComments, setFetchedComments] = useState([]);
 

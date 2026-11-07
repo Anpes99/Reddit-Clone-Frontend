@@ -16,7 +16,6 @@ import {
   QuestionAnswer,
   Reddit,
   Rocket,
-  Share,
   TrendingUp,
   Work,
   WorkspacePremium,

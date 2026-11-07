@@ -2,8 +2,8 @@ import { useDispatch } from "react-redux";
 import { setHeaderDropDownVisible } from "../../app/slices/appSlice";
 
 import SearchPageList from "./components/SearchPageList";
-import { Link, useSearchParams } from "react-router";
-const SearchPage = ({}) => {
+import { useSearchParams } from "react-router";
+const SearchPage = () => {
   const dispatch = useDispatch();
 
   const [searchParams] = useSearchParams();

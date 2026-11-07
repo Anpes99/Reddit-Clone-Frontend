@@ -10,7 +10,6 @@ import { uploadImageToS3 } from "../../../shared/utils/utils";
 const initialValues = { userAvatarImageUrl: "" };
 
 const EditSubredditPageBackgroundModal = ({ isVisible, closeForm }) => {
-  const [newError, setNewError] = useState(null);
   const [message, setMessage] = useState("");
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
 

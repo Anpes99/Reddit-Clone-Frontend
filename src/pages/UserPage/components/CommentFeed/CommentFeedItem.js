@@ -76,12 +76,7 @@ const CommentFeedItem = ({ comment }) => {
           {comment.text}
         </div>
 
-        <div
-          onClick={(e) => {
-            // e.stopPropagation();
-          }}
-          className=" hidden sm:block  pt-2  pb-1  w-fit pr-2"
-        >
+        <div className=" hidden sm:block  pt-2  pb-1  w-fit pr-2">
           <ActionsSection />
         </div>
       </div>

@@ -7,7 +7,6 @@ const handleSubmitComment = async (
   subredditId,
   postId,
   commentId,
-  user,
 ) => {
   const commentSchema = yup.object().shape({
     text: yup.string().min(1).required(),

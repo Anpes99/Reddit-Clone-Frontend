@@ -5,9 +5,6 @@ const useGetUserPageFeedItems = ({ username, contentType, sortByType }) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalItemsCount, setTotalItemsCount] = useState(0);
-  const [error, setError] = useState(false);
-  let sortBy = "createdAt";
-  let order = "DESC";
 
   //////////////////   GET INITIAL ITEMS  /////////////////////////////////////////////////////////////////////////////////////
   useEffect(() => {
@@ -39,7 +36,7 @@ const useGetUserPageFeedItems = ({ username, contentType, sortByType }) => {
     }
   }, [totalItemsCount, items.length, username, contentType, sortByType]);
 
-  return [fetchMoreItems, loading, items, error];
+  return [fetchMoreItems, loading, items];
 };
 
 export default useGetUserPageFeedItems;

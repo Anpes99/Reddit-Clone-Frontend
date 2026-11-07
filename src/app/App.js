@@ -51,7 +51,7 @@ const App = () => {
         setAuthInitialized(true);
         return;
       }
-      const { accessToken, username } = result.data;
+      const { accessToken } = result.data;
 
       const userResult = await Axios.get("/api/loggedInUser", {
         headers: { Authorization: `bearer ${accessToken}` },
