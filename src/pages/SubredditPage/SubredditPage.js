@@ -16,6 +16,14 @@ import { SubredditPermissions } from "../../enums/subreddit.enum";
 import { ImageOutlined } from "@mui/icons-material";
 import EditSubredditPageBackgroundModal from "./components/EditSubredditPageBackgroundModal";
 
+const EditIconButton = ({ className, onClick }) => (
+  <span onClick={onClick} className={className}>
+    <span className="p-1.5 bg-gray-200 rounded-full h-min flex items-center justify-center">
+      <ImageOutlined style={{ height: "20px" }} />
+    </span>
+  </span>
+);
+
 const SubredditPage = ({ orderType = "new" }) => {
   const dispatch = useDispatch();
   const subredditName = useParams().subredditName;
@@ -49,21 +57,6 @@ const SubredditPage = ({ orderType = "new" }) => {
 
     runUseEffectFunction();
   }, [subredditName, user]);
-
-  const EditIconButton = ({ className }) => (
-    <span
-      onClick={() => {
-        if (currentSubreddit?.currentUserCanManageSettings) {
-          setIsVisibleEditSubredditIconModal(true);
-        }
-      }}
-      className={className}
-    >
-      <span className="p-1.5 bg-gray-200 rounded-full h-min flex items-center justify-center">
-        <ImageOutlined style={{ height: "20px" }} />
-      </span>
-    </span>
-  );
 
   const openEditSubredditPageBackgroundModal = () =>
     setIsVisibleEditSubredditPageBackgroundModal(true);
@@ -117,7 +110,14 @@ const SubredditPage = ({ orderType = "new" }) => {
                   </div>
                 )}
                 {currentSubreddit?.currentUserCanManageSettings && (
-                  <EditIconButton className="absolute bottom-0 right-0 cursor-pointer " />
+                  <EditIconButton
+                    className="absolute bottom-0 right-0 cursor-pointer "
+                    onClick={() => {
+                      if (currentSubreddit?.currentUserCanManageSettings) {
+                        setIsVisibleEditSubredditIconModal(true);
+                      }
+                    }}
+                  />
                 )}
               </div>
 

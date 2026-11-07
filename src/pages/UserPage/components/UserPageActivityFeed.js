@@ -8,6 +8,14 @@ import useGetUserPageFeedItems from "../../../hooks/useGetUserPageFeedItems";
 import CommentFeedItem from "./CommentFeed/CommentFeedItem";
 import FeedItemSkeleton from "../../../components/Feeds/FeedItemSkeleton";
 
+const NoPostsYet = ({ username }) => (
+  <div className="flex flex-col items-center py-40 md:min-w-[500px] ">
+    <p className="text-xl font-bold text-gray-700">
+      {username} hasn't posted yet
+    </p>
+  </div>
+);
+
 const UserPageActivityFeed = ({ subredditId, contentType }) => {
   const username = useParams().username;
   const [searchParams, setSearchParams] = useSearchParams();
@@ -32,14 +40,6 @@ const UserPageActivityFeed = ({ subredditId, contentType }) => {
       if (node) observer.current.observe(node);
     },
     [loading, fetchMorePosts, orderType],
-  );
-
-  const NoPostsYet = () => (
-    <div className="flex flex-col items-center py-40 md:min-w-[500px] ">
-      <p className="text-xl font-bold text-gray-700">
-        {username} hasn't posted yet
-      </p>
-    </div>
   );
 
   return (
@@ -104,7 +104,7 @@ const UserPageActivityFeed = ({ subredditId, contentType }) => {
             <FeedItemSkeleton key={"feed-item-skeleton" + i} loading={true} />
           ))
       ) : (
-        <NoPostsYet />
+        <NoPostsYet username={username} />
       )}
     </div>
   );
