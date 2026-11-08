@@ -5,7 +5,10 @@ import { useState } from "react";
 import { Close } from "@mui/icons-material";
 import ImageUpload from "../../../components/Shared/ImageUpload";
 import { useDispatch, useSelector } from "react-redux";
-import { addGlobalNotification } from "../../../app/slices/appSlice";
+import {
+  addGlobalNotification,
+  setCurrentSubreddit,
+} from "../../../app/slices/appSlice";
 import { uploadImageToS3 } from "../../../shared/utils/utils";
 
 const initialValues = { userAvatarImageUrl: "" };
@@ -25,9 +28,14 @@ const EditSubredditPageBackgroundModal = ({ isVisible, closeForm }) => {
       await Axios.patch(`api/subreddits/${currentSubreddit.id}/settings`, {
         subredditPageBackgroundImageUrl: imageUrl,
       });
+      dispatch(
+        setCurrentSubreddit({
+          ...currentSubreddit,
+          subredditPageBackgroundImageUrl: imageUrl,
+        }),
+      );
       setLoading(false);
       closeForm();
-      window.location.reload();
     } catch (e) {
       setLoading(false);
       if (e.response?.status !== 429) {

@@ -3,7 +3,10 @@ import { Formik, useFormikContext } from "formik";
 import Axios from "../../../shared/lib/axios";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addGlobalNotification } from "../../../app/slices/appSlice";
+import {
+  addGlobalNotification,
+  setCurrentSubreddit,
+} from "../../../app/slices/appSlice";
 import ImageUpload from "../../../components/Shared/ImageUpload";
 import { Close } from "@mui/icons-material";
 import { uploadImageToS3 } from "../../../shared/utils/utils";
@@ -123,9 +126,9 @@ const EditSubredditIconModal = ({ isVisible, closeForm }) => {
       await Axios.patch(`api/subreddits/${currentSubreddit.id}/settings`, {
         subredditIconUrl: ímageUrl,
       });
+      dispatch(setCurrentSubreddit({ ...currentSubreddit, iconUrl: ímageUrl }));
       setLoading(false);
       closeForm();
-      window.location.href = "/r/" + currentSubreddit.name;
     } catch (e) {
       setLoading(false);
       if (e.response?.status !== 429) {
