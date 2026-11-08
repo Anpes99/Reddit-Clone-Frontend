@@ -23,8 +23,13 @@ const useGetPosts = ({ queryParamSort, subredditId, username }) => {
 
   //////////////////   GET INITIAL POSTS  /////////////////////////////////////////////////////////////////////////////////////
   useEffect(() => {
+    // ignore responses for a previous sort/subreddit
+    //  instead of letting them overwrite the feed.
+    let ignore = false;
+
     const runUseEffectFunction = async () => {
       setLoading(true);
+      setPosts([]);
 
       if (
         orderType === null ||
@@ -42,6 +47,7 @@ const useGetPosts = ({ queryParamSort, subredditId, username }) => {
             username,
           },
           (data) => {
+            if (ignore) return;
             setPosts(data.posts);
             setTotalPostCount(data.totalCount);
             setLoading(false);
@@ -58,6 +64,7 @@ const useGetPosts = ({ queryParamSort, subredditId, username }) => {
             username,
           },
           (data) => {
+            if (ignore) return;
             setPosts(data.posts);
             setTotalPostCount(data.totalCount);
             setLoading(false);
@@ -66,7 +73,10 @@ const useGetPosts = ({ queryParamSort, subredditId, username }) => {
       }
     };
     runUseEffectFunction();
-  }, [subredditId]);
+    return () => {
+      ignore = true;
+    };
+  }, [subredditId, queryParamSort, username]);
 
   //////////////////////////////////// GET MORE  POSTS ///////////////////////////////////////////////////
   const fetchMorePosts = async (orderType) => {

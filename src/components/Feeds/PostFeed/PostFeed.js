@@ -8,11 +8,13 @@ import { useDispatch, useSelector } from "react-redux";
 import SubredditInfo from "../../../pages/SubredditPage/components/SubredditInfo";
 import FeedItemSkeleton from "../FeedItemSkeleton";
 import { setLoginVisible } from "../../../app/slices/appSlice";
+import { useNavigate } from "react-router";
 
 const NoPostsYet = () => {
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
   const user = useSelector((state) => state.app.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   return currentSubreddit?.name ? (
     <div className="flex flex-col items-center space-y-2 py-40 px-5 bg-white ">
@@ -23,8 +25,7 @@ const NoPostsYet = () => {
       <button
         onClick={
           user
-            ? () =>
-                (window.location.href = `/r/${currentSubreddit?.name}/submit`)
+            ? () => navigate(`/r/${currentSubreddit.name}/submit`)
             : () => dispatch(setLoginVisible(true))
         }
         className="btn2 w-max"
@@ -39,6 +40,7 @@ const NoPostsYet = () => {
 
 const PostFeed = ({ subredditId, orderType }) => {
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
+  const navigate = useNavigate();
 
   const [fetchMorePosts, loading, posts] = useGetPosts({
     queryParamSort: orderType,
@@ -67,11 +69,9 @@ const PostFeed = ({ subredditId, orderType }) => {
               onClick={() => {
                 if (orderType === "new") return;
 
-                if (currentSubreddit?.name) {
-                  window.location.href = `/r/${currentSubreddit.name}`;
-                } else {
-                  window.location.href = `/`;
-                }
+                navigate(
+                  currentSubreddit?.name ? `/r/${currentSubreddit.name}` : "/",
+                );
               }}
               className={`flex items-center font-semibold ${
                 orderType === "new" ? "text-blue-500" : "text-gray-400"
@@ -84,11 +84,11 @@ const PostFeed = ({ subredditId, orderType }) => {
               onClick={() => {
                 if (orderType === "top") return;
 
-                if (currentSubreddit?.name) {
-                  window.location.href = `/r/${currentSubreddit.name}/top`;
-                } else {
-                  window.location.href = `/top`;
-                }
+                navigate(
+                  currentSubreddit?.name
+                    ? `/r/${currentSubreddit.name}/top`
+                    : "/top",
+                );
               }}
               className={`flex items-center font-semibold ${
                 orderType === "top" ? "text-blue-500" : "text-gray-400"
