@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import socket from "../shared/lib/socket";
 
 const useGetPosts = ({ queryParamSort, subredditId, username }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPostCount, setTotalPostCount] = useState(true);
+  // Increased whenever the feed is reset (new sort/subreddit/user), so
+  // "load more" responses for the previous feed can be dropped.
+  const feedGenerationRef = useRef(0);
   let sortBy = "createdAt";
   let order = "DESC";
   let orderType;
@@ -26,6 +29,7 @@ const useGetPosts = ({ queryParamSort, subredditId, username }) => {
     // ignore responses for a previous sort/subreddit
     //  instead of letting them overwrite the feed.
     let ignore = false;
+    feedGenerationRef.current += 1;
 
     const runUseEffectFunction = async () => {
       setLoading(true);
@@ -81,6 +85,9 @@ const useGetPosts = ({ queryParamSort, subredditId, username }) => {
   //////////////////////////////////// GET MORE  POSTS ///////////////////////////////////////////////////
   const fetchMorePosts = async (orderType) => {
     if (totalPostCount > posts.length) {
+      const generation = feedGenerationRef.current;
+      const isStale = () => feedGenerationRef.current !== generation;
+
       if (
         orderType === null ||
         orderType === "new" ||
@@ -98,7 +105,8 @@ const useGetPosts = ({ queryParamSort, subredditId, username }) => {
             username,
           },
           (data) => {
-            setPosts([...posts, ...data.posts]);
+            if (isStale()) return;
+            setPosts((curPosts) => [...curPosts, ...data.posts]);
             setTotalPostCount(data.totalCount);
             setLoading(false);
           },
@@ -116,7 +124,8 @@ const useGetPosts = ({ queryParamSort, subredditId, username }) => {
             username,
           },
           (data) => {
-            setPosts([...posts, ...data.posts]);
+            if (isStale()) return;
+            setPosts((curPosts) => [...curPosts, ...data.posts]);
             setTotalPostCount(data.totalCount);
             setLoading(false);
           },
