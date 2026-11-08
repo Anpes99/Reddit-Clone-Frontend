@@ -1,28 +1,10 @@
-import { useEffect } from "react";
 import "react-dropzone-uploader/dist/styles.css";
-import { useParams } from "react-router";
-import { useDispatch } from "react-redux";
-import { setCurrentSubreddit } from "../../app/slices/appSlice";
 import SubredditInfo from "../SubredditPage/components/SubredditInfo";
 import NewPostForm from "./components/NewPostForm";
-import Axios from "../../shared/lib/axios";
 
 const SubmitNewPostPage = () => {
-  const subredditName = useParams().subredditName;
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const runUseEffectFunction = async () => {
-      const res = await Axios.get("/api/subreddits/" + subredditName);
-
-      dispatch(setCurrentSubreddit(res.data));
-    };
-
-    runUseEffectFunction();
-  }, [subredditName, dispatch]);
-
   return (
-    <main className="max-w-screen-lg mx-auto min-h-[100dvh] ">
+    <main className="max-w-screen-lg mx-auto  ">
       <div className="flex mt-10 md:space-x-5">
         <section className="flex-grow flex flex-col ">
           <div className="pb-3 pl-3 border-b border-gray-100 font-semibold text-gray-700 mb-5 text-lg">

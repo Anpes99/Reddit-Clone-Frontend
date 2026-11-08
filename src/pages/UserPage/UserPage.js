@@ -465,7 +465,7 @@ const UserPage = () => {
         />
       )}
 
-      <div className="w-full xl:w-[1024px] xl:max-w-full  md:px-5 lg:pt-6 max-w-screen-lg min-h-[calc(100dvh-var(--header-height))] bg-white ">
+      <div className="w-full xl:w-[1024px] xl:max-w-full mx-auto  md:px-5 lg:pt-6 max-w-screen-lg min-h-[calc(100dvh-var(--header-height))] bg-white ">
         <UserIntroductionSection
           viewedUserDetails={viewedUserDetails}
           openEditUserPageBackgroundModal={openEditUserPageBackgroundModal}

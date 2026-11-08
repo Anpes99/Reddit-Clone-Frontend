@@ -21,14 +21,9 @@ const HomePage = ({ orderType = "new" }) => {
         className="flex"
       >
         <div className="flex-grow flex-shrink"></div>
-        <main
-          className="max-w-screen-lg mx-auto md:p-5
-    pt-3"
-        >
+        <main className="w-full xl:w-[1024px]  xl:max-w-full mx-auto md:p-5 pt-3">
           <TrendingFeed />
-          <div>
-            <PostFeed orderType={orderType} />
-          </div>
+          <PostFeed orderType={orderType} />
         </main>
         <div className="flex-grow flex-shrink"></div>
       </div>

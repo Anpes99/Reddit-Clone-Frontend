@@ -184,7 +184,11 @@ const Header = () => {
         </button>
 
         <div
-          onClick={() => (window.location.href = "/")}
+          onClick={() => {
+            setSearchResults([]);
+            setSearchWord("");
+            navigate("/");
+          }}
           className=" h-full flex items-center space-x-1 cursor-pointer"
         >
           <RedditIcon />
@@ -219,7 +223,9 @@ const Header = () => {
                     <li
                       key={"search-suggestion-" + searchResult.name}
                       onClick={() => {
-                        window.location.href = `/r/${searchResult.name}`;
+                        setSearchResults([]);
+                        setSearchWord("");
+                        navigate(`/r/${searchResult.name}`);
                       }}
                       className="cursor-pointer hover:underline"
                     >

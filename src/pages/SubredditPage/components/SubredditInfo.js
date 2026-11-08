@@ -87,6 +87,39 @@ const SubredditIntroductionAndEditSection = ({
   );
 };
 
+const SubredditInfoSkeleton = ({ style }) => (
+  <div
+    className="w-[340px] flex flex-col border rounded-sm pt-5 border-gray-300 bg-white animate-pulse"
+    style={style}
+    aria-busy="true"
+    aria-label="Loading community info"
+  >
+    <div className="p-2 flex flex-col space-y-3">
+      <div className="flex space-x-5 items-center">
+        <div className="rounded-full h-[3rem] w-[3rem] bg-gray-200" />
+        <div className="h-5 w-32 bg-gray-200 rounded" />
+      </div>
+      <div className="max-w-xs flex flex-col space-y-2 pb-4 border-b">
+        <div className="h-3 w-full bg-gray-200 rounded" />
+        <div className="h-3 w-11/12 bg-gray-200 rounded" />
+        <div className="h-3 w-2/3 bg-gray-200 rounded" />
+      </div>
+      <div className="flex space-x-20 border-b pb-5">
+        <div className="space-y-1">
+          <div className="h-4 w-10 bg-gray-200 rounded" />
+          <div className="h-3 w-14 bg-gray-200 rounded" />
+        </div>
+        <div className="space-y-1">
+          <div className="h-4 w-10 bg-gray-200 rounded" />
+          <div className="h-3 w-12 bg-gray-200 rounded" />
+        </div>
+      </div>
+      <div className="h-4 w-36 bg-gray-200 rounded" />
+      <div className="h-9 w-full rounded-full bg-gray-200" />
+    </div>
+  </div>
+);
+
 const SubredditInfo = ({ style = {}, isOnPostPage }) => {
   const dispatch = useDispatch();
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
@@ -97,15 +130,33 @@ const SubredditInfo = ({ style = {}, isOnPostPage }) => {
 
   const onlineCount = useSubredditPresence(socket, subredditName, user?.id);
 
+  const [loadFailed, setLoadFailed] = useState(false);
+
+  const isStaleOrMissing =
+    !!subredditName &&
+    (!currentSubreddit ||
+      currentSubreddit.name?.toLowerCase() !== subredditName.toLowerCase());
+
   useEffect(() => {
     const runUseEffectFunction = async () => {
-      if (!isOnPostPage) return;
-      const res = await Axios.get("/api/subreddits/" + subredditName);
-      dispatch(setCurrentSubreddit(res.data));
+      if (!subredditName) return;
+
+      const shouldFetch = isOnPostPage || isStaleOrMissing;
+      if (!shouldFetch) return;
+
+      setLoadFailed(false);
+      try {
+        const res = await Axios.get("/api/subreddits/" + subredditName);
+        dispatch(setCurrentSubreddit(res.data));
+      } catch (e) {
+        setLoadFailed(true);
+      }
     };
     runUseEffectFunction();
   }, [subredditName]);
 
+  if (loadFailed) return null;
+  if (isStaleOrMissing) return <SubredditInfoSkeleton style={style} />;
   if (!currentSubreddit) return <></>;
 
   const handleUpdateIntroduction = async (description) => {
@@ -122,7 +173,7 @@ const SubredditInfo = ({ style = {}, isOnPostPage }) => {
 
   return (
     <div
-      className="flex flex-col border rounded-sm pt-5 text-gray-800  border-gray-300 bg-white"
+      className="flex flex-col border rounded-sm pt-5 text-gray-800  border-gray-300 bg-white w-[340px]"
       style={style}
     >
       <div className="p-2 flex flex-col space-y-3 ">
