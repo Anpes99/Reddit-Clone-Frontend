@@ -1,6 +1,7 @@
 import axios from "axios";
 import Axios from "./axios";
 import socket from "./socket";
+import { registerNavigate } from "./navigation";
 import { store } from "../../app/store";
 import { setUser } from "../../app/slices/appSlice";
 
@@ -21,14 +22,18 @@ const respond = (config, status, data = {}) => {
 };
 
 const originalLocation = window.location;
+const navigate = jest.fn();
+let unregisterNavigate;
 
 beforeAll(() => {
   delete window.location;
   window.location = { origin: "http://localhost", href: "http://localhost/" };
+  unregisterNavigate = registerNavigate(navigate);
 });
 
 afterAll(() => {
   window.location = originalLocation;
+  unregisterNavigate();
 });
 
 beforeEach(() => {
@@ -39,6 +44,7 @@ beforeEach(() => {
   socket.auth = {};
   store.dispatch(setUser(null));
   window.location.href = "http://localhost/";
+  navigate.mockClear();
 });
 
 describe("request interceptor", () => {
@@ -128,7 +134,8 @@ describe("response interceptor", () => {
     jest.spyOn(axios, "post").mockRejectedValue(refreshError);
 
     await expect(Axios.get("/api/posts/1")).rejects.toBe(refreshError);
-    expect(window.location.href).toBe("/");
+    expect(store.getState().app.user).toBeNull();
+    expect(navigate).toHaveBeenCalledWith("/");
   });
 
   it("does not try to refresh when the refresh request itself fails", async () => {

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { store } from "../../app/store";
 import { addGlobalNotification, setUser } from "../../app/slices/appSlice";
+import { navigateTo } from "./navigation";
 
 const Axios = axios.create({
   baseURL: `${window.location.origin}`,
@@ -44,7 +45,8 @@ Axios.interceptors.response.use(
 
         return Axios(originalRequest);
       } catch (refreshError) {
-        window.location.href = "/";
+        store.dispatch(setUser(null));
+        navigateTo("/");
         return Promise.reject(refreshError);
       }
     }

@@ -3,7 +3,9 @@ import {
   Routes,
   Route,
   useLocation,
+  useNavigate,
 } from "react-router";
+import { registerNavigate } from "../shared/lib/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import HomePage from "../pages/HomePage/HomePage";
 import PostPage from "../pages/Postpage/PostPage";
@@ -27,6 +29,14 @@ const ScrollToTop = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+
+  return null;
+};
+
+const RegisterRouterNavigate = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => registerNavigate(navigate), [navigate]);
 
   return null;
 };
@@ -87,6 +97,7 @@ const App = () => {
   return (
     <div className=" bg-gray-200">
       <Router>
+        <RegisterRouterNavigate />
         <ScrollToTop />
         <Header />
         <div className="w-full h-[var(--header-height)] hidden lg:block"></div>

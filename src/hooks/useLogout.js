@@ -1,9 +1,11 @@
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 import Axios from "../shared/lib/axios";
 import { addGlobalNotification, setUser } from "../app/slices/appSlice";
 
 const useLogout = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const logout = async () => {
     try {
@@ -11,7 +13,7 @@ const useLogout = () => {
 
       dispatch(setUser(null));
 
-      window.location.href = "/";
+      navigate("/");
     } catch (e) {
       dispatch(
         addGlobalNotification({
