@@ -83,6 +83,7 @@ const Header = () => {
   );
 
   const headerRef = useRef(null);
+  const dropDownOptionsToggleRef = useRef(null);
 
   useEffect(() => {
     const header = headerRef.current;
@@ -159,11 +160,6 @@ const Header = () => {
         <></>
       )}
       <div
-        onClick={() => {
-          if (dropDownVisible) {
-            dispatch(setHeaderDropDownVisible(false));
-          }
-        }}
         ref={headerRef}
         className=" relative  lg:fixed lg:top-0 lg:left-0 w-full  sm:pb-0 flex sm:flex-row min-h-12 bg-white  items-center justify-between z-[150] pl-0 sm:pl-2 sm:space-x-2 border-b-[3px] "
       >
@@ -292,6 +288,7 @@ const Header = () => {
             <p className="whitespace-nowrap">Sign Up</p>
           </button>
           <div
+            ref={dropDownOptionsToggleRef}
             onClick={() => {
               dispatch(setHeaderDropDownVisible(!dropDownVisible));
             }}
@@ -308,7 +305,10 @@ const Header = () => {
           </div>
         </div>
 
-        <HeaderOptionsDropDownList isVisible={dropDownVisible} />
+        <HeaderOptionsDropDownList
+          isVisible={dropDownVisible}
+          toggleRef={dropDownOptionsToggleRef}
+        />
       </div>
       {loginVisible && (
         <div

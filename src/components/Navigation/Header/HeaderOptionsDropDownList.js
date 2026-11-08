@@ -1,15 +1,37 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setLoginVisible } from "../../../app/slices/appSlice";
+import {
+  setHeaderDropDownVisible,
+  setLoginVisible,
+} from "../../../app/slices/appSlice";
 import UserAvatarImg from "../../Users/UserAvatarImg";
 import useLogout from "../../../hooks/useLogout";
+import { useEffect, useRef } from "react";
 
-const HeaderOptionsDropDownList = ({ isVisible }) => {
+const HeaderOptionsDropDownList = ({ isVisible, toggleRef }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.app.user);
   const [logout] = useLogout();
 
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (toggleRef?.current?.contains(event.target)) return;
+      if (ref.current && !ref.current.contains(event.target)) {
+        dispatch(setHeaderDropDownVisible(false));
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dispatch, toggleRef]);
+
   return (
     <div
+      ref={ref}
       className={`flex right-0   top-14 w-auto ${
         isVisible ? "" : "h-0 overflow-hidden"
       } absolute  flex-col bg-gray-50 text-sm font-medium select-none duration-200 z-[100]`}

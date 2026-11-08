@@ -31,3 +31,7 @@
     --header-height: 56px;
   }
 }
+
+html {
+  scrollbar-gutter: stable;
+}

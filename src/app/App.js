@@ -19,6 +19,7 @@ import Axios from "../shared/lib/axios";
 import VerifyEmailPage from "../pages/VerifyEmailPage/VerifyEmailPage";
 import ResetPasswordPage from "../pages/resetPassword/ResetPasswordPage";
 import { getNotificationSeverity } from "../constants/notification";
+import NotFound from "../components/Shared/NotFound";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -124,6 +125,7 @@ const App = () => {
                 <Route path="/verify-email" element={<VerifyEmailPage />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
                 <Route path="/" element={<HomePage />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
           </div>

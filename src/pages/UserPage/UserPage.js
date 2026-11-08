@@ -1,14 +1,11 @@
 import { useParams, useSearchParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addGlobalNotification,
-  setHeaderDropDownVisible,
-} from "../../app/slices/appSlice";
+import { addGlobalNotification } from "../../app/slices/appSlice";
 
 import { PlusCircleIcon } from "@heroicons/react/outline";
 
 import UserPageActivityFeed from "./components/UserPageActivityFeed";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ArrowSmUpIcon } from "@heroicons/react/outline";
 import { ArrowSmDownIcon } from "@heroicons/react/outline";
 import UserAvatarImg from "../../components/Users/UserAvatarImg";
@@ -18,6 +15,9 @@ import { TextareaAutosize, useMediaQuery } from "@mui/material";
 import EditUserAvatarImageModal from "./components/EditUserAvatarImageModal";
 import moment from "moment";
 import EditUserPageBackgroundModal from "./components/EditUserPageBackgroundModal";
+import NotFound from "../../components/Shared/NotFound";
+import LoadError from "../../components/Shared/LoadError";
+import usePageResource from "../../hooks/usePageResource";
 
 const UserIntroductionSection = ({
   viewedUserDetails,
@@ -101,7 +101,6 @@ const UserPageContentSelectionButtons = ({
       <button
         onClick={() => {
           setSearchParams({ contentType: "overview" });
-          window.location.reload();
         }}
         className={`${currentlySelectedContent === "overview" ? "bg-gray-300" : ""} pl-4 pr-4 py-2  rounded-3xl font-semibold mr-4 hover:underline`}
       >
@@ -113,7 +112,6 @@ const UserPageContentSelectionButtons = ({
             contentType: "posts",
             sort: searchParams.get("sort") || "new",
           });
-          window.location.reload();
         }}
         className={`${currentlySelectedContent === "posts" ? "bg-gray-300" : ""} pl-4 pr-4 py-2 rounded-3xl font-semibold mr-4 hover:underline`}
       >
@@ -125,7 +123,6 @@ const UserPageContentSelectionButtons = ({
             contentType: "comments",
             sort: searchParams.get("sort") || "new",
           });
-          window.location.reload();
         }}
         className={`${currentlySelectedContent === "comments" ? "bg-gray-300" : ""} pl-4 pr-4 py-2  rounded-3xl font-semibold hover:underline `}
       >
@@ -363,7 +360,7 @@ const UserInfoSectionSmallScreen = ({
   );
 };
 
-const UserPage = ({ orderType = "new" }) => {
+const UserPage = () => {
   const viewedUserUsername = useParams().username;
   const dispatch = useDispatch();
   const user = useSelector((state) => state.app.user);
@@ -383,15 +380,15 @@ const UserPage = ({ orderType = "new" }) => {
     setIsVisibleEditUserAvatarImageModal,
   ] = useState(false);
 
-  useEffect(() => {
-    const runUseEffectFunction = async () => {
-      const result = await Axios.get("/api/users/" + viewedUserUsername);
-
-      setViewedUserDetails(result.data);
-      setIntroductionDraft(result.data.introduction ?? "");
-    };
-    runUseEffectFunction();
-  }, [viewedUserUsername]);
+  const { status: loadStatus, retry } = usePageResource(
+    "/api/users/" + viewedUserUsername,
+    {
+      onSuccess: (data) => {
+        setViewedUserDetails(data);
+        setIntroductionDraft(data.introduction ?? "");
+      },
+    },
+  );
 
   const handleUpdateIntroduction = async () => {
     setLoading(true);
@@ -427,6 +424,28 @@ const UserPage = ({ orderType = "new" }) => {
     setIsVisibleEditBackgroundModal(true);
   };
 
+  if (loadStatus === "loading") {
+    return null;
+  }
+
+  if (loadStatus === "error") {
+    return (
+      <LoadError
+        message={`We couldn't load u/${viewedUserUsername}. Please try again.`}
+        onRetry={retry}
+      />
+    );
+  }
+
+  if (loadStatus === "notFound") {
+    return (
+      <NotFound
+        title="User not found"
+        message={`u/${viewedUserUsername} doesn't exist or may have been deleted.`}
+      />
+    );
+  }
+
   return (
     <>
       {isVisibleEditUserAvatarImageModal && (
@@ -446,79 +465,55 @@ const UserPage = ({ orderType = "new" }) => {
         />
       )}
 
-      <div
-        onClick={() => {
-          dispatch(setHeaderDropDownVisible(false));
-        }}
-        className="flex flex-row min-h-[100dvh] justify-between bg-white "
-      >
-        {/* LEFT SIDE BAR SECTION */}
-        <div className=""></div>
+      <div className="w-full xl:w-[1024px] xl:max-w-full  md:px-5 lg:pt-6 max-w-screen-lg min-h-[calc(100dvh-var(--header-height))] bg-white ">
+        <UserIntroductionSection
+          viewedUserDetails={viewedUserDetails}
+          openEditUserPageBackgroundModal={openEditUserPageBackgroundModal}
+          isOwnPage={isOwnPage}
+          setIsVisibleEditUserAvatarImageModal={
+            setIsVisibleEditUserAvatarImageModal
+          }
+          isVisibleEditUserAvatarImageModal={isVisibleEditUserAvatarImageModal}
+          viewedUserUsername={viewedUserUsername}
+          user={user}
+        />
+        <UserInfoSectionSmallScreen
+          isVisibleEditIntroduction={isVisibleEditIntroduction}
+          setIsVisibleEditIntroduction={setIsVisibleEditIntroduction}
+          viewedUserDetails={viewedUserDetails}
+          introductionDraft={introductionDraft}
+          setIntroductionDraft={setIntroductionDraft}
+          loading={loading}
+          handleUpdateIntroduction={handleUpdateIntroduction}
+          user={user}
+          viewedUserUsername={viewedUserUsername}
+        />
+        <UserPageContentSelectionButtons
+          currentlySelectedContent={currentlySelectedContent}
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
+        />
 
-        {/* 1. USER INTRODUCTION SECTION 2. POST SORTING SECTION 3. USER POSTFEED SECTION/COMMENTS SECTION */}
-        <div className="w-full  md:px-5 lg:pt-6 max-w-screen-lg">
-          <UserIntroductionSection
-            viewedUserDetails={viewedUserDetails}
-            openEditUserPageBackgroundModal={openEditUserPageBackgroundModal}
-            isOwnPage={isOwnPage}
-            setIsVisibleEditUserAvatarImageModal={
-              setIsVisibleEditUserAvatarImageModal
-            }
-            isVisibleEditUserAvatarImageModal={
-              isVisibleEditUserAvatarImageModal
-            }
-            viewedUserUsername={viewedUserUsername}
-            user={user}
-          />
-          <UserInfoSectionSmallScreen
-            isVisibleEditIntroduction={isVisibleEditIntroduction}
-            setIsVisibleEditIntroduction={setIsVisibleEditIntroduction}
-            viewedUserDetails={viewedUserDetails}
-            introductionDraft={introductionDraft}
-            setIntroductionDraft={setIntroductionDraft}
-            loading={loading}
-            handleUpdateIntroduction={handleUpdateIntroduction}
-            user={user}
-            viewedUserUsername={viewedUserUsername}
-          />
-          <UserPageContentSelectionButtons
-            currentlySelectedContent={currentlySelectedContent}
-            searchParams={searchParams}
-            setSearchParams={setSearchParams}
-          />
-
-          <div className="flex flex-col  w-full">
-            <div className="flex justify-center lg:justify-between w-full mt-4">
-              <UserPageActivityFeed
-                contentType={currentlySelectedContent}
-                orderType={orderType}
-              />
-
-              <div className="hidden lg:block">
-                <UserInfoSectionBigScreen
-                  isVisibleEditIntroduction={isVisibleEditIntroduction}
-                  setIsVisibleEditIntroduction={setIsVisibleEditIntroduction}
-                  viewedUserDetails={viewedUserDetails}
-                  introductionDraft={introductionDraft}
-                  setIntroductionDraft={setIntroductionDraft}
-                  loading={loading}
-                  handleUpdateIntroduction={handleUpdateIntroduction}
-                  user={user}
-                  viewedUserUsername={viewedUserUsername}
-                  isOwnPage={isOwnPage}
-                  openEditUserPageBackgroundModal={
-                    openEditUserPageBackgroundModal
-                  }
-                />
-              </div>
-            </div>
+        <div className="flex justify-center lg:justify-between w-full mt-4 gap-6">
+          <div className="flex-1 min-w-0">
+            <UserPageActivityFeed contentType={currentlySelectedContent} />
           </div>
-
-          <div></div>
+          <div className="hidden lg:block w-[312px] shrink-0">
+            <UserInfoSectionBigScreen
+              isVisibleEditIntroduction={isVisibleEditIntroduction}
+              setIsVisibleEditIntroduction={setIsVisibleEditIntroduction}
+              viewedUserDetails={viewedUserDetails}
+              introductionDraft={introductionDraft}
+              setIntroductionDraft={setIntroductionDraft}
+              loading={loading}
+              handleUpdateIntroduction={handleUpdateIntroduction}
+              user={user}
+              viewedUserUsername={viewedUserUsername}
+              isOwnPage={isOwnPage}
+              openEditUserPageBackgroundModal={openEditUserPageBackgroundModal}
+            />
+          </div>
         </div>
-
-        {/* RIGHT SIDE BAR SECTION - USER PROFILE MAIN INFO SECTION */}
-        <div className=""></div>
       </div>
     </>
   );

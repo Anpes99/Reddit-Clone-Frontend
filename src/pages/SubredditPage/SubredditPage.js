@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router";
 import PostFeed from "../../components/Feeds/PostFeed/PostFeed";
 import {
@@ -8,13 +8,15 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 import JoinSubredditButton from "../../components/Buttons/JoinSubredditButton";
-import Axios from "../../shared/lib/axios";
 import DefaultSubredditIcon from "../../assets/icons/DefaultSubredditIcon";
 import EditSubredditIconModal from "./components/EditSubredditIconModal";
 import { hasSubredditPermission } from "../../config/moderator-permissions";
 import { SubredditPermissions } from "../../enums/subreddit.enum";
 import { ImageOutlined } from "@mui/icons-material";
 import EditSubredditPageBackgroundModal from "./components/EditSubredditPageBackgroundModal";
+import NotFound from "../../components/Shared/NotFound";
+import LoadError from "../../components/Shared/LoadError";
+import usePageResource from "../../hooks/usePageResource";
 
 const EditIconButton = ({ className, onClick }) => (
   <span onClick={onClick} className={className}>
@@ -37,29 +39,47 @@ const SubredditPage = ({ orderType = "new" }) => {
   const user = useSelector((state) => state.app.user);
 
   const [subredditId, setSubredditId] = useState(null);
-  useEffect(() => {
-    const runUseEffectFunction = async () => {
-      const res = await Axios.get("/api/subreddits/" + subredditName);
-      setSubredditId(res.data.id);
-
-      const getCanManageSettings = () =>
-        hasSubredditPermission(
-          res.data?.currentUserRole,
-          SubredditPermissions.SETTINGS_MANAGE,
+  const { status: loadStatus, retry } = usePageResource(
+    "/api/subreddits/" + subredditName,
+    {
+      refetchKey: user?.id,
+      onSuccess: (data) => {
+        setSubredditId(data.id);
+        dispatch(
+          setCurrentSubreddit({
+            ...data,
+            currentUserCanManageSettings: hasSubredditPermission(
+              data.currentUserRole,
+              SubredditPermissions.SETTINGS_MANAGE,
+            ),
+          }),
         );
-      dispatch(
-        setCurrentSubreddit({
-          ...res.data,
-          currentUserCanManageSettings: getCanManageSettings(),
-        }),
-      );
-    };
-
-    runUseEffectFunction();
-  }, [subredditName, user?.id, dispatch]);
+      },
+    },
+  );
 
   const openEditSubredditPageBackgroundModal = () =>
     setIsVisibleEditSubredditPageBackgroundModal(true);
+
+  if (loadStatus === "loading") return null;
+
+  if (loadStatus === "notFound") {
+    return (
+      <NotFound
+        title="Subreddit not found"
+        message={`r/${subredditName} doesn't exist or may have been removed.`}
+      />
+    );
+  }
+
+  if (loadStatus === "error") {
+    return (
+      <LoadError
+        message={`We couldn't load r/${subredditName}. Please try again.`}
+        onRetry={retry}
+      />
+    );
+  }
 
   return (
     <>
@@ -75,7 +95,7 @@ const SubredditPage = ({ orderType = "new" }) => {
         onClick={() => {
           dispatch(setHeaderDropDownVisible(false));
         }}
-        className="bg-gray-200 min-h-[100dvh]"
+        className="bg-gray-200 min-h-[calc(100dvh-var(--header-height))] xl:w-[1024px] xl:max-w-full"
       >
         <div>
           <div

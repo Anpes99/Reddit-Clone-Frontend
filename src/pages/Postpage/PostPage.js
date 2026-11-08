@@ -1,5 +1,5 @@
 import { XIcon, PhotographIcon } from "@heroicons/react/outline";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router";
 import PostPageMainInfoSection from "./components/PostPageItem";
 import { useDispatch } from "react-redux";
@@ -11,7 +11,9 @@ import CreateNewDirectPostComment from "./components/Comments/CreateNewDirectPos
 import PostPageCommentsSortingSection from "./components/Comments/PostPageCommentsSortingSection";
 import PostCommentsSection from "./components/Comments/PostCommentsSection";
 import PostVotingArrows from "../../components/Feeds/PostFeed/PostVotingArrows";
-import Axios from "../../shared/lib/axios";
+import usePageResource from "../../hooks/usePageResource";
+import NotFound from "../../components/Shared/NotFound";
+import LoadError from "../../components/Shared/LoadError";
 
 const PostPage = () => {
   const navigate = useNavigate();
@@ -24,17 +26,34 @@ const PostPage = () => {
 
   const user = useSelector((state) => state.app.user);
 
-  useEffect(() => {
-    const runUseEffectFunction = async () => {
-      let queryString = "";
-      queryString = sortBy ? queryString + "&sortBy=" + sortBy : queryString;
-      queryString = order ? queryString + "&order=" + order : queryString;
-      const result = await Axios.get(`/api/posts/${postId}?${queryString}`);
-      setPost(result.data.post);
-    };
+  const query = new URLSearchParams();
+  if (sortBy) query.set("sortBy", sortBy);
+  if (order) query.set("order", order);
 
-    runUseEffectFunction();
-  }, []);
+  const { status: loadStatus, retry } = usePageResource(
+    `/api/posts/${postId}?${query}`,
+    { onSuccess: (data) => setPost(data.post) },
+  );
+
+  if (loadStatus === "loading") return null;
+
+  if (loadStatus === "notFound") {
+    return (
+      <NotFound
+        title="Post not found"
+        message="This post doesn't exist or may have been removed."
+      />
+    );
+  }
+
+  if (loadStatus === "error") {
+    return (
+      <LoadError
+        message="We couldn't load this post. Please try again."
+        onRetry={retry}
+      />
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-[100dvh]">
