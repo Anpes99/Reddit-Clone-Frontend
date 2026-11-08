@@ -8,6 +8,7 @@ import { InputAdornment } from "@mui/material";
 import DefaultSubredditIcon from "../../assets/icons/DefaultSubredditIcon";
 import ImageUpload from "../Shared/ImageUpload";
 import { uploadImageToS3 } from "../../shared/utils/utils";
+import { useNavigate } from "react-router";
 const initialValues = {
   communityName: "",
   description: "",
@@ -110,6 +111,7 @@ const AvatarOptions = () => {
 
 const CreateCommunityForm = ({ isVisible, closeForm }) => {
   const [newError, setNewError] = useState(null);
+  const navigate = useNavigate();
 
   const onSubmit = async (values) => {
     const { communityName } = values;
@@ -124,7 +126,7 @@ const CreateCommunityForm = ({ isVisible, closeForm }) => {
         subredditIconUrl: ímageUrl,
       });
       closeForm();
-      window.location.href = "/r/" + communityName;
+      navigate("/r/" + communityName);
     } catch (e) {
       if (e?.response?.status === 409) {
         setNewError("A subreddit with this name already exists.");

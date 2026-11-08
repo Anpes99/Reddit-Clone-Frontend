@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
 import useGetSearchPageItems from "../../../hooks/useGetSearchPageItems";
-import { Link, useSearchParams } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { MenuItem, Select } from "@mui/material";
 import { makeStringSafeForURL } from "../../../shared/utils/utils";
 import moment from "moment";
@@ -85,6 +85,7 @@ const ListItemPost = ({ post }) => {
 
 const SearchPageList = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const orderType = searchParams.get("sort") || "NEW";
   const itemsType = searchParams.get("type") || "posts";
   const searchQuery = searchParams.get("searchquery");
@@ -107,13 +108,15 @@ const SearchPageList = () => {
   });
 
   return (
-    <div className="pr-0 lg:pr-7 w-full">
+    <div className=" w-full xl:w-[1024px] xl:max-w-full">
       {itemsType !== "communities" && (
         <div className="flex space-x-4 bg-white p-5 text-xs sm:text-sm mb-2 border border-gray-300 w-full">
           <Select
             value={orderType}
             onChange={(e) => {
-              window.location.href = `/search?type=${itemsType}&sort=${e.target.value}&searchquery=${encodeURIComponent(searchQuery ?? "")}`;
+              navigate(
+                `/search?type=${itemsType}&sort=${e.target.value}&searchquery=${encodeURIComponent(searchQuery ?? "")}`,
+              );
             }}
           >
             <MenuItem value={"NEW"}>New</MenuItem>

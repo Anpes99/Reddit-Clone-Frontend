@@ -5,12 +5,14 @@ import {
 } from "../../../app/slices/appSlice";
 import UserAvatarImg from "../../Users/UserAvatarImg";
 import useLogout from "../../../hooks/useLogout";
+import { useNavigate } from "react-router";
 import { useEffect, useRef } from "react";
 
 const HeaderOptionsDropDownList = ({ isVisible, toggleRef }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.app.user);
   const [logout] = useLogout();
+  const navigate = useNavigate();
 
   const ref = useRef(null);
 
@@ -39,7 +41,8 @@ const HeaderOptionsDropDownList = ({ isVisible, toggleRef }) => {
       {user && (
         <div
           onClick={() => {
-            window.location.href = "/user/" + user.username;
+            dispatch(setHeaderDropDownVisible(false));
+            navigate("/user/" + user.username);
           }}
           className="flex text-xs link"
         >

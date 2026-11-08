@@ -186,7 +186,6 @@ const Header = () => {
         <div
           onClick={() => {
             setSearchResults([]);
-            setSearchWord("");
             navigate("/");
           }}
           className=" h-full flex items-center space-x-1 cursor-pointer"
@@ -210,7 +209,10 @@ const Header = () => {
             maxLength={500}
             onKeyDown={(e) => {
               if (e.key === "Enter" && searchWord.length) {
-                window.location.href = `/search?type=posts&sort=TOP&searchquery=${encodeURIComponent(searchWord)}`;
+                setSearchResults([]);
+                navigate(
+                  `/search?type=posts&sort=TOP&searchquery=${encodeURIComponent(searchWord)}`,
+                );
               }
             }}
           />
@@ -224,7 +226,6 @@ const Header = () => {
                       key={"search-suggestion-" + searchResult.name}
                       onClick={() => {
                         setSearchResults([]);
-                        setSearchWord("");
                         navigate(`/r/${searchResult.name}`);
                       }}
                       className="cursor-pointer hover:underline"

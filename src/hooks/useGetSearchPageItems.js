@@ -1,133 +1,122 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Axios from "../shared/lib/axios";
 
-const useGetSearchPageItems = ({
-  queryParamSort,
-  subredditId,
+const PAGE_SIZE = 20;
+const emptyResults = {
+  key: null,
+  items: [],
+  totalCount: 0,
+  searchWordEmbedding: "",
+};
+
+const fetchSearchPage = async ({
   itemsType,
   searchQuery,
+  orderType,
+  offset,
+  prevSearchWordEmbedding,
 }) => {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [totalItemsCount, setTotalItemsCount] = useState(true);
-  const [searchWordEmbedding, setSearchWordEmbedding] = useState("");
-
-  let orderType;
-
-  if (queryParamSort === "NEW") {
-    orderType = "NEW";
+  if (itemsType === "communities") {
+    const result = await Axios.post(`/api/search/subreddits`, {
+      searchQuery,
+      offset,
+      limit: PAGE_SIZE,
+    });
+    return {
+      items: result.data.subreddits,
+      totalCount: result.data.totalCount,
+    };
   }
 
-  if (queryParamSort === "TOP") {
-    orderType = "TOP";
-  }
+  const result = await Axios.post(`/api/search/posts`, {
+    searchQuery,
+    offset,
+    limit: PAGE_SIZE,
+    orderType,
+    ...(orderType === "TOP" && offset > 0 ? { prevSearchWordEmbedding } : {}),
+  });
+  return {
+    items: result.data.posts,
+    totalCount: result.data.totalCount,
+    searchWordEmbedding: result.data.searchWordEmbedding,
+  };
+};
+
+const useGetSearchPageItems = ({ queryParamSort, itemsType, searchQuery }) => {
+  const orderType = queryParamSort === "TOP" ? "TOP" : "NEW";
+
+  const queryKey = `${itemsType}|${orderType}|${searchQuery}`;
+  const [results, setResults] = useState(emptyResults);
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  const isCurrent = results.key === queryKey;
+  const items = isCurrent ? results.items : emptyResults.items;
+  const loading = !isCurrent || loadingMore;
 
   //////////////////   GET INITIAL POSTS/SUBREDDITS  /////////////////////////////////////////////////////////////////////////////////////
   useEffect(() => {
-    const runUseEffectFunction = async () => {
-      if (loading) return;
+    let ignore = false;
 
-      if (itemsType === "posts") {
-        if (
-          orderType === null ||
-          orderType === "NEW" ||
-          orderType === undefined
-        ) {
-          setLoading(true);
-
-          const result = await Axios.post(`/api/search/posts`, {
-            searchQuery,
-            offset: 0,
-            limit: 20,
-
-            orderType,
-          });
-          setItems(result.data.posts);
-          setTotalItemsCount(result.data.totalCount);
-          setLoading(false);
-        } else if (orderType === "TOP") {
-          setLoading(true);
-
-          const result = await Axios.post(`/api/search/posts`, {
-            searchQuery,
-            offset: 0,
-            limit: 20,
-            orderType,
-          });
-          setSearchWordEmbedding(result.data.searchWordEmbedding);
-          setLoading(false);
-          setItems(result.data.posts);
-          setTotalItemsCount(result.data.totalCount);
-          setLoading(false);
-        }
-      } else if (itemsType === "communities") {
-        setLoading(true);
-
-        const result = await Axios.post(`/api/search/subreddits`, {
-          searchQuery,
-          offset: 0,
-          limit: 20,
+    fetchSearchPage({ itemsType, searchQuery, orderType, offset: 0 })
+      .then((page) => {
+        if (ignore) return;
+        setResults({
+          key: queryKey,
+          items: page.items,
+          totalCount: page.totalCount,
+          searchWordEmbedding: page.searchWordEmbedding ?? "",
         });
-        setItems(result.data.subreddits);
-        setTotalItemsCount(result.data.totalCount);
-        setLoading(false);
-      }
+      })
+      .catch(() => {
+        if (!ignore) setResults({ ...emptyResults, key: queryKey });
+      });
+
+    return () => {
+      ignore = true;
     };
-    runUseEffectFunction();
-  }, [subredditId]);
+  }, [queryKey, itemsType, searchQuery, orderType]);
 
   //////////////////////////////////// GET MORE  POSTS ///////////////////////////////////////////////////
-  const fetchMoreItems = async (orderType) => {
-    if (loading) return;
-
-    if (totalItemsCount > items.length) {
-      if (itemsType === "posts") {
-        if (
-          orderType === null ||
-          orderType === "NEW" ||
-          orderType === undefined
-        ) {
-          setLoading(true);
-          const result = await Axios.post(`/api/search/posts`, {
-            searchQuery,
-            offset: items.length,
-            limit: 20,
-
-            orderType,
-          });
-          setItems([...items, ...result.data.posts]);
-          setTotalItemsCount(result.data.totalCount);
-          setLoading(false);
-        } else if (orderType === "TOP") {
-          setLoading(true);
-
-          const result = await Axios.post(`/api/search/posts`, {
-            searchQuery,
-            offset: items.length,
-            limit: 20,
-            orderType,
-            prevSearchWordEmbedding: searchWordEmbedding,
-          });
-          setLoading(false);
-          setItems([...items, ...result.data.posts]);
-
-          setTotalItemsCount(result.data.totalCount);
-          setLoading(false);
-        }
-      } else if (itemsType === "communities") {
-        setLoading(true);
-
-        const result = await Axios.post(`/api/search/subreddits`, {
-          searchQuery,
-          offset: items.length,
-          limit: 20,
-        });
-        setItems([...items, ...result.data.subreddits]);
-        setTotalItemsCount(result.data.totalCount);
-        setLoading(false);
-      }
+  const fetchMoreItems = useCallback(async () => {
+    if (
+      !isCurrent ||
+      loadingMore ||
+      results.totalCount <= results.items.length
+    ) {
+      return;
     }
-  };
+    setLoadingMore(true);
+    try {
+      const page = await fetchSearchPage({
+        itemsType,
+        searchQuery,
+        orderType,
+        offset: results.items.length,
+        prevSearchWordEmbedding: results.searchWordEmbedding,
+      });
+      setResults((current) =>
+        current.key === queryKey
+          ? {
+              ...current,
+              items: [...current.items, ...page.items],
+              totalCount: page.totalCount,
+            }
+          : current,
+      );
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [
+    isCurrent,
+    loadingMore,
+    results.totalCount,
+    results.items.length,
+    results.searchWordEmbedding,
+    itemsType,
+    searchQuery,
+    orderType,
+    queryKey,
+  ]);
 
   return [fetchMoreItems, loading, items];
 };
