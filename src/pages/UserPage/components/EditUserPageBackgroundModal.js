@@ -10,7 +10,7 @@ import { uploadImageToS3 } from "../../../shared/utils/utils";
 
 const initialValues = { userAvatarImageUrl: "" };
 
-const EditUserPageBackgroundModal = ({ isVisible, closeForm }) => {
+const EditUserPageBackgroundModal = ({ isVisible, closeForm, onSaved }) => {
   const [message, setMessage] = useState("");
   const user = useSelector((state) => state.app.user);
   const dispatch = useDispatch();
@@ -25,9 +25,9 @@ const EditUserPageBackgroundModal = ({ isVisible, closeForm }) => {
       await Axios.patch(`api/loggedInUser`, {
         profilePageBackgroundImageUrl: imageUrl,
       });
+      onSaved?.({ profilePageBackgroundImageUrl: imageUrl });
       setLoading(false);
       closeForm();
-      window.location.reload();
     } catch (e) {
       setLoading(false);
       if (e.response?.status !== 429) {

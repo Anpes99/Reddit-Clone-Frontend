@@ -415,6 +415,9 @@ const UserPage = () => {
     }
   };
 
+  const applySavedUserDetails = (changes) =>
+    setViewedUserDetails((details) => ({ ...details, ...changes }));
+
   const isOwnPage = () => user?.username === viewedUserDetails.username;
 
   const [isVisibleEditBackgroundModal, setIsVisibleEditBackgroundModal] =
@@ -454,6 +457,7 @@ const UserPage = () => {
           closeForm={() => {
             setIsVisibleEditUserAvatarImageModal(false);
           }}
+          onSaved={applySavedUserDetails}
         />
       )}
       {isVisibleEditBackgroundModal && (
@@ -462,6 +466,7 @@ const UserPage = () => {
           closeForm={() => {
             setIsVisibleEditBackgroundModal(false);
           }}
+          onSaved={applySavedUserDetails}
         />
       )}
 

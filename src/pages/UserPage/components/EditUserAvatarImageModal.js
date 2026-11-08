@@ -3,7 +3,7 @@ import { Formik, useFormikContext } from "formik";
 import Axios from "../../../shared/lib/axios";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addGlobalNotification } from "../../../app/slices/appSlice";
+import { addGlobalNotification, setUser } from "../../../app/slices/appSlice";
 import UserAvatarImg from "../../../components/Users/UserAvatarImg";
 import { Close } from "@mui/icons-material";
 
@@ -75,13 +75,16 @@ const AvatarOptions = ({ iconsToShow = 16 }) => {
   );
 };
 
-const EditUserAvatarImageModal = ({ isVisible, closeForm }) => {
+const EditUserAvatarImageModal = ({ isVisible, closeForm, onSaved }) => {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.app.user);
   const onSubmit = async (values) => {
     try {
       await Axios.patch(`api/loggedInUser`, values);
+      const avatarImageUrl = values.userAvatarImageUrl;
+      dispatch(setUser({ ...user, avatarImageUrl }));
+      onSaved?.({ avatarImageUrl });
       closeForm();
-      window.location.reload();
     } catch (e) {
       if (e.response?.status !== 429) {
         dispatch(
