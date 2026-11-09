@@ -18,14 +18,12 @@ const VerifyEmailPage = () => {
   useEffect(() => {
     const verifyEmail = async () => {
       const token = searchParams.get("token");
-      console.log(token);
       if (!token) return;
       try {
         const response = await axios.post(
           window.location.origin + "/api/verify-email",
           { token },
         );
-        console.log(response);
         if (response.status === 200) {
           navigate("/");
           dispatch(setEmailVerificationModal({ email: "", isVisible: false }));

@@ -10,7 +10,7 @@ const TrendingFeed = () => {
       .then((res) => {
         setNewsArticles(res.data.articles);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }, []);
 
   return (
