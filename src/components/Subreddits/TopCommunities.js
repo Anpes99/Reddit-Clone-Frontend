@@ -63,7 +63,10 @@ const TopCommunities = () => {
         )}
         {!loadFailed &&
           subreddits === null &&
-          Array.from({ length: 10 }).map((_, i) => <SkeletonRow key={i} />)}
+          Array.from({ length: 10 }).map((_, i) => (
+            // eslint-disable-next-line @eslint-react/no-array-index-key
+            <SkeletonRow key={"skeleton-top-community-" + i} />
+          ))}
         {subreddits?.length === 0 && (
           <p className="text-sm text-gray-500 text-center py-6">
             No communities yet.
