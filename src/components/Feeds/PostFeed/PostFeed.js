@@ -2,7 +2,7 @@ import PostFeedItem from "./PostFeedItem";
 import TopCommunities from "../../Subreddits/TopCommunities";
 import { SunIcon } from "@heroicons/react/outline";
 import { TrendingUpIcon } from "@heroicons/react/outline";
-import { useCallback, useRef } from "react";
+import { useRef } from "react";
 import useGetPosts from "../../../hooks/useGetPosts";
 import { useDispatch, useSelector } from "react-redux";
 import SubredditInfo from "../../../pages/SubredditPage/components/SubredditInfo";
@@ -48,7 +48,7 @@ const PostFeed = ({ subredditId, orderType }) => {
   });
 
   const observerRef = useRef();
-  const lastPostRef = useCallback((node) => {
+  const lastPostRef = (node) => {
     if (loading) return;
     if (observerRef.current) observerRef.current.disconnect();
     observerRef.current = new IntersectionObserver((entries) => {
@@ -57,7 +57,7 @@ const PostFeed = ({ subredditId, orderType }) => {
       }
     });
     if (node) observerRef.current.observe(node);
-  });
+  };
 
   return (
     <div className="flex flex-col  w-full">
