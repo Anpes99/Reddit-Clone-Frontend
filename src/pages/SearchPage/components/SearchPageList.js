@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useRef } from "react";
 import useGetSearchPageItems from "../../../hooks/useGetSearchPageItems";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { MenuItem, Select } from "@mui/material";
@@ -96,7 +96,7 @@ const SearchPageList = () => {
     searchQuery,
   });
   const observerRef = useRef();
-  const lastItemRef = useCallback((node) => {
+  const lastItemRef = (node) => {
     if (loading) return;
     if (observerRef.current) observerRef.current.disconnect();
     observerRef.current = new IntersectionObserver((entries) => {
@@ -105,7 +105,7 @@ const SearchPageList = () => {
       }
     });
     if (node) observerRef.current.observe(node);
-  });
+  };
 
   return (
     <div className=" w-full xl:w-[1024px] xl:max-w-full">
