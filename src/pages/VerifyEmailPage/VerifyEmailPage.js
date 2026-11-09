@@ -40,7 +40,7 @@ const VerifyEmailPage = () => {
     };
 
     verifyEmail();
-  }, [token, navigate, dispatch]);
+  }, []);
 
   return error ? (
     <div className="w-full mt-10 max-w-md mx-auto rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm">

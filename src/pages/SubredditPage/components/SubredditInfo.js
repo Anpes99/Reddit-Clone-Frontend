@@ -153,7 +153,7 @@ const SubredditInfo = ({ style = {}, isOnPostPage }) => {
       }
     };
     runUseEffectFunction();
-  }, [subredditName]);
+  }, [subredditName, dispatch, isOnPostPage]);
 
   if (loadFailed) return null;
   if (isStaleOrMissing) return <SubredditInfoSkeleton style={style} />;
