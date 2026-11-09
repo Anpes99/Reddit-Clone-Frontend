@@ -80,7 +80,7 @@ const useGetPosts = ({ queryParamSort, subredditId, username }) => {
     return () => {
       ignore = true;
     };
-  }, [subredditId, queryParamSort, username]);
+  }, [subredditId, queryParamSort, username, order, sortBy, orderType]);
 
   //////////////////////////////////// GET MORE  POSTS ///////////////////////////////////////////////////
   const fetchMorePosts = async (orderType) => {
