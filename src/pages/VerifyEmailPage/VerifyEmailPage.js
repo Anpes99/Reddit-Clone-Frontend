@@ -14,10 +14,9 @@ const VerifyEmailPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [error, setError] = useState(false);
-
+  const token = searchParams.get("token");
   useEffect(() => {
     const verifyEmail = async () => {
-      const token = searchParams.get("token");
       if (!token) return;
       try {
         const response = await axios.post(
@@ -41,7 +40,7 @@ const VerifyEmailPage = () => {
     };
 
     verifyEmail();
-  }, []);
+  }, [token, navigate, dispatch]);
 
   return error ? (
     <div className="w-full mt-10 max-w-md mx-auto rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm">
