@@ -23,7 +23,7 @@ const CommentLikes = ({ comment }) => {
     return () => {
       socket.off("comment_likes_changed", handleCommentLikesChanged);
     };
-  }, []);
+  }, [comment.id]);
 
   return <p className=" font-bold">{likes}</p>;
 };
