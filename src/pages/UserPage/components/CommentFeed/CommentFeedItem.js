@@ -9,15 +9,24 @@ import CommentVotingArrows from "./CommentVotingArrows";
 const ActionsSection = () => {
   return (
     <div className="flex space-x-4 text-gray-450 font-bold pl-2 w-fit">
-      <div className="flex  hover:bg-gray-300">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="flex  hover:bg-gray-300"
+      >
         <Reply className="scale-x-[-1]" />
         <p className="hidden sm:inline-block">Share</p>
       </div>
-      <div className="flex hover:bg-gray-300">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="flex hover:bg-gray-300"
+      >
         <BookmarkAdd className="mr-1" />
         <p className="hidden sm:inline-block">Save</p>
       </div>
-      <div className="flex items-center hover:bg-gray-300">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="flex items-center hover:bg-gray-300"
+      >
         <MoreHoriz />
       </div>
     </div>

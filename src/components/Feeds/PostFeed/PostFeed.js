@@ -6,6 +6,7 @@ import { useRef } from "react";
 import useGetPosts from "../../../hooks/useGetPosts";
 import { useDispatch, useSelector } from "react-redux";
 import SubredditInfo from "../../../pages/SubredditPage/components/SubredditInfo";
+import SubredditModerators from "../../../pages/SubredditPage/components/SubredditModerators";
 import FeedItemSkeleton from "../FeedItemSkeleton";
 import { setLoginVisible } from "../../../app/slices/appSlice";
 import { useNavigate } from "react-router";
@@ -58,6 +59,8 @@ const PostFeed = ({ subredditId, orderType }) => {
     });
     if (node) observerRef.current.observe(node);
   };
+
+  const isOnSubredditPage = !!currentSubreddit?.id;
 
   return (
     <div className="flex flex-col  w-full">
@@ -125,10 +128,13 @@ const PostFeed = ({ subredditId, orderType }) => {
           )}
         </div>
         <div className="hidden lg:block">
-          {currentSubreddit?.id && (
+          {isOnSubredditPage && (
             <SubredditInfo style={{ marginBottom: "20px" }} />
           )}
           <TopCommunities />
+          {isOnSubredditPage && (
+            <SubredditModerators style={{ marginTop: "20px" }} />
+          )}
         </div>
       </div>
     </div>

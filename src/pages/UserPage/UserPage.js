@@ -18,6 +18,7 @@ import EditUserPageBackgroundModal from "./components/EditUserPageBackgroundModa
 import NotFound from "../../components/Shared/NotFound";
 import LoadError from "../../components/Shared/LoadError";
 import usePageResource from "../../hooks/usePageResource";
+import ModeratedCommunities from "./components/ModeratedCommunities";
 
 const UserIntroductionSection = ({
   viewedUserDetails,
@@ -356,6 +357,11 @@ const UserInfoSectionSmallScreen = ({
           </div>
         </div>
       </div>
+      <ModeratedCommunities
+        moderatedSubreddits={viewedUserDetails.moderatedSubreddits}
+        collapsible
+        className="mb-4"
+      />
     </div>
   );
 };
@@ -516,6 +522,10 @@ const UserPage = () => {
               viewedUserUsername={viewedUserUsername}
               isOwnPage={isOwnPage}
               openEditUserPageBackgroundModal={openEditUserPageBackgroundModal}
+            />
+            <ModeratedCommunities
+              moderatedSubreddits={viewedUserDetails.moderatedSubreddits}
+              className="mt-4"
             />
           </div>
         </div>
