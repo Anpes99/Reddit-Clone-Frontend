@@ -1,107 +1,130 @@
-import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  MenuIcon,
-} from "@heroicons/react/solid";
+import { ChevronDownIcon, MenuIcon } from "@heroicons/react/solid";
 import "./NavigationDrawer.css";
-import { useEffect, useState } from "react";
-import {
-  Article,
-  Book,
-  Campaign,
-  Code,
-  Groups,
-  Help,
-  HouseOutlined,
-  QuestionAnswer,
-  Reddit,
-  Rocket,
-  TrendingUp,
-  Work,
-  WorkspacePremium,
-  Workspaces,
-} from "@mui/icons-material";
+import { useEffect, useMemo, useState } from "react";
+import { HouseOutlined } from "@mui/icons-material";
 import { useLocation, Link } from "react-router";
 import { PlusIcon } from "@heroicons/react/solid";
 import CreateCommunityForm from "../../Forms/CreateCommunityForm";
+import DefaultSubredditIcon from "../../../assets/icons/DefaultSubredditIcon";
+import Axios from "../../../shared/lib/axios";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  setLoginVisible,
   setNavigationDrawerOpenedFromHeader,
   setNavigationDrawerVisible,
+  setSignUpVisible,
 } from "../../../app/slices/appSlice";
 
-const ResourcesDropDownList = () => {
-  const [isVisibleResources, setIsVisibleResources] = useState(false);
+const CommunitiesSection = ({ title, subreddits }) => {
+  const [expanded, setExpanded] = useState(true);
+  const location = useLocation();
+  const currentSubredditName = decodeURIComponent(
+    location.pathname.match(/^\/r\/([^/]+)/)?.[1] ?? "",
+  ).toLowerCase();
 
   return (
-    <div className="border-b-2 pt-5 pb-2">
+    <div className="pt-5 pb-2 border-b-2">
       <button
-        onClick={() => {
-          setIsVisibleResources(!isVisibleResources);
-        }}
-        className=" font font-semibold flex items-center justify-between w-full hover:bg-gray-100 p-2 rounded-lg"
+        type="button"
+        aria-expanded={expanded}
+        onClick={() => setExpanded((prev) => !prev)}
+        className="flex items-center justify-between w-full hover:bg-gray-100 p-2 rounded-lg"
       >
-        <p className="text-gray-400">RESOURCES</p>
-        {isVisibleResources && <ChevronUpIcon className="h-4 -ml-1" />}
-        {!isVisibleResources && <ChevronDownIcon className="h-4 -ml-1" />}
+        <p className="text-gray-400">{title}</p>
+        <ChevronDownIcon
+          className={`h-4 -ml-1 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
+        />
       </button>
-      <div style={{ display: isVisibleResources ? "block" : "none" }}>
-        <Link
-          to={""}
-          className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
+      <div
+        className="grid transition-[grid-template-rows] duration-300 ease-in-out"
+        style={{ gridTemplateRows: expanded ? "1fr" : "0fr" }}
+      >
+        <ul
+          className={`overflow-hidden transition-opacity duration-300 ${expanded ? "opacity-100" : "opacity-0"}`}
+          // React 18 needs inert as a string; switch to inert={!expanded} on React 19
+          inert={expanded ? undefined : "inert"}
         >
-          <Reddit />
-          <p>About Reddit</p>
-        </Link>
-        <Link
-          to={""}
-          className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
+          {subreddits.map((subreddit) => {
+            const isCurrentSubreddit =
+              subreddit.name.toLowerCase() === currentSubredditName;
+            return (
+              <li key={subreddit.id}>
+                <Link
+                  to={`/r/${subreddit.name}`}
+                  aria-current={isCurrentSubreddit ? "page" : undefined}
+                  className={`flex items-center space-x-2 py-2 pl-4 rounded-lg ${isCurrentSubreddit ? "bg-gray-200" : "hover:bg-gray-100"}`}
+                >
+                  <span className="h-6 w-6 shrink-0 rounded-full overflow-hidden flex items-center justify-center">
+                    {subreddit.iconUrl ? (
+                      <img
+                        src={subreddit.iconUrl}
+                        alt=""
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <DefaultSubredditIcon />
+                    )}
+                  </span>
+                  <p className="truncate min-w-0">r/{subreddit.name}</p>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+const TOP_COMMUNITIES_SHOWN = 5;
+
+const TopCommunitiesSection = () => {
+  const [subreddits, setSubreddits] = useState([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    Axios.get("/api/subreddits/leaderboards/top-subreddits")
+      .then((res) => {
+        if (!cancelled) setSubreddits(res.data.slice(0, TOP_COMMUNITIES_SHOWN));
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (!subreddits.length) return null;
+  return <CommunitiesSection title="TOP COMMUNITIES" subreddits={subreddits} />;
+};
+
+const SignUpPrompt = () => {
+  const dispatch = useDispatch();
+  return (
+    <div className="mt-5 p-4 rounded-lg bg-gray-100 text-sm">
+      <p className="text-gray-700 mb-3">
+        Join communities, post, vote and comment
+      </p>
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={() => {
+            dispatch(setSignUpVisible(false));
+            dispatch(setLoginVisible(true));
+          }}
+          className="btn flex-1 hover:bg-blue-50 text-blue-500 border-blue-500"
         >
-          <Campaign />
-          <p>Advertise</p>
-        </Link>
-        <Link
-          to={""}
-          className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
+          Log In
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            dispatch(setLoginVisible(false));
+            dispatch(setSignUpVisible(true));
+          }}
+          className="btn flex-1 bg-blue-500 text-white hover:bg-blue-400"
         >
-          <Code />
-          <p>Developer Platform</p>
-        </Link>
-        <Link
-          to={""}
-          className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-        >
-          <WorkspacePremium />
-          <p>Reddit Pro</p>
-        </Link>
-        <Link
-          to={""}
-          className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-        >
-          <Help />
-          <p>Help</p>
-        </Link>
-        <Link
-          to={""}
-          className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-        >
-          <Book />
-          <p>Blog</p>
-        </Link>
-        <Link
-          to={""}
-          className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-        >
-          <Work />
-          <p>Careers</p>
-        </Link>
-        <Link
-          to={""}
-          className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-        >
-          <Article />
-          <p>Press</p>
-        </Link>
+          Sign Up
+        </button>
       </div>
     </div>
   );
@@ -113,6 +136,14 @@ const NavigationDrawer = () => {
   const [isVisibleCreateCommunityForm, setIsVisibleCreateCommunityForm] =
     useState(false);
   const user = useSelector((state) => state.app.user);
+
+  const joinedSubreddits = useMemo(
+    () =>
+      [...(user?.subreddits ?? [])].sort((a, b) =>
+        a.name.localeCompare(b.name, undefined, { sensitivity: "base" }),
+      ),
+    [user?.subreddits],
+  );
 
   const location = useLocation();
   const isHomePage = ["/", "/top"].includes(location.pathname);
@@ -184,27 +215,6 @@ const NavigationDrawer = () => {
                 <HouseOutlined />
                 <p>Home</p>
               </Link>
-              <Link
-                to={""}
-                className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-              >
-                <TrendingUp />
-                <p>Popular</p>
-              </Link>
-              <Link
-                to={""}
-                className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-              >
-                <QuestionAnswer />
-                <p>Answers</p>
-              </Link>
-              <Link
-                to={""}
-                className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-              >
-                <Workspaces />
-                <p>Explore</p>
-              </Link>
 
               {user && (
                 <button
@@ -218,23 +228,19 @@ const NavigationDrawer = () => {
                 </button>
               )}
             </div>
-            <ResourcesDropDownList />
-            <div className="pt-2">
-              <Link
-                to={""}
-                className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-              >
-                <Groups />
-                <p>Communities</p>
-              </Link>{" "}
-              <Link
-                to={""}
-                className="flex space-x-2 hover:bg-gray-100 cursor-pointer py-3 pl-4 rounded-lg"
-              >
-                <Rocket />
-                <p>Best of Reddit</p>
-              </Link>
-            </div>
+            {user ? (
+              joinedSubreddits.length > 0 && (
+                <CommunitiesSection
+                  title="COMMUNITIES"
+                  subreddits={joinedSubreddits}
+                />
+              )
+            ) : (
+              <>
+                <TopCommunitiesSection />
+                <SignUpPrompt />
+              </>
+            )}
           </div>
         </div>
       </div>
