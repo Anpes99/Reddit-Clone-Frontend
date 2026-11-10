@@ -108,7 +108,7 @@ describe("SignUp", () => {
     });
 
     expect(
-      await screen.findByText("Username must be at least 2 characters"),
+      await screen.findByText("Username must be at least 3 characters"),
     ).toBeInTheDocument();
     expect(
       screen.getByText("Please enter a valid email address"),

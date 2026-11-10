@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 import { Skeleton } from "@mui/material";
-import { StarOutlined } from "@mui/icons-material";
 import moment from "moment";
 import HoverCard, { createCachedFetcher } from "../Shared/HoverCard";
 import UserAvatarImg from "./UserAvatarImg";
