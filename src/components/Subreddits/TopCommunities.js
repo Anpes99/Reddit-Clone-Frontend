@@ -2,14 +2,13 @@ import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/solid";
 import { useEffect, useState } from "react";
 import JoinSubredditButton from "../Buttons/JoinSubredditButton";
 import Axios from "../../shared/lib/axios";
-import { useNavigate } from "react-router";
 import DefaultSubredditIcon from "../../assets/icons/DefaultSubredditIcon";
+import SubredditHoverCard from "./SubredditHoverCard";
 import { HorizontalRule } from "@mui/icons-material";
 
 const TopCommunities = () => {
   const [subreddits, setSubreddits] = useState(null);
   const [loadFailed, setLoadFailed] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const runUseEffectFunction = async () => {
@@ -82,26 +81,20 @@ const TopCommunities = () => {
                 <p className="w-3">{i + 1}</p>
 
                 <RankChangedIcon subreddit={subreddit} />
-                <div
-                  onClick={() => {
-                    navigate(`/r/${subreddit.name}`);
-                  }}
-                  className="rounded-full flex justify-center items-center overflow-hidden h-8 w-8 cursor-pointer"
-                >
-                  {subreddit.iconUrl ? (
-                    <img src={subreddit.iconUrl} />
-                  ) : (
-                    <DefaultSubredditIcon />
-                  )}
-                </div>
+                <SubredditHoverCard subredditName={subreddit.name}>
+                  <div className="rounded-full flex justify-center items-center overflow-hidden h-8 w-8 cursor-pointer">
+                    {subreddit.iconUrl ? (
+                      <img src={subreddit.iconUrl} />
+                    ) : (
+                      <DefaultSubredditIcon />
+                    )}
+                  </div>
+                </SubredditHoverCard>
               </div>
-              <p
-                onClick={() => {
-                  navigate(`/r/${subreddit.name}`);
-                }}
-                className="text-xs w-1/2 truncate cursor-pointer max-w-[100px] overflow-hidden"
-              >
-                r/{subreddit.name}
+              <p className="text-xs w-1/2 truncate cursor-pointer hover:underline max-w-[100px] overflow-hidden">
+                <SubredditHoverCard subredditName={subreddit.name}>
+                  r/{subreddit.name}
+                </SubredditHoverCard>
               </p>
               <JoinSubredditButton subreddit={subreddit} />
             </div>

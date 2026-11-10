@@ -2,36 +2,10 @@ import moment from "moment";
 import { useNavigate } from "react-router";
 import PostVotingArrows from "../../../../components/Feeds/PostFeed/PostVotingArrows";
 import { makeStringSafeForURL } from "../../../../shared/utils/utils";
-import { BookmarkAdd, MoreHoriz, Reply } from "@mui/icons-material";
-import DefaultSubredditIcon from "../../../../assets/icons/DefaultSubredditIcon";
 import CommentVotingArrows from "./CommentVotingArrows";
-
-const ActionsSection = () => {
-  return (
-    <div className="flex space-x-4 text-gray-450 font-bold pl-2 w-fit">
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="flex  hover:bg-gray-300"
-      >
-        <Reply className="scale-x-[-1]" />
-        <p className="hidden sm:inline-block">Share</p>
-      </div>
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="flex hover:bg-gray-300"
-      >
-        <BookmarkAdd className="mr-1" />
-        <p className="hidden sm:inline-block">Save</p>
-      </div>
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="flex items-center hover:bg-gray-300"
-      >
-        <MoreHoriz />
-      </div>
-    </div>
-  );
-};
+import UserHoverCard from "../../../../components/Users/UserHoverCard";
+import DefaultSubredditIcon from "../../../../assets/icons/DefaultSubredditIcon";
+import SubredditHoverCard from "../../../../components/Subreddits/SubredditHoverCard";
 
 const CommentFeedItem = ({ comment }) => {
   const date = new Date(comment.createdAt);
@@ -55,28 +29,36 @@ const CommentFeedItem = ({ comment }) => {
       >
         <div className="flex flex-col p-2">
           <div className="flex items-center space-x-2 ">
-            <div className="inline-block rounded-full overflow-hidden h-7 w-7">
-              {comment?.subreddit?.iconUrl ? (
-                <img src={comment?.subreddit?.iconUrl} alt="subreddit img" />
-              ) : (
-                <DefaultSubredditIcon />
-              )}
-            </div>
-            <p className="inline mr-2 font-bold text-sm">
-              r/{comment?.subreddit?.name || "noName"}
-            </p>
+            <SubredditHoverCard subredditName={comment?.subreddit?.name}>
+              <div className="inline-block rounded-full overflow-hidden h-7 w-7">
+                {comment?.subreddit?.iconUrl ? (
+                  <img src={comment?.subreddit?.iconUrl} alt="subreddit img" />
+                ) : (
+                  <DefaultSubredditIcon />
+                )}
+              </div>
+            </SubredditHoverCard>
+            <SubredditHoverCard subredditName={comment?.subreddit?.name}>
+              <p className="inline mr-2 font-bold text-sm">
+                r/{comment?.subreddit?.name || "noName"}
+              </p>
+            </SubredditHoverCard>
           </div>
           <div className="mt-2  text-xs line-clamp-5">
             {comment.post?.title}
           </div>
           <div className="flex space-x-1 items-center mb-3 mt-2 text-xs">
-            <p className="font-bold ">{comment.user?.username}</p>
+            <UserHoverCard username={comment.user?.username}>
+              <p className="font-bold ">{comment.user?.username}</p>
+            </UserHoverCard>
             {comment.parentComment ? (
               <>
                 <p className="text-gray-500">answered to comment by</p>
-                <p className="font-bold ">
-                  {comment.parentComment?.user?.username}{" "}
-                </p>
+                <UserHoverCard username={comment.parentComment?.user?.username}>
+                  <p className="font-bold ">
+                    {comment.parentComment?.user?.username}{" "}
+                  </p>
+                </UserHoverCard>
               </>
             ) : (
               <p className="text-gray-500">commented</p>
@@ -85,14 +67,10 @@ const CommentFeedItem = ({ comment }) => {
           </div>
           {comment.text}
         </div>
-
-        <div className=" hidden sm:block  pt-2  pb-1  w-fit pr-2">
-          <ActionsSection />
-        </div>
       </div>
 
       <div className="flex sm:hidden p-2 items-center">
-        <PostVotingArrows post={comment} /> <ActionsSection />
+        <PostVotingArrows post={comment} />
       </div>
     </div>
   );

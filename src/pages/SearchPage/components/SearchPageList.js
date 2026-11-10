@@ -5,6 +5,7 @@ import { MenuItem, Select } from "@mui/material";
 import { makeStringSafeForURL } from "../../../shared/utils/utils";
 import moment from "moment";
 import DefaultSubredditIcon from "../../../assets/icons/DefaultSubredditIcon";
+import SubredditHoverCard from "../../../components/Subreddits/SubredditHoverCard";
 
 const ListItemSubreddit = ({ subreddit }) => {
   return (
@@ -43,20 +44,28 @@ const ListItemPost = ({ post }) => {
   const date = new Date(post.createdAt);
   const { title } = post;
   return (
-    <Link
-      to={`/r/${post?.subreddit?.name || "noName"}/comments/${post.id}/${
-        makeStringSafeForURL(post?.title) || "noTitle"
-      }`}
-      className="border-b py-5  flex flex-row justify-between items-center hover:bg-gray-100 rounded-md px-4"
-    >
+    <div className="relative border-b py-5  flex flex-row justify-between items-center hover:bg-gray-100 rounded-md px-4">
+      {/* Covers the row; links can't nest, so inner links use z-10 to sit above it.
+          Cant use onClick because it doesnt have the "open link in new tab" */}
+      <Link
+        to={`/r/${post?.subreddit?.name || "noName"}/comments/${post.id}/${
+          makeStringSafeForURL(post?.title) || "noTitle"
+        }`}
+        aria-label={title}
+        className="absolute inset-0 rounded-md"
+      />
       <div className="flex flex-col">
         <div className="flex flex-row mb-1.5 items-center">
-          <div className="inline-block flex justify-center items-center rounded-full overflow-hidden h-7 w-7 cursor-pointer flex-shrink-0">
-            <img src={post.subreddit.iconUrl} alt="user img" />
-          </div>
-          <p className="font-semibold text-sm mr-1.5 ml-3">
-            r/{post?.subreddit?.name}
-          </p>
+          <SubredditHoverCard subredditName={post?.subreddit?.name}>
+            <div className="relative z-10 inline-block flex justify-center items-center rounded-full overflow-hidden h-7 w-7 cursor-pointer flex-shrink-0">
+              <img src={post.subreddit.iconUrl} alt="user img" />
+            </div>
+          </SubredditHoverCard>
+          <SubredditHoverCard subredditName={post?.subreddit?.name}>
+            <p className="relative z-10 font-semibold text-sm mr-1.5 ml-3">
+              r/{post?.subreddit?.name}
+            </p>
+          </SubredditHoverCard>
           <p className="font-extralight text-sm">·</p>
           <p className="font-extralight text-sm ml-1.5">
             {moment(date.getTime()).fromNow()}
@@ -79,7 +88,7 @@ const ListItemPost = ({ post }) => {
           src={post.imageUrl}
         />
       )}
-    </Link>
+    </div>
   );
 };
 
@@ -122,6 +131,17 @@ const SearchPageList = () => {
             <MenuItem value={"NEW"}>New</MenuItem>
             <MenuItem value={"TOP"}>Top</MenuItem>
           </Select>
+        </div>
+      )}
+      {!loading && items.length === 0 && (
+        <div className="bg-white  px-4 py-12 text-center">
+          <p className="font-semibold text-lg">
+            No {itemsType === "communities" ? "communities" : "posts"} found
+            {searchQuery ? ` for "${searchQuery}"` : ""}
+          </p>
+          <p className="mt-2 text-sm text-gray-500">
+            Try different keywords or check your spelling.
+          </p>
         </div>
       )}
       {items.map((item, i) => {

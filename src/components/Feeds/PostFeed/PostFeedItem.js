@@ -11,14 +11,11 @@ import {
   MenuItem,
 } from "@mui/material";
 import PostVotingArrows from "./PostVotingArrows";
-import { makeStringSafeForURL } from "../../../shared/utils/utils";
-import {
-  BookmarkAdd,
-  ChatBubbleRounded,
-  MoreHoriz,
-  Reply,
-} from "@mui/icons-material";
+import UserHoverCard from "../../Users/UserHoverCard";
 import DefaultSubredditIcon from "../../../assets/icons/DefaultSubredditIcon";
+import SubredditHoverCard from "../../Subreddits/SubredditHoverCard";
+import { makeStringSafeForURL } from "../../../shared/utils/utils";
+import { ChatBubbleRounded, MoreHoriz } from "@mui/icons-material";
 import Axios from "../../../shared/lib/axios";
 import { addGlobalNotification } from "../../../app/slices/appSlice";
 import { hasSubredditPermission } from "../../../config/moderator-permissions";
@@ -99,35 +96,12 @@ const MoreOptionsMenu = ({ onDelete }) => {
 const ActionsSection = ({ post, onDelete }) => {
   return (
     <div className="flex space-x-4 text-gray-450 font-bold pl-2 w-fit">
-      <div className="flex  hover:bg-gray-300">
+      <div className="flex">
         <ChatBubbleRounded className=" mr-1" style={{ width: "20px" }} />
         <p>{post.commentCount}</p>
         <p className="hidden sm:inline-block ml-1">Comments</p>
       </div>
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="flex  hover:bg-gray-300"
-      >
-        <Reply className="scale-x-[-1]" />
-        <p className="hidden sm:inline-block">Share</p>
-      </div>
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="flex hover:bg-gray-300"
-      >
-        <BookmarkAdd className="mr-1" />
-        <p className="hidden sm:inline-block">Save</p>
-      </div>
-      {onDelete ? (
-        <MoreOptionsMenu onDelete={onDelete} />
-      ) : (
-        <div
-          onClick={(e) => e.stopPropagation()}
-          className="flex items-center hover:bg-gray-300"
-        >
-          <MoreHoriz />
-        </div>
-      )}
+      {onDelete && <MoreOptionsMenu onDelete={onDelete} />}
     </div>
   );
 };
@@ -189,18 +163,25 @@ const PostFeedItem = ({ post }) => {
       >
         <div className="flex flex-col p-2">
           <div className="flex items-center space-x-2 ">
-            <div className="inline-block flex justify-center items-center rounded-full overflow-hidden h-7 w-7">
-              {post?.subreddit?.iconUrl ? (
-                <img src={post?.subreddit?.iconUrl} alt="subreddit img" />
-              ) : (
-                <DefaultSubredditIcon />
-              )}
-            </div>
-            <p className="inline mr-2 font-bold text-sm">
-              r/{post?.subreddit?.name || "noName"}
-            </p>
+            <SubredditHoverCard subredditName={post?.subreddit?.name}>
+              <div className="inline-block flex justify-center items-center rounded-full overflow-hidden h-7 w-7">
+                {post?.subreddit?.iconUrl ? (
+                  <img src={post?.subreddit?.iconUrl} alt="subreddit img" />
+                ) : (
+                  <DefaultSubredditIcon />
+                )}
+              </div>
+            </SubredditHoverCard>
+            <SubredditHoverCard subredditName={post?.subreddit?.name}>
+              <p className="inline mr-2 font-bold text-sm">
+                r/{post?.subreddit?.name || "noName"}
+              </p>
+            </SubredditHoverCard>
             <p className="inline text-xs text-gray-400">
-              posted by u/{post?.user?.username || "noName"}{" "}
+              posted by{" "}
+              <UserHoverCard username={post?.user?.username}>
+                u/{post?.user?.username || "noName"}
+              </UserHoverCard>{" "}
               {moment(date.getTime()).fromNow()}
             </p>
           </div>
