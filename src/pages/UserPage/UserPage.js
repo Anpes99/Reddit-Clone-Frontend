@@ -2,8 +2,6 @@ import { useParams, useSearchParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { addGlobalNotification } from "../../app/slices/appSlice";
 
-import { PlusCircleIcon } from "@heroicons/react/outline";
-
 import UserPageActivityFeed from "./components/UserPageActivityFeed";
 import { useState } from "react";
 import { ArrowSmUpIcon } from "@heroicons/react/outline";
@@ -20,6 +18,10 @@ import LoadError from "../../components/Shared/LoadError";
 import usePageResource from "../../hooks/usePageResource";
 import ModeratedCommunities from "./components/ModeratedCommunities";
 
+const getBackgroundImageUrl = (userDetails, username) =>
+  userDetails.profilePageBackgroundImageUrl ||
+  `https://api.dicebear.com/10.x/landscape/svg?orbProbability=0&seed=${username}`;
+
 const UserIntroductionSection = ({
   viewedUserDetails,
   openEditUserPageBackgroundModal,
@@ -27,7 +29,6 @@ const UserIntroductionSection = ({
   setIsVisibleEditUserAvatarImageModal,
   isVisibleEditUserAvatarImageModal,
   viewedUserUsername,
-  user,
 }) => {
   return (
     <div>
@@ -36,9 +37,7 @@ const UserIntroductionSection = ({
         style={{
           height: "100px",
           width: "100%",
-          backgroundImage: viewedUserDetails.profilePageBackgroundImageUrl
-            ? `url(${viewedUserDetails.profilePageBackgroundImageUrl})`
-            : `url(https://api.dicebear.com/10.x/landscape/svg?orbProbability=0&seed=${viewedUserUsername})`,
+          backgroundImage: `url(${getBackgroundImageUrl(viewedUserDetails, viewedUserUsername)})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -83,9 +82,6 @@ const UserIntroductionSection = ({
               u/{viewedUserUsername}
             </h2>
           </div>
-        </div>
-        <div className="height-full flex items-center lg:hidden">
-          {viewedUserUsername !== user?.username && <FollowUserButton />}
         </div>
       </div>
     </div>
@@ -132,16 +128,6 @@ const UserPageContentSelectionButtons = ({
     </div>
   );
 };
-
-const FollowUserButton = () => (
-  <button className="bg-blue-800 text-white rounded-full px-3 py-1 font-semibold flex text-sm items-center mb-4 font-normal hover:bg-blue-900">
-    <PlusCircleIcon
-      style={{ width: "1.5rem", marginRight: "7px" }}
-      className="hidden lg:block"
-    />
-    Follow
-  </button>
-);
 
 const UserInfoSectionDetails = ({ viewedUserDetails }) => {
   return (
@@ -266,9 +252,7 @@ const UserInfoSectionBigScreen = ({
         style={{
           height: "100px",
           width: "300px",
-          backgroundImage: viewedUserDetails.profilePageBackgroundImageUrl
-            ? `url(${viewedUserDetails.profilePageBackgroundImageUrl})`
-            : `url(https://api.dicebear.com/10.x/landscape/svg?orbProbability=0&seed=${viewedUserUsername})`,
+          backgroundImage: `url(${getBackgroundImageUrl(viewedUserDetails, viewedUserUsername)})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -285,7 +269,6 @@ const UserInfoSectionBigScreen = ({
 
       <div className="p-4 w-full">
         <div className="mb-4 font-bold">{viewedUserUsername}</div>
-        {viewedUserUsername !== user?.username && <FollowUserButton />}
         <UserIntroductionAndEditSection
           isVisibleEditIntroduction={isVisibleEditIntroduction}
           setIsVisibleEditIntroduction={setIsVisibleEditIntroduction}
@@ -473,6 +456,7 @@ const UserPage = () => {
             setIsVisibleEditBackgroundModal(false);
           }}
           onSaved={applySavedUserDetails}
+          currentImageUrl={viewedUserDetails.profilePageBackgroundImageUrl}
         />
       )}
 
@@ -486,7 +470,6 @@ const UserPage = () => {
           }
           isVisibleEditUserAvatarImageModal={isVisibleEditUserAvatarImageModal}
           viewedUserUsername={viewedUserUsername}
-          user={user}
         />
         <UserInfoSectionSmallScreen
           isVisibleEditIntroduction={isVisibleEditIntroduction}

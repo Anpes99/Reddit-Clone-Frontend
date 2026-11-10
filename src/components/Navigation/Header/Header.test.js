@@ -10,9 +10,6 @@ jest.mock("../../../shared/lib/axios", () => ({
   __esModule: true,
   default: { post: jest.fn() },
 }));
-// Rendered for logged-in users; not needed for the logout flow.
-jest.mock("./UserSubredditsDropDown", () => () => null);
-
 const loggedInUser = { id: 1, username: "test_user1", token: "access-1" };
 
 beforeAll(() => {

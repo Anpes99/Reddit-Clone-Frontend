@@ -56,7 +56,7 @@ const PostPage = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-[100dvh]">
+    <div className="flex flex-col min-h-[100dvh] xl:w-[1024px] xl:max-w-full">
       <div
         onClick={() => {
           dispatch(setHeaderDropDownVisible(false));
@@ -85,7 +85,7 @@ const PostPage = () => {
             </div>
           </div>
           <section className="flex space-x-5 p-5 justify-center text-sm">
-            <section className="flex flex-col">
+            <section className="flex flex-col w-full max-w-[40rem] min-w-0">
               <PostPageMainInfoSection post={post} />
               <div className="mb-5">
                 <CreateNewDirectPostComment user={user} post={post} />

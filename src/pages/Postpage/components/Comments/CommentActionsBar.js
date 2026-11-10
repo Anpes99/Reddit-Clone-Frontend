@@ -76,10 +76,6 @@ const CommentActionsBar = ({ post, comment, user, dispatch }) => {
         >
           <ChatIcon className="hidden sm:inline-block h-6 mr-1" /> Reply
         </p>
-        <p className="hover:bg-gray-200 cursor-pointer">Share</p>
-        <p className="hover:bg-gray-200 cursor-pointer">Report</p>
-        <p className="hover:bg-gray-200 cursor-pointer">Save</p>
-        <p className="hover:bg-gray-200 cursor-pointer">Follow</p>
       </div>
       <ReplyToCommentSection
         commentId={comment.id}

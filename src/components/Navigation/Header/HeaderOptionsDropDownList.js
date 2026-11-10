@@ -53,15 +53,6 @@ const HeaderOptionsDropDownList = ({ isVisible, toggleRef }) => {
           </div>
         </div>
       )}
-      <h4 className="p-2 text-xs text-gray-400">VIEW OPTIONS</h4>
-      <a className="link">Dark Mode</a>
-      <h4 className="p-2 text-xs text-gray-400">MORE STUFF</h4>
-      <a className="link">Coins</a>
-      <a className="link">Premium</a>
-      <a className="link">Powerups</a>
-      <a className="link">Talk</a>
-      <a className="link">Predictions</a>
-      <a className="link">Help Center</a>
       {!user && (
         <a
           onClick={() => {

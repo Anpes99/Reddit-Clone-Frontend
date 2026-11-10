@@ -10,7 +10,12 @@ import { uploadImageToS3 } from "../../../shared/utils/utils";
 
 const initialValues = { userAvatarImageUrl: "" };
 
-const EditUserPageBackgroundModal = ({ isVisible, closeForm, onSaved }) => {
+const EditUserPageBackgroundModal = ({
+  isVisible,
+  closeForm,
+  onSaved,
+  currentImageUrl,
+}) => {
   const [message, setMessage] = useState("");
   const user = useSelector((state) => state.app.user);
   const dispatch = useDispatch();
@@ -69,7 +74,7 @@ const EditUserPageBackgroundModal = ({ isVisible, closeForm, onSaved }) => {
                 backgroundImage: values.profilePageBackgroundImageUrl
                   ?.previewUrl
                   ? `url(${values.profilePageBackgroundImageUrl?.previewUrl})`
-                  : `url(${user.profilePageBackgroundImageUrl || `https://api.dicebear.com/10.x/landscape/svg?orbProbability=0&seed=${user.username}`})`,
+                  : `url(${currentImageUrl || `https://api.dicebear.com/10.x/landscape/svg?orbProbability=0&seed=${user.username}`})`,
                 backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",

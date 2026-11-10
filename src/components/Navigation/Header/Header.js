@@ -21,7 +21,6 @@ import _ from "lodash";
 import RedditTextIcon from "../../../assets/icons/RedditTextIcon";
 import RedditIcon from "../../../assets/icons/RedditIcon";
 import HeaderOptionsDropDownList from "./HeaderOptionsDropDownList";
-import UserSubredditsDropDownList from "./UserSubredditsDropDown";
 import Axios from "../../../shared/lib/axios";
 import UserAvatarImg from "../../Users/UserAvatarImg";
 import EmailVerificationModal from "../../Forms/EmailVerification/EmailVerificationModal";
@@ -194,9 +193,6 @@ const Header = () => {
           <div className="hidden md:inline">
             <RedditTextIcon />
           </div>
-        </div>
-        <div className="hidden sm:block">
-          {user && <UserSubredditsDropDownList />}
         </div>
         <div className="w-full sm:w-auto flex flex-col border rounded-sm relative bg-gray-100 basis-full flex-shrink min-w-0">
           <SearchIcon className="hidden sm:inline-block pl-4 h-7 top-1/2 translate-y-[-50%] text-gray-400 absolute" />
