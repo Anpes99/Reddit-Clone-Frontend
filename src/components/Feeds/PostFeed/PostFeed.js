@@ -10,6 +10,7 @@ import SubredditModerators from "../../../pages/SubredditPage/components/Subredd
 import FeedItemSkeleton from "../FeedItemSkeleton";
 import { setLoginVisible } from "../../../app/slices/appSlice";
 import { useNavigate } from "react-router";
+import CreatePostBar from "./CreatePostBar";
 
 const NoPostsYet = () => {
   const currentSubreddit = useSelector((state) => state.app.currentSubreddit);
@@ -67,6 +68,7 @@ const PostFeed = ({ subredditId, orderType }) => {
       <p className="py-4 font-medium text-gray-700 px-1">Popular posts</p>
       <div className="flex justify-center lg:justify-between w-full">
         <div className="pr-0 lg:pr-7 w-full">
+          <CreatePostBar />
           <div className="flex space-x-4 bg-white p-5 text-xs sm:text-sm mb-2 border border-gray-300 w-full">
             <button
               onClick={() => {

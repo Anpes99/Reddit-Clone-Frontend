@@ -10,7 +10,11 @@ import { useDispatch, useSelector } from "react-redux";
 import HomePage from "../pages/HomePage/HomePage";
 import PostPage from "../pages/Postpage/PostPage";
 import { useEffect, useRef, useState } from "react";
-import { addGlobalNotification, setUser } from "./slices/appSlice";
+import {
+  addGlobalNotification,
+  setCurrentSubreddit,
+  setUser,
+} from "./slices/appSlice";
 import SubmitNewPostPage from "../pages/SubmitNewPostPage/SubmitNewPostPage";
 import SubredditPage from "../pages/SubredditPage/SubredditPage";
 import UserPage from "../pages/UserPage/UserPage";
@@ -29,6 +33,18 @@ const ScrollToTop = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+
+  return null;
+};
+
+const ClearSubredditOutsideSubredditPages = () => {
+  const { pathname } = useLocation();
+  const dispatch = useDispatch();
+  const isSubredditRoute = pathname.startsWith("/r/");
+
+  useEffect(() => {
+    if (!isSubredditRoute) dispatch(setCurrentSubreddit(null));
+  }, [isSubredditRoute, dispatch]);
 
   return null;
 };
@@ -99,6 +115,7 @@ const App = () => {
       <Router>
         <RegisterRouterNavigate />
         <ScrollToTop />
+        <ClearSubredditOutsideSubredditPages />
         <Header />
         <div className="w-full h-[var(--header-height)] hidden lg:block"></div>
         {authInitialized && (
