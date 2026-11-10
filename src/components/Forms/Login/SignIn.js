@@ -16,8 +16,14 @@ const initialValues = {
 };
 
 const validationSchema = yup.object().shape({
-  username: yup.string().min(2).required("Username is required"),
-  password: yup.string().min(4).required("Password is required"),
+  username: yup
+    .string()
+    .min(3, "Username must be at least 3 characters")
+    .required("Username is required"),
+  password: yup
+    .string()
+    .min(4, "Password must be at least 4 characters")
+    .required("Password is required"),
 });
 
 export const SignInContainer = ({ onSubmit, newError }) => {
@@ -29,11 +35,12 @@ export const SignInContainer = ({ onSubmit, newError }) => {
       onSubmit={onSubmit}
     >
       {({ handleSubmit }) => (
-        <div className="space-y-4 flex flex-col items-center">
+        <div className="space-y-4 flex flex-col items-center w-full">
           <FormikTextInput
             name="username"
             placeholder="Username"
             inputProps={{ maxLength: 25 }}
+            ContainerClassName="w-full flex flex-col items-center"
           />
 
           <FormikTextInput
@@ -41,6 +48,7 @@ export const SignInContainer = ({ onSubmit, newError }) => {
             type={"password"}
             placeholder="Password"
             inputProps={{ maxLength: 128 }}
+            ContainerClassName="w-full flex flex-col items-center"
           />
 
           {newError && <p className="text-red-600">{newError}</p>}
@@ -50,7 +58,7 @@ export const SignInContainer = ({ onSubmit, newError }) => {
             onClick={handleSubmit}
             role="button"
             aria-label="create my account"
-            className="focus:ring-2 focus:ring-offset-2 focus:bg-blue-500 text-sm font-semibold leading-none text-white focus:outline-none bg-blue-500 border rounded hover:bg-blue-400 py-4 w-full transition-all"
+            className="focus:ring-2 focus:ring-offset-2 max-w-[235px] focus:bg-blue-500 text-sm font-semibold leading-none text-white focus:outline-none bg-blue-500 border rounded hover:bg-blue-400 py-4 w-full transition-all"
           >
             Log In
           </button>

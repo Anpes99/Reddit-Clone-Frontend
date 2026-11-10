@@ -6,14 +6,14 @@ const FormikTextInput = ({
   type,
   placeholder,
   marginBottom,
-  containerStyle,
+  ContainerClassName,
   ...props
 }) => {
   const [field, meta, helpers] = useField(name); // useField has to be under Formik component to work
   const showError = meta.touched && meta.error;
 
   return (
-    <div style={containerStyle}>
+    <div className={ContainerClassName}>
       <TextField
         type={type ? type : "text"}
         variant="outlined"

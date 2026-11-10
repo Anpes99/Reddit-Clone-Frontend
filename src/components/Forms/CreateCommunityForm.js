@@ -151,7 +151,7 @@ const CreateCommunityForm = ({ isVisible, closeForm }) => {
             onClick={() => closeForm()}
             className="fixed top-0 left-0 w-full h-full bg-black opacity-70 z-[100] "
           ></div>
-          <div className="z-[101]  bg-white  p-5 basis-[385px] md:basis-[768px] rounded-xl max-w-full overflow-y-auto overscroll-contain max-h-[100dvh] h-min">
+          <div className="z-[101]  bg-white  p-5 basis-[500px] md:basis-[768px] rounded-xl max-w-full overflow-y-auto overscroll-contain max-h-[100dvh] h-min">
             <div className="flex justify-between mb-10">
               <div>
                 <p className="font-semibold text-xl">
@@ -187,7 +187,7 @@ const CreateCommunityForm = ({ isVisible, closeForm }) => {
                       </InputAdornment>
                     ),
                   }}
-                  containerStyle={{ marginBottom: "20px", width: "100%" }}
+                  ContainerClassName="w-full mb-5"
                   required
                 />
 
@@ -198,7 +198,7 @@ const CreateCommunityForm = ({ isVisible, closeForm }) => {
                   inputProps={{ maxLength: 500 }}
                   required
                   multiline
-                  containerStyle={{ width: "100%" }}
+                  ContainerClassName="w-full"
                   rows={7}
                 />
               </div>

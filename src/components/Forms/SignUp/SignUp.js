@@ -17,13 +17,13 @@ const initialValues = {
 
 export const validationSchema = Joi.object({
   username: Joi.string()
-    .min(2)
+    .min(3)
     .max(25)
     .pattern(/^[A-Za-z0-9_-]+$/)
     .required()
     .messages({
       "string.empty": "Username is required",
-      "string.min": "Username must be at least 2 characters",
+      "string.min": "Username must be at least 3 characters",
       "string.max": "Username must be at most 25 characters",
       "string.pattern.base":
         "Username may contain letters, numbers, underscores and hyphens only",
@@ -70,23 +70,26 @@ export const SignUpContainer = ({ onSubmit, newError }) => {
       onSubmit={onSubmit}
     >
       {({ handleSubmit }) => (
-        <div className="space-y-4">
+        <div className="flex flex-col items-center space-y-4">
           <FormikTextInput
             name="username"
             placeholder="Username"
             inputProps={{ maxLength: 25 }}
+            ContainerClassName="w-full flex flex-col items-center"
           />
           <FormikTextInput
             type="email"
             name="email"
             placeholder="Email"
             inputProps={{ maxLength: 254 }}
+            ContainerClassName="w-full flex flex-col items-center"
           />
           <FormikTextInput
             type="password"
             name="password"
             placeholder="Password"
             inputProps={{ minLength: 4, maxLength: 128 }}
+            ContainerClassName="w-full flex flex-col items-center"
           />
 
           {newError && <p className="text-red-600">{newError}</p>}
@@ -96,7 +99,7 @@ export const SignUpContainer = ({ onSubmit, newError }) => {
             onClick={handleSubmit}
             role="button"
             aria-label="create my account"
-            className="focus:ring-2 focus:ring-offset-2 focus:bg-blue-500 text-sm font-semibold leading-none text-white focus:outline-none bg-blue-500 border rounded hover:bg-blue-400 py-4 w-full transition-all"
+            className="focus:ring-2 focus:ring-offset-2 max-w-[235px] focus:bg-blue-500 text-sm font-semibold leading-none text-white focus:outline-none bg-blue-500 border rounded hover:bg-blue-400 py-4 w-full transition-all"
           >
             Sign Up
           </button>

@@ -5,7 +5,6 @@ import {
   setSignUpVisible,
 } from "../../../app/slices/appSlice";
 import { useDispatch } from "react-redux";
-import ContinueWithGoogleButton from "../../Buttons/ContinueWithGoogleButton";
 
 function LoginForm() {
   const dispatch = useDispatch();
@@ -13,7 +12,7 @@ function LoginForm() {
   return (
     <div className="h-full bg-black/60 w-full flex flex-col justify-center items-center">
       <div className="flex flex-col items-center justify-center w-full h-full">
-        <div className="bg-white shadow rounded lg:w-1/3 flex flex-col items-center  md:w-1/2 w-full p-10 pt-[4rem] relative overflow-y-scroll overscroll-contain ">
+        <div className="bg-white shadow rounded flex flex-col items-center w-full max-w-md p-10 pt-[4rem] relative overflow-y-scroll overscroll-contain ">
           <XIcon
             className="h-10 w-10 absolute top-5 right-5 cursor-pointer"
             onClick={() => {
@@ -45,16 +44,8 @@ function LoginForm() {
               Sign up here
             </span>
           </p>
-          <ContinueWithGoogleButton />
-          <div className="w-full flex items-center justify-between py-5">
-            <hr className="w-full bg-gray-400" />
-            <p className="text-base font-medium leading-4 px-2.5 text-gray-400">
-              OR
-            </p>
-            <hr className="w-full bg-gray-400  " />
-          </div>
 
-          <div className="mt-8 flex justify-center">
+          <div className="mt-8 w-full max-w-xs">
             <SignIn />
           </div>
         </div>
