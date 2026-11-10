@@ -6,7 +6,7 @@ import {
 import { useEffect, useState } from "react";
 import socket from "../../../../shared/lib/socket";
 import { setLoginVisible } from "../../../../app/slices/appSlice";
-import { ChatIcon } from "@heroicons/react/outline";
+import { ChatIcon, PencilIcon } from "@heroicons/react/outline";
 import ReplyToCommentSection from "./ReplyToCommentSection";
 
 const CommentLikes = ({ comment }) => {
@@ -28,7 +28,7 @@ const CommentLikes = ({ comment }) => {
   return <p className=" font-bold">{likes}</p>;
 };
 
-const CommentActionsBar = ({ post, comment, user, dispatch }) => {
+const CommentActionsBar = ({ post, comment, user, dispatch, onEdit }) => {
   const [newComment, setNewComment] = useState("");
   const [createCommentVisible, setCreateCommentVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -76,6 +76,14 @@ const CommentActionsBar = ({ post, comment, user, dispatch }) => {
         >
           <ChatIcon className="hidden sm:inline-block h-6 mr-1" /> Reply
         </p>
+        {onEdit && (
+          <button
+            onClick={onEdit}
+            className="flex items-center hover:bg-gray-200 cursor-pointer"
+          >
+            <PencilIcon className="hidden sm:inline-block h-5 mr-1" /> Edit
+          </button>
+        )}
       </div>
       <ReplyToCommentSection
         commentId={comment.id}

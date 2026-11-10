@@ -7,7 +7,7 @@ import { renderWithProviders } from "../../../../test/renderWithProviders";
 
 jest.mock("../../../../shared/lib/axios", () => ({
   __esModule: true,
-  default: { get: jest.fn(), post: jest.fn() },
+  default: { get: jest.fn(), post: jest.fn(), patch: jest.fn() },
 }));
 
 const post = { id: 7, subredditId: 3 };
@@ -146,4 +146,100 @@ it("posts a reply to the comment", async () => {
     commentId: 1,
   });
   expect(await screen.findByText("new comment created")).toBeInTheDocument();
+});
+
+const author = { id: 1, username: "test_user1" };
+
+it("shows the edit button only to the comment's author", () => {
+  const { unmount } = renderWithProviders(
+    <SingleCommentAndCommentCommentsThread
+      post={post}
+      comment={makeComment()}
+    />,
+    { appState: { user: { id: 2, username: "test_user4" } } },
+  );
+  expect(
+    screen.queryByRole("button", { name: "Edit" }),
+  ).not.toBeInTheDocument();
+  unmount();
+
+  renderWithProviders(
+    <SingleCommentAndCommentCommentsThread
+      post={post}
+      comment={makeComment()}
+    />,
+    { appState: { user: author } },
+  );
+  expect(screen.getByRole("button", { name: "Edit" })).toBeInTheDocument();
+});
+
+it("hides the edit button on a deleted comment", () => {
+  renderWithProviders(
+    <SingleCommentAndCommentCommentsThread
+      post={post}
+      comment={makeComment({ isDeleted: true, text: "[deleted]" })}
+    />,
+    { appState: { user: author } },
+  );
+
+  expect(
+    screen.queryByRole("button", { name: "Edit" }),
+  ).not.toBeInTheDocument();
+});
+
+it("lets the author edit the comment text", async () => {
+  const user = userEvent.setup();
+  Axios.patch.mockResolvedValue({
+    data: { comment: { id: 1, text: "Edited comment" } },
+  });
+  renderWithProviders(
+    <SingleCommentAndCommentCommentsThread
+      post={post}
+      comment={makeComment()}
+    />,
+    { appState: { user: author } },
+  );
+
+  await user.click(screen.getByRole("button", { name: "Edit" }));
+  const textbox = screen.getByRole("textbox", { name: "Edit comment" });
+  await user.clear(textbox);
+  await user.type(textbox, "Edited comment");
+  await user.click(screen.getByRole("button", { name: "Save" }));
+
+  expect(Axios.patch).toHaveBeenCalledWith("/api/comments/1", {
+    text: "Edited comment",
+  });
+  expect(await screen.findByText("Edited comment")).toBeInTheDocument();
+  expect(
+    screen.queryByRole("textbox", { name: "Edit comment" }),
+  ).not.toBeInTheDocument();
+});
+
+it("keeps the edit open when saving fails", async () => {
+  const user = userEvent.setup();
+  Axios.patch.mockRejectedValue({ response: { status: 500 } });
+  const { store } = renderWithProviders(
+    <SingleCommentAndCommentCommentsThread
+      post={post}
+      comment={makeComment()}
+    />,
+    { appState: { user: author } },
+  );
+
+  await user.click(screen.getByRole("button", { name: "Edit" }));
+  await user.type(
+    screen.getByRole("textbox", { name: "Edit comment" }),
+    " more",
+  );
+  await user.click(screen.getByRole("button", { name: "Save" }));
+
+  expect(
+    await screen.findByRole("textbox", { name: "Edit comment" }),
+  ).toHaveValue("Top level comment more");
+  expect(store.getState().app.globalNotifications).toEqual([
+    expect.objectContaining({
+      type: "error",
+      message: "Couldn't update the comment. Please try again.",
+    }),
+  ]);
 });
