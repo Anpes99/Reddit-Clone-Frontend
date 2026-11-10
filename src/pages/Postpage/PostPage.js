@@ -86,7 +86,12 @@ const PostPage = () => {
           </div>
           <section className="flex space-x-5 p-5 justify-center text-sm">
             <section className="flex flex-col w-full max-w-[40rem] min-w-0">
-              <PostPageMainInfoSection post={post} />
+              <PostPageMainInfoSection
+                post={post}
+                onPostUpdated={(changes) =>
+                  setPost((prev) => ({ ...prev, ...changes }))
+                }
+              />
               <div className="mb-5">
                 <CreateNewDirectPostComment user={user} post={post} />
               </div>
