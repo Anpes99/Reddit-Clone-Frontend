@@ -10,9 +10,15 @@ function LoginForm() {
   const dispatch = useDispatch();
 
   return (
-    <div className="h-full bg-black/60 w-full flex flex-col justify-center items-center">
+    <div
+      onClick={() => dispatch(setLoginVisible(false))}
+      className="h-full bg-black/60 w-full flex flex-col justify-center items-center"
+    >
       <div className="flex flex-col items-center justify-center w-full h-full">
-        <div className="bg-white shadow rounded flex flex-col items-center w-full max-w-md p-10 pt-[4rem] relative overflow-y-scroll overscroll-contain ">
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="bg-white shadow rounded flex flex-col items-center w-full max-w-md p-10 pt-[4rem] relative overflow-y-scroll overscroll-contain "
+        >
           <XIcon
             className="h-10 w-10 absolute top-5 right-5 cursor-pointer"
             onClick={() => {
