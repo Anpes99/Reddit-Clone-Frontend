@@ -1,4 +1,4 @@
-import { act, screen } from "@testing-library/react";
+import { act, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Axios from "../../../../shared/lib/axios";
 import socket from "../../../../shared/lib/socket";
@@ -7,7 +7,12 @@ import { renderWithProviders } from "../../../../test/renderWithProviders";
 
 jest.mock("../../../../shared/lib/axios", () => ({
   __esModule: true,
-  default: { get: jest.fn(), post: jest.fn(), patch: jest.fn() },
+  default: {
+    get: jest.fn(),
+    post: jest.fn(),
+    patch: jest.fn(),
+    delete: jest.fn(),
+  },
 }));
 
 const post = { id: 7, subredditId: 3 };
@@ -242,4 +247,56 @@ it("keeps the edit open when saving fails", async () => {
       message: "Couldn't update the comment. Please try again.",
     }),
   ]);
+});
+
+it("shows the delete button to the author and to subreddit moderators only", () => {
+  const postInSubreddit = { ...post, subreddit: { name: "javascript" } };
+  const renderAs = (appUser) =>
+    renderWithProviders(
+      <SingleCommentAndCommentCommentsThread
+        post={postInSubreddit}
+        comment={makeComment()}
+      />,
+      { appState: { user: appUser } },
+    );
+
+  let view = renderAs({ id: 2, username: "test_user4" });
+  expect(
+    screen.queryByRole("button", { name: "Delete" }),
+  ).not.toBeInTheDocument();
+  view.unmount();
+
+  view = renderAs(author);
+  expect(screen.getByRole("button", { name: "Delete" })).toBeInTheDocument();
+  view.unmount();
+
+  renderAs({
+    id: 3,
+    username: "test_moderator",
+    moderatedSubreddits: [{ name: "javascript", role: "moderator_limited" }],
+  });
+  expect(screen.getByRole("button", { name: "Delete" })).toBeInTheDocument();
+});
+
+it("replaces the text with a placeholder after deleting", async () => {
+  const user = userEvent.setup();
+  Axios.delete.mockResolvedValue({ status: 204 });
+  renderWithProviders(
+    <SingleCommentAndCommentCommentsThread
+      post={post}
+      comment={makeComment()}
+    />,
+    { appState: { user: author } },
+  );
+
+  await user.click(screen.getByRole("button", { name: "Delete" }));
+  const dialog = await screen.findByRole("dialog");
+  await user.click(within(dialog).getByRole("button", { name: "Delete" }));
+
+  expect(Axios.delete).toHaveBeenCalledWith("/api/comments/1");
+  expect(await screen.findByText("[deleted]")).toBeInTheDocument();
+  expect(screen.queryByText("Top level comment")).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole("button", { name: "Edit" }),
+  ).not.toBeInTheDocument();
 });

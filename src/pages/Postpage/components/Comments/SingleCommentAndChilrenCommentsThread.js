@@ -6,7 +6,11 @@ import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/outline";
 import "./SingleCommentAndChilrenCommentsThread.css";
 import TextareaAutosize from "react-textarea-autosize";
 import Axios from "../../../../shared/lib/axios";
+import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
 import { addGlobalNotification } from "../../../../app/slices/appSlice";
+import { hasSubredditPermission } from "../../../../config/moderator-permissions";
+import { SubredditPermissions } from "../../../../enums/subreddit.enum";
+import { DELETED_COMMENT_TEXT } from "../../../../constants/comment";
 
 const SingleCommentInfoAndActions = ({ post, comment }) => {
   const dispatch = useDispatch();
@@ -16,9 +20,49 @@ const SingleCommentInfoAndActions = ({ post, comment }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState("");
   const [isSaveInProgress, setIsSaveInProgress] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(!!comment.isDeleted);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [isDeleteInProgress, setIsDeleteInProgress] = useState(false);
 
-  const canEdit =
-    !!user && user.username === comment.user?.username && !comment.isDeleted;
+  const isAuthor = !!user && user.username === comment.user?.username;
+  const moderatorRole = user?.moderatedSubreddits?.find(
+    (subreddit) => subreddit.name === post?.subreddit?.name,
+  )?.role;
+  const canEdit = isAuthor && !isDeleted;
+  const canDelete =
+    !isDeleted &&
+    (isAuthor ||
+      hasSubredditPermission(moderatorRole, SubredditPermissions.POSTS_MANAGE));
+
+  const closeDeleteConfirm = () => {
+    if (isDeleteInProgress) return;
+    setIsDeleteConfirmOpen(false);
+  };
+
+  const handleDelete = async () => {
+    setIsDeleteInProgress(true);
+    try {
+      await Axios.delete(`/api/comments/${comment.id}`);
+      setIsDeleted(true);
+      setText(DELETED_COMMENT_TEXT);
+      setIsEditing(false);
+      dispatch(
+        addGlobalNotification({ type: "success", message: "Comment deleted." }),
+      );
+    } catch (e) {
+      if (e.response?.status !== 429) {
+        dispatch(
+          addGlobalNotification({
+            type: "error",
+            message: "Couldn't delete the comment. Please try again.",
+          }),
+        );
+      }
+    } finally {
+      setIsDeleteInProgress(false);
+      setIsDeleteConfirmOpen(false);
+    }
+  };
 
   const startEditing = () => {
     setEditText(text);
@@ -97,7 +141,31 @@ const SingleCommentInfoAndActions = ({ post, comment }) => {
         user={user}
         dispatch={dispatch}
         onEdit={canEdit && !isEditing ? startEditing : undefined}
+        onDelete={
+          canDelete && !isEditing
+            ? () => setIsDeleteConfirmOpen(true)
+            : undefined
+        }
       />
+      <Dialog
+        open={isDeleteConfirmOpen}
+        onClose={closeDeleteConfirm}
+        disableScrollLock
+      >
+        <DialogTitle>Delete this comment?</DialogTitle>
+        <DialogActions>
+          <Button onClick={closeDeleteConfirm} disabled={isDeleteInProgress}>
+            Cancel
+          </Button>
+          <Button
+            color="error"
+            onClick={handleDelete}
+            disabled={isDeleteInProgress}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
