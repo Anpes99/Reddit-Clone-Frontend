@@ -36,6 +36,19 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const [searchResults, setSearchResults] = useState([]);
+  const [searchSuggestionsOpen, setSearchSuggestionsOpen] = useState(false);
+  const searchContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (!searchSuggestionsOpen) return;
+    const handlePointerDown = (e) => {
+      if (!searchContainerRef.current?.contains(e.target)) {
+        setSearchSuggestionsOpen(false);
+      }
+    };
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, [searchSuggestionsOpen]);
 
   const loginVisible = useSelector((state) => state.app.loginVisible);
   const signUpVisible = useSelector((state) => state.app.signUpVisible);
@@ -61,6 +74,7 @@ const Header = () => {
 
   const handleSearchWordChange = (e) => {
     setSearchWord(e.target.value);
+    setSearchSuggestionsOpen(true);
     debouncedSearch(e.target.value);
   };
 
@@ -194,11 +208,15 @@ const Header = () => {
             <RedditTextIcon />
           </div>
         </div>
-        <div className="w-full sm:w-auto flex flex-col border rounded-sm relative bg-gray-100 basis-full flex-shrink min-w-0">
+        <div
+          ref={searchContainerRef}
+          className="w-full sm:w-auto flex flex-col border rounded-sm relative bg-gray-100 basis-full flex-shrink min-w-0"
+        >
           <SearchIcon className="hidden sm:inline-block pl-4 h-7 top-1/2 translate-y-[-50%] text-gray-400 absolute" />
           <input
             value={searchWord}
             onChange={handleSearchWordChange}
+            onFocus={() => setSearchSuggestionsOpen(true)}
             className="flex flex-grow bg-gray-200 p-2 text-gray-700 placeholder:text-gray-500 sm:pl-20 hover:bg-white focus:bg-white min-w-0"
             placeholder="Search Reddit"
             type="text"
@@ -212,7 +230,7 @@ const Header = () => {
               }
             }}
           />
-          {searchResults.length ? (
+          {searchSuggestionsOpen && searchResults.length ? (
             <>
               <div className="p-2 bg-white border-t border-gray-200 absolute w-full top-full">
                 <div className="text-sm text-gray-500">Search suggestions:</div>
